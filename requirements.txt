@@ -1,0 +1,7 @@
+ Flask==1.0
+ numpy
+ scipy
+ pandas
+ nltk
+ sklearn
+ pymystem3
