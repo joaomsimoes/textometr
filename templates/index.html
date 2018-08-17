@@ -14,23 +14,58 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <style type="text/css">
-        .bg-main {
-            background-color: #127c59;
+        .bg-header {
+            background-color: #29953e;
         }
     </style>
 
-    <title>Discover your text</title>
+    <title>Исследуй свой текст</title>
 </head>
 
 <body>
+    <header class="bg-header">
+        <h5 class="text-center text-white p-2">Исследуй свой текст</h5>
+    </header>
     <div id="app" class="container">
-        <div class="row pt-2 bg-main text-white">
-            <div class="col">
-                <h5 class="text-center">Discover your text</h5>
+        <form>
+            <div class="form-group p-2">
+                <textarea v-model="text" class="form-control" rows="10" placeholder="Введите текст для анализа"></textarea>
             </div>
-        </div>
-    </div>
+        </form>
+        <p v-if="result">Характеристики текста для уровня [[ result.level ]]</p>
+    </div>   
     <script>
+        const DELAY = 2000;
+
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data: {
+                text: '',
+                result: null,
+                delayedSend: null
+            },
+            watch: {
+                text: function() {
+                    clearTimeout(app.delayedSend);
+                    if (app.text) {
+                        app.delayedSend = setTimeout(function() {app.analyze()}, DELAY);
+                    } else {
+                        app.result = null;
+                    }    
+                }
+            },
+            methods: {
+                // REST API
+                analyze: function() {
+                    axios
+                        .post('/analyze', {text: app.text})
+                        .then(function(response) {
+                            app.result = response.data.result    
+                        });
+                }
+            }
+        })
     </script>
 </body>
 

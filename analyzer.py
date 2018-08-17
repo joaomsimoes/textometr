@@ -250,15 +250,20 @@ def start(this_text):
     whole_lemmas_list = []
     global noun_list
     noun_list = []
+    global bastard_list
     bastard_list = []
+    global geo_imen_list
     geo_imen_list = []
+    global conj_adversative_list
     conj_adversative_list = [] #противительные союзы
     modal_words_list = []
     global words_length_list
     words_length_list = []
     global number_of_syllables_list
     number_of_syllables_list = []
+    global long_words_list
     long_words_list = [] #слова более чем 4 слога
+    global count_kotoryi
     count_kotoryi = []
     global count_content_pos
     count_content_pos = []
