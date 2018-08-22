@@ -303,7 +303,7 @@ def start(this_text):
     dict_of_features['mean_len_word'] = (sum(words_length_list))/all_words #средняя длина слова в тексте
     dict_of_features['median_len_word'] = statistics.median(all_len_words)
     dict_of_features['median_len_sentence'] = statistics.median(all_len_sentences)
-    dict_of_features['mean_len_sentence'] = all_words/all_sentences #средняя длина предложения в тексте
+    dict_of_features['mean_len_sentence'] = all_words/all_sentences # средняя длина предложения в тексте
     dict_of_features['mean_len_word_in_syllables'] = all_syllables/all_words
     dict_of_features['percent_of_long_words'] = long_words/all_words
 
@@ -389,6 +389,14 @@ def start(this_text):
     test_features_array = test_features_array.reshape(1, -1)
 
     x_train, y_train = features[columns_needed], features['level']
+    
+    #Основная функция, где обучаем модель на полученных признаках и делаем предсказание
+    def fit_and_predict(y):
+        ridge.fit(x_train,y_train)
+        prediction = ridge.predict(y)
+        return prediction
+        
+    prediction = fit_and_predict(test_features_array)
 
     interpreter = [("A0, самое начало",-10,0.2),
                 ("A1",0.2,1),
@@ -406,68 +414,80 @@ def start(this_text):
                 ("конец C1", 4.6, 5),
                 ("C2, уровень носителя", 5, 6), 
                 ("ой-ой-ой, этот текст сложный даже для носителя", 6, 20)]
-
-    #Основная функция, где обучаем модель на полученных признаках и делаем предсказание
-    def fit_and_predict(y):
-        ridge.fit(x_train,y_train)
-        prediction = ridge.predict(y)
-        level_int = int(round(list(prediction)[0]))
-        level = ''
+                
+    #принимает на вход уровень текста и выдает статистику.
+    def tell_me_about_text(element):
+        level_int = int(round(list(element)[0])) #округленное до целых уровень, чтобы потом анализировать по средним значениям для этого уровня
+        if level_int > 7:
+            level_int = 7
+        level_comment = ''
         for i in interpreter:
-            if i[1] < prediction < i[2]:
-                level = i[0]
-                print('***************************************************************', '\n', 
-                    '---------------------------------------------------------------')
-                print('Уровень текста: %.2f' % (prediction), level)
-        return level,level_int
+            if i[1] < element < i[2]:
+                level_comment = i[0]
 
-    level,level_int = fit_and_predict(test_features_array)
-    if level_int > 7:
-        level_int = 7
+        #создаем словарь и будем в него все складывать
+        data_about_text = defaultdict(int)
+        data_about_text['level_number'] = '%.2f' %element
+        data_about_text['level_comment'] = level_comment
+        
+        
+        ##Ищем средние значения по уровням
+        f_by_levels = [features.iloc[:,:][features["level"] == 0], 
+                    features.iloc[:,:][features["level"] == 1], 
+                    features.iloc[:,:][features["level"] == 2],
+                    features.iloc[:,:][features["level"] == 3],
+                    features.iloc[:,:][features["level"] == 4],
+                    features.iloc[:,:][features["level"] == 5],
+                    features.iloc[:,:][features["level"] == 6]]
+                    
+        slovnik_by_levels = [slovnik_A1_list,slovnik_A2_list,slovnik_B1_list,slovnik_B2_list, slovnik_C1_list]
+        kelly_by_levels = [kelly_A1_list,kelly_A2_list,kelly_B1_list,kelly_B2_list, kelly_C1_list]
+
+        reading_speed_learn = [10,30,50,50,100,120,120,120]
+        reading_speed_watch = [20,50,100,300,400,500,500,500]
+        
+        ## Начинаем анализ
+        #Слов в тексте
+        data_about_text['words'] = dict_of_features['words']
+        
+        #Изучающее чтение текста должно занять... мин		
+        data_about_text['reading_for_detail_speed'] = int(dict_of_features['words']/reading_speed_learn[level_int])
+        
+        #Просмотровое чтение текста должно занять...мин
+        data_about_text['skim_reading_speed'] = int(dict_of_features['words']/reading_speed_watch[level_int])
+        
+        #Средняя длина предложения
+        data_about_text['mean_sentence_length'] = '%.2f' % dict_of_features['mean_len_sentence']
+        
+        # норма для этого уровня
+        data_about_text['norm_sentence_length'] = int(np.mean(f_by_levels[level_int]['mean_len_sentence']))
+        
+        # слишком длинное предложение, лучше разбить на несколько
+        data_about_text['too_long_sentence'] = [f for f in sentences if (len(f.split(' '))-( np.mean(f_by_levels[level_int]['mean_len_sentence']) + 10) > 0)]
+        
+        # можем работать с лексическими списками только до 4 уровня, дальше их не существует
+        if level_int < 4:
+        
+            # новые частотные слова (объяснить в первую очередь):
+            data_about_text['new_and_frequent'] = set([f for f in clean_lemmas_list if f not in slovnik_by_levels[(level_int-1)] and f in slovnik_by_levels[level_int] and f in fr_3000_list])
+            
+            # нет в словнике есть в келли
+            data_about_text['not_in_kelly'] = set([f for f in clean_lemmas_list if f not in slovnik_by_levels[level_int] and f in kelly_by_levels[level_int] and f in fr_3000_list])
+            
+            # низкочастотные слова, которых нет в минимуме (возможно, стоит заменить на синоним): 			
+            data_about_text['no_minimum_no_frequent'] = set([f for f in clean_lemmas_list if f not in slovnik_by_levels[level_int] and f not in fr_10000_list ])
+            
+            #Неизвестные, но достаточно частотные слова 
+            data_about_text['no_minimum_frequent'] = set([f for f in clean_lemmas_list if f not in slovnik_by_levels[4] and f in fr_10000_list ])
+            
+            #Эти слова я не понял, может, опечатка? 
+            data_about_text['bastards'] = set(bastard_list)
+            
+            #Имена собственные 
+            data_about_text['names_and_geo'] = set(geo_imen_list)
+            
+            return data_about_text
+
+    data = tell_me_about_text(prediction)
     
-
-        
-    ##Ищем средние значения по уровням
-    f_by_levels = [features.iloc[:,:][features["level"] == 0], 
-                features.iloc[:,:][features["level"] == 1], 
-                features.iloc[:,:][features["level"] == 2],
-                features.iloc[:,:][features["level"] == 3],
-                features.iloc[:,:][features["level"] == 4],
-                features.iloc[:,:][features["level"] == 5],
-                features.iloc[:,:][features["level"] == 6]]
-    slovnik_by_levels = [slovnik_A1_list,slovnik_A2_list,slovnik_B1_list,slovnik_B2_list, slovnik_C1_list]
-    kelly_by_levels = [kelly_A1_list,kelly_A2_list,kelly_B1_list,kelly_B2_list, kelly_C1_list]
-
-    reading_speed_learn = [10,30,50,50,100,120,120,120]
-    reading_speed_watch = [20,50,100,300,400,500,500,500]
-    ## Начинаем анализ
-    print("Характеристики текста для уровня ", level)
-    print("Слов: ", dict_of_features['words'])
-
-    print("Изучающее чтение текста должно занять ", int(dict_of_features['words']/reading_speed_learn[level_int]),' мин.')
-    print("Просмотровое чтение текста должно занять ", int(dict_of_features['words']/reading_speed_watch[level_int]),' мин.')
-
-    print('Средняя длина предложения: %.2f' % dict_of_features['mean_len_sentence'])
-    print('Норма для этого уровня ', int(np.mean(f_by_levels[level_int]['mean_len_sentence'])))
-    print('Слишком длинное предложение, лучше разбить на несколько: ', [f for f in sentences if (len(f.split(' '))-( np.mean(f_by_levels[level_int]['mean_len_sentence']) + 10) > 0)])
-
-    if level_int < 4:
-        print('Новые частотные слова (объяснить в первую очередь): ', 
-            set([f for f in clean_lemmas_list if f not in slovnik_by_levels[(level_int-1)] and f in slovnik_by_levels[level_int]  
-                and f in fr_3000_list]))
-        print('нет в словнике есть в келли', 
-            set([f for f in clean_lemmas_list if f not in slovnik_by_levels[level_int] and f in kelly_by_levels[level_int]  
-                and f in fr_3000_list]))
-        print('Низкочастотные слова, которых нет в минимуме (возможно, стоит заменить на синоним): ', 
-            set([f for f in clean_lemmas_list if f not in slovnik_by_levels[level_int] and f not in fr_10000_list ]))  
-    else:
-        print('Неизвестные, но достаточно частотные слова ', 
-            set([f for f in clean_lemmas_list if f not in slovnik_by_levels[4] and f in fr_10000_list ]))
-        
-        
-    print('Эти слова я не понял, может, опечатка? : ', set(bastard_list))
-    print('Имена собственные ', set(geo_imen_list))
-
-    data = {'level': level}
-
     return data
