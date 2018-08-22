@@ -33,98 +33,138 @@ def load_dictionaries():
                     'од', 'нп', 'пе']
 
     ## словники ##
-    slovnik_A1 = open('data/new_vocab_a1.txt','r', encoding = 'utf_8').readlines()
+    with open ('data/new_vocab_a1.txt','r', encoding = 'utf_8') as f:
+        slovnik_A1 = f.readlines()
     global slovnik_A1_list
     slovnik_A1_list = [f.replace('\n','') for f in slovnik_A1]
-    slovnik_A2 = open('data/new_vocab_a2.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/new_vocab_a2.txt','r', encoding = 'utf_8') as f:
+        slovnik_A2 = f.readlines()
     global slovnik_A2_list
     slovnik_A2_list = [f.replace('\n','') for f in slovnik_A2]
-    slovnik_B1 = open('data/new_vocab_b1.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/new_vocab_b1.txt','r', encoding = 'utf_8') as f:
+        slovnik_B1 = f.readlines() 
     global slovnik_B1_list
     slovnik_B1_list = [f.replace('\n','') for f in slovnik_B1]
-    slovnik_B2 = open('data/new_vocab_b2.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/new_vocab_b2.txt','r', encoding = 'utf_8') as f:
+        slovnik_B2 = f.readlines() 
     global slovnik_B2_list
     slovnik_B2_list = [f.replace('\n','') for f in slovnik_B2]
-    slovnik_C1 = open('data/new_vocab_c1.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/new_vocab_c1.txt','r', encoding = 'utf_8') as f:
+        slovnik_C1 = f.readlines() 
     global slovnik_C1_list
     slovnik_C1_list = [f.replace('\n','') for f in slovnik_C1]
 
-
     ## списки kelly ##
-    kelly_A1 = open('data/kelly_a1.txt','r', encoding = 'utf_8').readlines()
+    with open ('data/kelly_a1.txt','r', encoding = 'utf_8') as f:
+        kelly_A1 = f.readlines() 
     global kelly_A1_list
     kelly_A1_list = [f.replace('\n','') for f in kelly_A1]
-    kelly_A2 = open('data/kelly_a2.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/kelly_a2.txt','r', encoding = 'utf_8') as f:
+        kelly_A2 = f.readlines()
     global kelly_A2_list
     kelly_A2_list = [f.replace('\n','') for f in kelly_A2]
-    kelly_B1 = open('data/kelly_b1.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/kelly_b1.txt','r', encoding = 'utf_8') as f:
+        kelly_B1 = f.readlines()
     global kelly_B1_list
     kelly_B1_list = [f.replace('\n','') for f in kelly_B1]
-    kelly_B2 = open('data/kelly_b2.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/kelly_b2.txt','r', encoding = 'utf_8') as f:
+        kelly_B2 = f.readlines()
     global kelly_B2_list
     kelly_B2_list = [f.replace('\n','') for f in kelly_B2]
-    kelly_C1 = open('data/kelly_c1.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/kelly_c1.txt','r', encoding = 'utf_8') as f:
+        kelly_C1 = f.readlines()
     global kelly_C1_list
     kelly_C1_list = [f.replace('\n','') for f in kelly_C1]
-    kelly_C2 = open('data/kelly_c2.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/kelly_c2.txt','r', encoding = 'utf_8') as f:
+        kelly_C2 = f.readlines()
     global kelly_C2_list
     kelly_C2_list = [f.replace('\n','') for f in kelly_C2]
 
     ## Списки частотных слов ##
-    fr_100 = open('data/fr_100.txt','r', encoding = 'utf_8').readlines()
+    with open ('data/fr_100.txt','r', encoding = 'utf_8') as f:
+        fr_100 = f.readlines()
     global fr_100_list
     fr_100_list = [f.replace('\n','') for f in fr_100]
-    fr_300 = open('data/fr_300.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_300.txt','r', encoding = 'utf_8') as f:
+        fr_300 = f.readlines()
     global fr_300_list
     fr_300_list = [f.replace('\n','') for f in fr_300]
-    fr_500 = open('data/fr_500.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_500.txt','r', encoding = 'utf_8') as f:
+        fr_500 = f.readlines()
     global fr_500_list
     fr_500_list = [f.replace('\n','') for f in fr_500]
-    fr_1000 = open('data/fr_1000.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_1000.txt','r', encoding = 'utf_8') as f:
+        fr_1000 = f.readlines()
     global fr_1000_list
     fr_1000_list = [f.replace('\n','') for f in fr_1000]
-    fr_3000 = open('data/fr_3000.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_3000.txt','r', encoding = 'utf_8') as f:
+        fr_3000 = f.readlines()
     global fr_3000_list
     fr_3000_list = [f.replace('\n','') for f in fr_3000]
-    fr_5000 = open('data/fr_5000.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_5000.txt','r', encoding = 'utf_8') as f:
+        fr_5000 = f.readlines()
     global fr_5000_list
     fr_5000_list = [f.replace('\n','') for f in fr_5000]
-    fr_10000 = open('data/fr_10000.txt','r', encoding = 'utf_8').readlines()
+    
+    with open ('data/fr_10000.txt','r', encoding = 'utf_8') as f:
+        fr_10000 = f.readlines()
     global fr_10000_list
     fr_10000_list = [f.replace('\n','') for f in fr_10000]
 
-    fr_more_than_5 = open('data/fr_more_than_5ipm.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/fr_more_than_5ipm.txt','r', encoding = 'utf_8') as f:
+        fr_more_than_5 = f.readlines()
     global fr_more_than_5list
     fr_more_than_5list = [f.replace('\n', '') for f in fr_more_than_5]
 
-    fr_spoken = open('data/fr_spoken.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/fr_spoken.txt','r', encoding = 'utf_8') as f:
+        fr_spoken = f.readlines()
     global fr_spoken_list
     fr_spoken_list = [f.replace('\n', '') for f in fr_spoken]
 
     ##Списки слов
-    simple_russian_850 = open('data/SimpleRussian850.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/SimpleRussian850.txt','r', encoding = 'utf_8') as f:
+        simple_russian_850 = f.readlines()
     global simple_russian_850_list
     simple_russian_850_list = [f.replace('\n', '') for f in simple_russian_850]
 
-    simple_russian_1000 = open('data/simple_russian.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/simple_russian.txt','r', encoding = 'utf_8') as f:
+        simple_russian_1000 = f.readlines()
     global simple_russian_1000_list
     simple_russian_1000_list = [f.replace('\n', '') for f in simple_russian_1000]
 
-    simple_russian_2000 = open('data/SimpleRussian2000.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/SimpleRussian2000.txt','r', encoding = 'utf_8') as f:
+        simple_russian_2000 = f.readlines()
     global simple_russian_2000_list
     simple_russian_2000_list = [f.replace('\n', '') for f in simple_russian_2000]
-
-    brown_russian_10000 = open('data/Brown10000.txt', 'r', encoding ='utf_8').readlines()
+    
+    with open ('data/Brown10000.txt','r', encoding = 'utf_8') as f:
+        brown_russian_10000 = f.readlines()
     global brown_russian_10000_list
     brown_russian_10000_list = [f.replace('\n', '') for f in brown_russian_10000]
 
-    dale_russian_3000 = open('data/DaleRussian3000.txt', 'r', encoding ='utf_8').readlines()
+    with open ('data/DaleRussian3000.txt','r', encoding = 'utf_8') as f:
+        dale_russian_3000 = f.readlines()
     global dale_russian_3000_list
     dale_russian_3000_list = [f.replace('\n', '') for f in dale_russian_3000]
 
 
     ##семантические списки##
-    lex_abstract = open('data/lex_abstract.txt','r', encoding = 'utf_8').readlines()
+    with open ('data/lex_abstract.txt','r', encoding = 'utf_8') as f:
+        lex_abstract = f.readlines()
     global lex_abstract_list
     lex_abstract_list = [f.replace('\n','') for f in lex_abstract]
 
@@ -269,6 +309,7 @@ def start(this_text):
     count_kotoryi = []
     global count_content_pos
     count_content_pos = []
+    global count_passive
     count_passive = []
 
     ##СОЗДАЕМ СЛОВАРЬ СО ВСЕМИ ДАННЫМИ ИЗ ТЕКСТА##
@@ -430,9 +471,11 @@ def start(this_text):
                 
     #принимает на вход уровень текста и выдает статистику.
     def tell_me_about_text(element):
-        level_int = int(round(list(element)[0])) - 1 #округленное до целых уровень, чтобы потом анализировать по средним значениям для этого уровня
+        level_int = int(round(list(element)[0])) #округленное до целых уровень, чтобы потом анализировать по средним значениям для этого уровня
         if level_int > 6:
             level_int = 6
+        if level_int < 0:
+            level_int = 0
         level_comment = ''
         for i in interpreter:
             if i[1] < element < i[2]:
@@ -454,18 +497,18 @@ def start(this_text):
         slovnik_by_levels = [slovnik_A1_list,slovnik_A2_list,slovnik_B1_list,slovnik_B2_list, slovnik_C1_list]
         kelly_by_levels = [kelly_A1_list,kelly_A2_list,kelly_B1_list,kelly_B2_list, kelly_C1_list]
 
-        reading_speed_learn = [10,30,50,50,100,120,120,120]
-        reading_speed_watch = [20,50,100,300,400,500,500,500]
+        reading_for_detail_speed_norm = [10,30,50,50,100,120,120,120]
+        skim_reading_speed_norm = [20,50,100,300,400,500,500,500]
         
         ## Начинаем анализ
         #Слов в тексте
         data_about_text['words'] = dict_of_features['words']
         
         #Изучающее чтение текста должно занять... мин		
-        data_about_text['reading_for_detail_speed'] = int(dict_of_features['words']/reading_speed_learn[level_int])
-        
+        data_about_text['reading_for_detail_speed'] = int(dict_of_features['words']/reading_for_detail_speed_norm[level_int])
+
         #Просмотровое чтение текста должно занять...мин
-        data_about_text['skim_reading_speed'] = int(dict_of_features['words']/reading_speed_watch[level_int])
+        data_about_text['skim_reading_speed'] = int(dict_of_features['words']/skim_reading_speed_norm[level_int])
         
         #Средняя длина предложения
         data_about_text['mean_sentence_length'] = '%.2f' % dict_of_features['mean_len_sentence']
@@ -495,7 +538,8 @@ def start(this_text):
             data_about_text['bastards'] = set(bastard_list)
             
             #Имена собственные 
-            data_about_text['names_and_geo'] = set(geo_imen_list)
+            geo_imen_list_title = [f.title() for f in geo_imen_list]
+            data_about_text['names_and_geo'] = set(geo_imen_list_title)
             
         return True
 
