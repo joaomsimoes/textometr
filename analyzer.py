@@ -224,8 +224,6 @@ def percent_of_known_words(element, list_of_words):
     known_words = [w for w in element if w in list_of_words]
     unknown_words = [f for f in element if f not in list_of_words]
     percent = len(known_words)/len(element)
-    #print('Известные слова: ', known_words)
-    #print('Незнакомые слова: ', unknown_words)
     return percent
 
 
@@ -238,9 +236,13 @@ def gram_analyze(element):
             count_gram(i)
     return True
 
+    
+
 ###Начало цикла анализа этого текста
 def start(this_text):
     load_dictionaries()
+    #создаем словарь и будем в него все складывать
+    data_about_text = {}
 
     global sentences
     sentences = sent_tokenize(this_text)
@@ -281,6 +283,18 @@ def start(this_text):
 
     for i in analyzed_bigrams:
         count_passive_form(i)
+        
+    #проверка текста, если он не подходит - мы не запускаем весь анализ, а выдаем ошибку.
+    def check_input_text(element): 
+        if len(element) < 10 or len(whole_lemmas_list) < 5: 
+            return False
+        return True
+  
+    data_about_text['text_ok'] = check_input_text(this_text)
+    data_about_text['text_error_message'] = 'Ошибка! Введите текст на русском языке не менее 5 слов.'
+
+    if data_about_text['text_ok'] == False:
+        return data_about_text    
 
     ##меняем значения в словаре с простых счетчиков на процент встречаемости в тексте##
     for i in gram_features:
@@ -288,7 +302,8 @@ def start(this_text):
 
     clean_lemmas_list = [f for f in whole_lemmas_list if f not in geo_imen_list and f not in bastard_list]
     noun_unic_list = list(set(noun_list)) #список уникальный сущ.
-
+    
+    
     all_words = len(whole_analyzed_text)
     all_sentences = len(sentences)
     all_syllables = sum(number_of_syllables_list)
@@ -373,9 +388,7 @@ def start(this_text):
     ##грам. значения на предложение##
     dict_of_features['median_punct_per_sentence'] = statistics.median((punctuation_per_sentence(sentences)))#медианное пунктуации на предложение
     dict_of_features['mean_punct_per_sentence'] = sum(punctuation_per_sentence(sentences))/len(sentences)
-
-    #for i in dict_of_features:
-        #print(i, '---', "{0:.2f}".format(dict_of_features[i]))
+    
     
     whole_analyzed_text.clear()
     analyzed_bigrams.clear()
@@ -417,16 +430,14 @@ def start(this_text):
                 
     #принимает на вход уровень текста и выдает статистику.
     def tell_me_about_text(element):
-        level_int = int(round(list(element)[0])) #округленное до целых уровень, чтобы потом анализировать по средним значениям для этого уровня
-        if level_int > 7:
-            level_int = 7
+        level_int = int(round(list(element)[0])) - 1 #округленное до целых уровень, чтобы потом анализировать по средним значениям для этого уровня
+        if level_int > 6:
+            level_int = 6
         level_comment = ''
         for i in interpreter:
             if i[1] < element < i[2]:
                 level_comment = i[0]
 
-        #создаем словарь и будем в него все складывать
-        data_about_text = defaultdict(int)
         data_about_text['level_number'] = '%.2f' %element
         data_about_text['level_comment'] = level_comment
         
@@ -486,8 +497,8 @@ def start(this_text):
             #Имена собственные 
             data_about_text['names_and_geo'] = set(geo_imen_list)
             
-            return data_about_text
+        return True
 
-    data = tell_me_about_text(prediction)
+    tell_me_about_text(prediction)
     
-    return data
+    return data_about_text
