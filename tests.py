@@ -14,7 +14,7 @@ class TestAnalyzer(unittest.TestCase):
         self.assertEqual(
             analyzer.start('Шла Саша по шоссе и'
                 ' сосала сушку.')['names_and_geo'],
-            {'Саша'}
+            ['Саша']
         )
 
     def test_text_3(self):

@@ -27,12 +27,71 @@
         <h5 class="text-center text-white p-2">Исследуй свой текст</h5>
     </header>
     <div id="app" class="container">
+        <div v-if="result && result.text_ok === false" class="alert alert-danger text-center" role="alert">
+            [[ result.text_error_message]]
+        </div>
         <form>
             <div class="form-group p-2">
-                <textarea v-model="text" class="form-control" rows="10" placeholder="Введите текст для анализа"></textarea>
+                <textarea v-model="text" class="form-control" rows="10"></textarea>
             </div>
         </form>
-        <p v-if="result">Характеристики текста для уровня [[ result.level ]]</p>
+        <table v-if="result && result.text_ok === true" class="table-striped table-sm">
+            <tbody>
+                <tr v-if="result.level_number">
+                    <td>Уровень текста</td>
+                    <td>[[ result.level_number ]] ([[ result.level_comment ]])</td>
+                </tr>
+                <tr v-if="result.mean_sentence_length">
+                    <td>Средняя длина предложения</td>
+                    <td>[[ result.mean_sentence_length ]]</td>
+                </tr>
+                <tr v-if="result.norm_sentence_length">
+                    <td>Норма для этого уровня</td>
+                    <td>[[ result.norm_sentence_length ]]</td>
+                </tr>
+                <tr v-if="result.reading_for_detail_speed">
+                    <td>Изучающее чтение текста должно занять</td>
+                    <td>[[ result.reading_for_detail_speed ]] мин</td>
+                </tr>
+                <tr v-if="result.skim_reading_speed">
+                    <td>Просмотровое чтение текста должно занять</td>
+                    <td>[[ result.skim_reading_speed ]] мин</td>
+                </tr>
+                <tr v-if="result.too_long_sentence && result.too_long_sentence.length > 0">
+                    <td>Слишком длинные предложения, лучше разбить на несколько</td>
+                    <td>[[ result.too_long_sentence ]]</td>
+                </tr>
+                <tr v-if="result.new_and_frequent && result.new_and_frequent.length > 0">
+                    <td>Новые частотные слова (объяснить в первую очередь)</td>
+                    <td>[[ result.new_and_frequent ]]</td>
+                </tr>
+                <tr v-if="result.not_in_kelly && result.not_in_kelly.length > 0">
+                    <td>Нет в словнике, есть в Келли</td>
+                    <td>[[ result.not_in_kelly ]]</td>
+                </tr>
+                <tr v-if="result.no_minimum_no_frequent && result.no_minimum_no_frequent.length > 0">
+                    <td>Низкочастотные слова, которых нет в минимуме
+                        (возможно, стоит заменить на синоним)</td>
+                    <td>[[ result.no_minimum_no_frequent ]]</td>
+                </tr>
+                <tr v-if="result.no_minimum_frequent && result.no_minimum_frequent.length > 0">
+                    <td>Неизвестные, но достаточно частотные слова</td>
+                    <td>[[ result.no_minimum_frequent ]]</td>
+                </tr>
+                <tr v-if="result.bastards && result.bastards.length > 0">
+                    <td>Эти слова я не понял, может, опечатка?</td>
+                    <td>[[ result.bastards ]]</td>
+                </tr>
+                <tr v-if="result.names_and_geo && result.names_and_geo.length > 0">
+                    <td>Имена собственные</td>
+                    <td>[[ result.names_and_geo ]]</td>
+                </tr>
+                <tr v-if="result.words">
+                    <td>Слов в тексте</td>
+                    <td>[[ result.words ]]</td>
+                </tr>
+            </tbody>
+        </table>
     </div>   
     <script>
         const DELAY = 2000;

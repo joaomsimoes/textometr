@@ -10,6 +10,7 @@ from collections import defaultdict
 import statistics
 from sklearn.model_selection import train_test_split
 from nltk.tokenize import sent_tokenize
+import logging
 
 def load_dictionaries():
     global m
@@ -307,6 +308,7 @@ def start(this_text):
         data_about_text['text_ok'] = False
         data_about_text['text_error_message'] = ('Ошибка! Введите текст на'
             ' русском языке не менее 5 слов.')
+        logging.debug(data_about_text)
         return data_about_text
 
     load_dictionaries()
@@ -325,6 +327,7 @@ def start(this_text):
     geo_imen_list = []
     global conj_adversative_list
     conj_adversative_list = [] # противительные союзы
+    global modal_words_list
     modal_words_list = []
     global words_length_list
     words_length_list = []
@@ -354,16 +357,17 @@ def start(this_text):
         
     # Проверка текста. Если он не подходит - мы не запускаем весь анализ,
     # а выдаем ошибку.
-    def check_input_text(element): 
+    def check_input_text(): 
         if len(whole_lemmas_list) < 5: 
             return False
         return True
   
-    data_about_text['text_ok'] = check_input_text(this_text)
+    data_about_text['text_ok'] = check_input_text()
     data_about_text['text_error_message'] = ('Ошибка! Введите текст на'
         ' русском языке не менее 5 слов.')
 
     if data_about_text['text_ok'] == False:
+        logging.debug(data_about_text)
         return data_about_text    
 
     # меняем значения в словаре с простых счетчиков на процент
@@ -667,7 +671,7 @@ def start(this_text):
         # дальше их не существует
         if level_int < 4:
             # новые частотные слова (объяснить в первую очередь):
-            data_about_text['new_and_frequent'] = set(
+            data_about_text['new_and_frequent'] = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
@@ -676,10 +680,10 @@ def start(this_text):
                             and f in fr_3000_list
                         )
                 ]
-            )
+            ))
             
-            # нет в словнике есть в келли
-            data_about_text['not_in_kelly'] = set(
+            # нет в словнике есть в Келли
+            data_about_text['not_in_kelly'] = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
@@ -688,11 +692,11 @@ def start(this_text):
                             and f in fr_3000_list
                         )
                 ]
-            )
+            ))
             
             # низкочастотные слова, которых нет в минимуме (возможно,
             # стоит заменить на синоним): 			
-            data_about_text['no_minimum_no_frequent'] = set(
+            data_about_text['no_minimum_no_frequent'] = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
@@ -700,10 +704,10 @@ def start(this_text):
                             and f not in fr_10000_list
                         )
                 ]
-            )
+            ))
             
             # неизвестные, но достаточно частотные слова 
-            data_about_text['no_minimum_frequent'] = set(
+            data_about_text['no_minimum_frequent'] = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
@@ -711,17 +715,19 @@ def start(this_text):
                             and f in fr_10000_list
                         )
                 ]
-            )
+            ))
             
             # Эти слова я не понял, может, опечатка? 
-            data_about_text['bastards'] = set(bastard_list)
+            data_about_text['bastards'] = list(set(bastard_list))
             
             # имена собственные 
             geo_imen_list_title = [ f.title() for f in geo_imen_list ]
-            data_about_text['names_and_geo'] = set(geo_imen_list_title)
+            data_about_text['names_and_geo'] = list(set(geo_imen_list_title))
             
         return True
 
     tell_me_about_text(prediction)
+
+    logging.debug(data_about_text)
     
     return data_about_text
