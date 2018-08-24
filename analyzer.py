@@ -303,14 +303,22 @@ def start(this_text):
     # создаем словарь и будем в него все складывать
     data_about_text = {}
 
-    # самая первая проверка текста на объем
-    if len(this_text) < 10 or len(this_text) > 1000:
+    # первая проверка текста - не слишком маленький
+    if len(this_text) < 10:
         data_about_text['text_ok'] = False
         data_about_text['text_error_message'] = ('Ошибка! Введите текст на'
             ' русском языке не менее 5 слов.')
         logging.debug(data_about_text)
         return data_about_text
-
+    
+    # Вторая проверка текста - не слишком большой
+    if len(this_text) > 3000:
+        data_about_text['text_ok'] = False
+        data_about_text['text_error_message'] = ('Ошибка! Введите текст не '
+            'более 3 000 слов.')
+        logging.debug(data_about_text)
+        return data_about_text
+    
     load_dictionaries()
 
     global sentences
@@ -355,8 +363,8 @@ def start(this_text):
     for i in analyzed_bigrams:
         count_passive_form(i)
         
-    # Проверка текста. Если он не подходит - мы не запускаем весь анализ,
-    # а выдаем ошибку.
+    # третья проверка текста, что в нем более 5 русских слов. Если он не 
+    #подходит - мы не запускаем анализ.
     def check_input_text(): 
         if len(whole_lemmas_list) < 5: 
             return False
@@ -385,7 +393,6 @@ def start(this_text):
     all_words = len(whole_analyzed_text)
     all_sentences = len(sentences)
     all_syllables = sum(number_of_syllables_list)
-    all_letters = sum(words_length_list)
     long_words = len(long_words_list)
     all_len_words = [len(f) for f in whole_lemmas_list]
     all_len_sentences = [len(f.split(' ')) for f in sentences]
@@ -554,7 +561,7 @@ def start(this_text):
     
     whole_analyzed_text.clear()
     analyzed_bigrams.clear()
-
+    
     # из словаря признаков делаем список
     features_for_test_text = []
     for ii in columns_needed:
@@ -570,10 +577,12 @@ def start(this_text):
     def fit_and_predict(y):
         ridge.fit(x_train,y_train)
         prediction = ridge.predict(y)
+        if prediction < 0:
+            prediction = 0
         return prediction
         
     prediction = fit_and_predict(test_features_array)
-
+    
     interpreter = [("A0, самое начало",-10,0.2),
                 ("A1",0.2,1),
                 ("начало A2", 1, 1.3), 
@@ -595,18 +604,21 @@ def start(this_text):
     def tell_me_about_text(element):
          # округленный до целых уровень, чтобы потом анализировать по
          # средним значениям для этого уровня
-        level_int = int(round(list(element)[0]))
+        if element == 0:
+            level_int = 0
+        else:
+            level_int = int(round(list(element)[0]))
         if level_int > 6:
             level_int = 6
-        if level_int < 0:
-            level_int = 0
         level_comment = ''
         for i in interpreter:
             if i[1] < element < i[2]:
                 level_comment = i[0]
 
-        data_about_text['level_number'] = '%.2f' %element
+        data_about_text['level_number'] = '%.1f' % element
         data_about_text['level_comment'] = level_comment
+        # служебный атрибут для Тони
+        data_about_text['level_int'] = level_int
         
         
         # Ищем средние значения по уровням
@@ -634,6 +646,12 @@ def start(this_text):
         # Слов в тексте
         data_about_text['words'] = dict_of_features['words']
         
+        # Предложений
+        data_about_text['sentences'] = dict_of_features['sentences']
+        
+        # Знаков
+        data_about_text['characters'] = len(this_text)
+        
         # Изучающее чтение текста должно занять m мин		
         data_about_text['reading_for_detail_speed'] = int(
             dict_of_features['words']/reading_for_detail_speed_norm[level_int]
@@ -644,15 +662,113 @@ def start(this_text):
             dict_of_features['words']/skim_reading_speed_norm[level_int]
         )
         
-        # Средняя длина предложения
-        data_about_text['mean_sentence_length'] = (
-            '%.2f' % dict_of_features['mean_len_sentence']
-        )
+        #Блок лексики:
         
-        # Норма для этого уровня
-        data_about_text['norm_sentence_length'] = int(
-            np.mean(f_by_levels[level_int]['mean_len_sentence'])
-        )
+        # Можем работать с лексическими списками только до 4 уровня,
+        # дальше их не существует
+        if level_int < 4:
+            
+            # Самые полезные слова
+            data_about_text['cool_words'] = list(set(
+                    [
+                    f for f in clean_lemmas_list
+                        if f not in slovnik_by_levels[(level_int-1)]
+                            and (f in fr_3000_list
+                            or f in kelly_by_levels[level_int]
+                            or whole_lemmas_list.count(f) > 2)
+                ]
+            ))
+                    
+            # Избавиться от этих слов
+            
+            data_about_text['bad_words'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if (
+                            f not in slovnik_by_levels[level_int]
+                            and f not in kelly_by_levels[level_int]
+                            and (f not in fr_10000_list
+                            or f in bastard_list)
+                        )
+                ]
+            ))
+            
+            #Служебный
+            data_about_text['not_in_slovnik_by_levels'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if (
+                            f not in slovnik_by_levels[level_int])
+                ]))       
+                    
+            #Служебный  
+            data_about_text['in_kelly'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if f not in slovnik_by_levels[level_int]
+                        and f in kelly_by_levels[level_int]
+                ]))
+                
+                    
+            # Служебный: новые частотные слова (объяснить в первую очередь):
+            data_about_text['new_and_frequent'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if (
+                            f not in slovnik_by_levels[(level_int-1)]
+                            and f in slovnik_by_levels[level_int]
+                            and f in fr_3000_list
+                        )
+                ]
+            ))
+            
+            # нет в словнике есть в Келли
+            data_about_text['cool_but_not_in_slovnik'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if (
+                            f not in slovnik_by_levels[level_int]
+                            and f in kelly_by_levels[level_int]
+                            and f in fr_3000_list
+                        )
+                ]
+            ))
+                
+        else:
+          # Самые полезные слова
+            data_about_text['cool_words'] = list(set(
+                    [
+                    f for f in clean_lemmas_list
+                        if (f not in slovnik_by_levels[3] 
+                        and (f in slovnik_by_levels[4]
+                            or f in fr_5000_list
+                            or f in kelly_by_levels[4]
+                            or whole_lemmas_list.count(f) > 3))
+                ]
+            ))
+                    
+            # Избавиться от этих слов
+            
+            data_about_text['bad_words'] = list(set(
+                [
+                    f for f in clean_lemmas_list
+                        if (
+                            f not in slovnik_by_levels[4]
+                            and (f not in fr_10000_list
+                            or f in bastard_list)
+                        )
+                ]
+            ))  
+                    
+        # Имена героев и гео-названия
+        geo_imen_list_title = [ f.title() for f in geo_imen_list ]
+        data_about_text['names_and_geo'] = list(set(geo_imen_list_title))
+            
+         # Служебный - эти слова я не понял, может, опечатка? 
+        data_about_text['bastards'] = list(set(bastard_list))
+            
+            
+        # Блок Грамматика.
         
         # Слишком длинное предложение, лучше разбить на несколько
         data_about_text['too_long_sentence'] = [
@@ -666,64 +782,36 @@ def start(this_text):
                     > 0
                 )
         ]
+                    
+                    
         
-        # Можем работать с лексическими списками только до 4 уровня,
-        # дальше их не существует
-        if level_int < 4:
-            # новые частотные слова (объяснить в первую очередь):
-            data_about_text['new_and_frequent'] = list(set(
-                [
-                    f for f in clean_lemmas_list
-                        if (
-                            f not in slovnik_by_levels[(level_int-1)]
-                            and f in slovnik_by_levels[level_int]
-                            and f in fr_3000_list
-                        )
-                ]
-            ))
-            
-            # нет в словнике есть в Келли
-            data_about_text['not_in_kelly'] = list(set(
-                [
-                    f for f in clean_lemmas_list
-                        if (
-                            f not in slovnik_by_levels[level_int]
-                            and f in kelly_by_levels[level_int]
-                            and f in fr_3000_list
-                        )
-                ]
-            ))
-            
-            # низкочастотные слова, которых нет в минимуме (возможно,
-            # стоит заменить на синоним): 			
-            data_about_text['no_minimum_no_frequent'] = list(set(
-                [
-                    f for f in clean_lemmas_list
-                        if (
-                            f not in slovnik_by_levels[level_int]
-                            and f not in fr_10000_list
-                        )
-                ]
-            ))
-            
-            # неизвестные, но достаточно частотные слова 
-            data_about_text['no_minimum_frequent'] = list(set(
-                [
-                    f for f in clean_lemmas_list
-                        if (
-                            f not in slovnik_by_levels[4]
-                            and f in fr_10000_list
-                        )
-                ]
-            ))
-            
-            # Эти слова я не понял, может, опечатка? 
-            data_about_text['bastards'] = list(set(bastard_list))
-            
-            # имена собственные 
-            geo_imen_list_title = [ f.title() for f in geo_imen_list ]
-            data_about_text['names_and_geo'] = list(set(geo_imen_list_title))
-            
+        # Список потенциально сложных тем
+        gr_features = ['A', 'ADV', 'ADVPRO', 'ANUM', 'APRO',
+        'NUM', 'SPRO', 'им', 'пр', 'род', 'твор', 'деепр', 'пов',
+        'прич', 'кр', 'полн', 'притяж', 'несов',
+        'сов','modal_verbs','passive']
+        gr_features_names = ['Прилагательные', 'Наречия', 'Наречия', 
+                           'Порядковые числительные', 'Прилагательные',
+                           'Числительные', 'Местоимения', 'Именительный падеж',
+                           'Предложный падеж', 'Родительный падеж', 
+                           'Творительный падеж', 'Деепричастия', 
+                           'Повелительное наклонение', 'Причастия', 
+                           'Краткие формы прилагательных и причастий', 
+                           'Краткие формы прилагательных и причастий', 
+                           'Притяжательные местоимения', 'Вид глагола',
+                           'Вид глагола','Модальные глаголы','Пассивные формы']
+        
+        gram_complex = []
+        
+        for i in gr_features:
+            compare = dict_of_features[i]/(np.mean(f_by_levels[level_int][i] + 0.00000001))
+            if  compare > 2:
+                gram_complex.append(gr_features_names[gr_features.index(i)])
+                #Служебный
+                data_about_text[('gram_complex_'+i)] = compare
+        
+        data_about_text['gram_complex'] = list(set(gram_complex))
+        
         return True
 
     tell_me_about_text(prediction)
@@ -731,3 +819,4 @@ def start(this_text):
     logging.debug(data_about_text)
     
     return data_about_text
+
