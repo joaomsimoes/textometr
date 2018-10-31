@@ -5,9 +5,9 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_1(self):
         self.assertEqual(
-            analyzer.start('Шла Саша по шоссе и'
-                ' сосала сушку.')['norm_sentence_length'],
-            11
+            analyzer.start('Шла Саша по шоссе и сосала сушку.')
+            ['sentences'],
+            1
         )
         
     def test_text_2(self):
@@ -45,8 +45,8 @@ class TestAnalyzer(unittest.TestCase):
     def test_text_6(self):
         self.assertEqual(
             analyzer.start('Шла Саша по шоссе, была хорошая погода. А в тексте'
-                ' бывает english/vinglish')['reading_for_detail_speed'],
-            1
+                ' бывает english/vinglish')['words'],
+            13
         )
     def test_text_7(self):
         self.assertEqual(
@@ -67,7 +67,6 @@ class TestAnalyzer(unittest.TestCase):
                            'Фрэмптон. По их словам, они сразу рассказали об эт'
                            'ом следователям — однако те почему-то не предприня'
                            'ли никаких действий.')['text_ok'],True
-            1
         )
 
 if __name__ == '__main__':

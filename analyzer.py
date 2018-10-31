@@ -1,14 +1,11 @@
 # Быстренько обучаем модель и анализируем входной текст
 import numpy as np
 import pandas as pd
-import math
 import nltk
 from sklearn import linear_model
-import re
 import pymystem3
 from collections import defaultdict
 import statistics
-from sklearn.model_selection import train_test_split
 from nltk.tokenize import sent_tokenize
 import logging
 
@@ -28,7 +25,7 @@ def load_dictionaries():
         'dale3000', 'infr1000', 'infr3000', 'infr5000', 'infr10000',
         'lex_abstract', 'formula_smog', 'mean_len_word', 'median_len_word',
         'median_len_sentence', 'mean_len_sentence', 'percent_of_long_words',
-        'mean_punct_per_sentence', 'median_punct_per_sentence', 'tt_ratio',
+        'mean_punct_per_sentence', 'median_punct_per_sentence',
         'contentPOS', 'kotoryi/words', 'modal_verbs', 'conj_adversative',
         'kotoryi/sentences', 'passive', 'A', 'ADV', 'ADVPRO', 'ANUM',
         'APRO', 'COM', 'CONJ', 'INTJ', 'NUM', 'PART', 'PR', 'S', 'SPRO',
@@ -281,7 +278,6 @@ def punctuation_per_sentence(element):
 # Вычисляем процент слов из разных словников и частотных списков
 def percent_of_known_words(element, list_of_words):
     known_words = [w for w in element if w in list_of_words]
-    unknown_words = [f for f in element if f not in list_of_words]
     percent = len(known_words)/len(element)
     return percent
 
@@ -299,7 +295,8 @@ def gram_analyze(element):
 
 # начало цикла анализа этого текста
 def start(this_text):
-
+    
+    this_text = this_text.replace('\n',' ')
     # создаем словарь и будем в него все складывать
     data_about_text = {}
 
@@ -396,7 +393,7 @@ def start(this_text):
     long_words = len(long_words_list)
     all_len_words = [len(f) for f in whole_lemmas_list]
     all_len_sentences = [len(f.split(' ')) for f in sentences]
-
+    unic_lemmas_list = set(whole_lemmas_list)
     # Цифры про текст:
     # всего слов в тексте
     dict_of_features['words'] = (len(whole_analyzed_text))
@@ -416,7 +413,7 @@ def start(this_text):
     # type-token ratio - number of types and the number of tokens -
     # lexical variety
     dict_of_features['tt_ratio'] = (
-        len(whole_lemmas_list)/len(set(whole_lemmas_list))
+       len(unic_lemmas_list)/len(whole_lemmas_list)
     )
     
 
@@ -663,13 +660,40 @@ def start(this_text):
         )
         
         #Блок лексики:
+        # 1. Считаем ключевые слова по tf/idf
+        
+        # считали датафрейм
+        corpus_rnc = pd.read_csv("data/freq_rnc.csv", quotechar='`')
+        lemmas_list_rnc = list(corpus_rnc['lemma'])
+        bag_tf_idf = dict()
+        for item in unic_lemmas_list:
+            if (item not in bastard_list and item not in geo_imen_list and 
+            whole_lemmas_list.count(item) > 2):
+                if item in lemmas_list_rnc:
+                    # если омонимы, берем cамый частотный
+                    if lemmas_list_rnc.count(item) > 1:
+                        idf = float(list(corpus_rnc[corpus_rnc['lemma'] == item]['idf'])[0])
+                    else:
+                        idf = float(corpus_rnc[corpus_rnc['lemma'] == item]['idf'])
+                else:
+                    idf = 0
+                bag_tf_idf[item] = ((
+                        whole_lemmas_list.count(item)/len(whole_lemmas_list))/(
+                        0.00001 + idf)
+                        )
+        sorted_bag = (sorted(bag_tf_idf.items(), key=lambda x: x[1], reverse=True))
+        #print(sorted_bag)
+        data_about_text['key_words'] = [f[0] for f in sorted_bag[:3]]
+        
+        #2. Лексическое разнообразие
+        data_about_text['tt_ratio'] = dict_of_features['tt_ratio']
         
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
         if level_int < 4:
             
             # Самые полезные слова
-            data_about_text['cool_words'] = list(set(
+            cool_words = list(set(
                     [
                     f for f in clean_lemmas_list
                         if f not in slovnik_by_levels[(level_int-1)]
@@ -678,14 +702,15 @@ def start(this_text):
                             or whole_lemmas_list.count(f) > 2)
                 ]
             ))
+            data_about_text['cool_words'] = cool_words
                     
             # Избавиться от этих слов
-            
-            data_about_text['bad_words'] = list(set(
+            data_about_text['rare_words'] = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
-                            f not in slovnik_by_levels[level_int]
+                            f not in cool_words
+                            and f not in slovnik_by_levels[level_int]
                             and f not in kelly_by_levels[level_int]
                             and (f not in fr_10000_list
                             or f in bastard_list)
@@ -736,29 +761,31 @@ def start(this_text):
                 
         else:
           # Самые полезные слова
-            data_about_text['cool_words'] = list(set(
-                    [
-                    f for f in clean_lemmas_list
-                        if (f not in slovnik_by_levels[3] 
-                        and (f in slovnik_by_levels[4]
-                            or f in fr_5000_list
-                            or f in kelly_by_levels[4]
-                            or whole_lemmas_list.count(f) > 3))
+          cool_words_more_4 = list(set(
+            [
+            f for f in clean_lemmas_list
+                if (f not in slovnik_by_levels[3] 
+                and (f in slovnik_by_levels[4]
+                    or f in fr_5000_list
+                    or f in kelly_by_levels[4]
+                    or whole_lemmas_list.count(f) > 3))
                 ]
             ))
+          data_about_text['cool_words'] = cool_words_more_4
                     
-            # Избавиться от этих слов
-            
-            data_about_text['bad_words'] = list(set(
+          # Избавиться от этих слов
+          rare_words_more_4 = list(set(
                 [
                     f for f in clean_lemmas_list
                         if (
-                            f not in slovnik_by_levels[4]
+                            f not in cool_words_more_4
+                            and f not in slovnik_by_levels[4]
                             and (f not in fr_10000_list
                             or f in bastard_list)
                         )
                 ]
-            ))  
+                                    ))        
+          data_about_text['rare_words'] = rare_words_more_4
                     
         # Имена героев и гео-названия
         geo_imen_list_title = [ f.title() for f in geo_imen_list ]
@@ -818,5 +845,8 @@ def start(this_text):
 
     logging.debug(data_about_text)
     
+    
     return data_about_text
 
+#text = input("Введите текст")
+#print(start(text))
