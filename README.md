@@ -1,18 +1,23 @@
 # discover-your-text
+Get some information about text.
+
+## Startup
 
 1. Start
-```bash
-$ docker-compose up
-```
+   ```bash
+   docker-compose up
+   ```
 
-2. Go to URL http://localhost:5000/
+2. Go to URL http://localhost:9001/
 
-3. Run bash inside docker container:
-```bash
-$ docker exec -it CONTAINER_NAME bash
-```
+## Development
 
-4. Run all tests:
-```bash
-$ python -m unittest
-```
+1. Run bash inside Docker container
+   ```bash
+   docker exec -it CONTAINER_NAME bash
+   ```
+
+2. Run tests
+   ```bash
+   python -m unittest
+   ```

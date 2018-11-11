@@ -1,4 +1,5 @@
- Flask==1.0
+ Flask
+ redis
  numpy
  scipy
  pandas

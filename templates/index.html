@@ -14,8 +14,8 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <style type="text/css">
-        .bg-header {
-            background-color: #29953e;
+        .bg-main {
+            background-color: #0c996a;
         }
     </style>
 
@@ -23,10 +23,13 @@
 </head>
 
 <body>
-    <header class="bg-header">
-        <h5 class="text-center text-white p-2">Исследуй свой текст</h5>
-    </header>
     <div id="app" class="container">
+        <div class="row pt-2 bg-main text-white">
+            <div class="col">
+                <h5 class="text-center">Исследуй свой текст</h5>
+            </div>
+        </div>
+
         <div v-if="result && result.text_ok === false" class="alert alert-danger text-center" role="alert">
             [[ result.text_error_message]]
         </div>
@@ -92,7 +95,12 @@
                 </tr>
             </tbody>
         </table>
-    </div>   
+
+        <div class="text-center">
+            <a class="btn btn-primary btn-lg m-2" href="/survey">Пройти тест по определению сложности текстов</a> 
+        </div>
+    </div>
+
     <script>
         const DELAY = 2000;
 
