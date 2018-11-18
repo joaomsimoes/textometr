@@ -15,7 +15,7 @@
 
     <style type="text/css">
         .bg-main {
-            background-color: #0c996a;
+            background-color: #0a7a9c;
         }
 
         .btn {
@@ -27,81 +27,141 @@
 </head>
 
 <body>
-    <div id="app" class="container">
+    <div id="app" class="container-fluid">
         <div class="row pt-2 bg-main text-white">
             <div class="col">
-                <h5 class="text-center">Исследуй свой текст</h5>
+                <h1 class="text-center">Исследуй свой текст</h1>
+                
             </div>
         </div>
 
         <div v-if="result && result.text_ok === false" class="alert alert-danger text-center" role="alert">
             [[ result.text_error_message]]
         </div>
-        <form>
-            <div class="form-group p-2">
-                <textarea v-model="text" class="form-control" rows="10"></textarea>
-            </div>
-        </form>
-        <table v-if="result && result.text_ok === true" class="table-striped table-sm">
-            <tbody>
-                <tr v-if="result.level_number">
-                    <td>Уровень текста</td>
-                    <td>[[ result.level_number ]] ([[ result.level_comment ]])</td>
-                </tr>
-                <tr v-if="result.mean_sentence_length">
-                    <td>Средняя длина предложения</td>
-                    <td>[[ result.mean_sentence_length ]]</td>
-                </tr>
-                <tr v-if="result.norm_sentence_length">
-                    <td>Норма для этого уровня</td>
-                    <td>[[ result.norm_sentence_length ]]</td>
-                </tr>
-                <tr v-if="result.reading_for_detail_speed">
-                    <td>Изучающее чтение текста должно занять</td>
-                    <td>[[ result.reading_for_detail_speed ]] мин</td>
-                </tr>
-                <tr v-if="result.skim_reading_speed">
-                    <td>Просмотровое чтение текста должно занять</td>
-                    <td>[[ result.skim_reading_speed ]] мин</td>
-                </tr>
-                <tr v-if="result.too_long_sentence && result.too_long_sentence.length > 0">
-                    <td>Слишком длинные предложения, лучше разбить на несколько</td>
-                    <td>[[ result.too_long_sentence ]]</td>
-                </tr>
-                <tr v-if="result.new_and_frequent && result.new_and_frequent.length > 0">
-                    <td>Новые частотные слова (объяснить в первую очередь)</td>
-                    <td>[[ result.new_and_frequent ]]</td>
-                </tr>
-                <tr v-if="result.not_in_kelly && result.not_in_kelly.length > 0">
-                    <td>Нет в словнике, есть в Келли</td>
-                    <td>[[ result.not_in_kelly ]]</td>
-                </tr>
-                <tr v-if="result.no_minimum_no_frequent && result.no_minimum_no_frequent.length > 0">
-                    <td>Низкочастотные слова, которых нет в минимуме
-                        (возможно, стоит заменить на синоним)</td>
-                    <td>[[ result.no_minimum_no_frequent ]]</td>
-                </tr>
-                <tr v-if="result.no_minimum_frequent && result.no_minimum_frequent.length > 0">
-                    <td>Неизвестные, но достаточно частотные слова</td>
-                    <td>[[ result.no_minimum_frequent ]]</td>
-                </tr>
-                <tr v-if="result.bastards && result.bastards.length > 0">
-                    <td>Эти слова я не понял, может, опечатка?</td>
-                    <td>[[ result.bastards ]]</td>
-                </tr>
-                <tr v-if="result.names_and_geo && result.names_and_geo.length > 0">
-                    <td>Имена собственные</td>
-                    <td>[[ result.names_and_geo ]]</td>
-                </tr>
-                <tr v-if="result.words">
-                    <td>Слов в тексте</td>
-                    <td>[[ result.words ]]</td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div class="text-center">
-            <a class="btn btn-primary btn-lg m-2" href="/survey">Пройти тест по определению сложности текстов</a> 
+        <div class="row justify-content-center mt-4">
+            <div class="col-md">
+                <form>
+                    <div class="form-group p-2">
+                        <textarea v-model="text" class="form-control" placeholder="Вставьте текст для исследования (╭ರᴥ•́)" rows="10"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md">
+                <table v-if="result && result.text_ok === true" class="table-striped table-sm">
+                    <tbody>
+                        <tr v-if="result.level_number">
+                            <td>Уровень текста</td>
+                            <td>[[ result.level_number ]] ([[ result.level_comment ]])</td>
+                        </tr>
+                        <tr v-if="result.sentences">
+                            <td>Предложений в тексте</td>
+                            <td>[[ result.sentences ]]</td>
+                        </tr>
+                         <tr v-if="result.words">
+                            <td>Слов в тексте</td>
+                            <td>[[ result.words ]]</td>
+                        </tr>
+                         <tr v-if="result.characters">
+                            <td>Знаков</td>
+                            <td>[[ result.characters]]</td>
+                        </tr>
+                         <tr v-if="result.key_words && result.key_words.length > 0">
+                            <td>Ключевые слова</td>
+                            <td>[[ result.key_words ]]</td>
+                        </tr>
+                         <tr v-if="result.gram_complex">
+                            <td>Возможные грамматические темы</td>
+                            <td>[[ result.gram_complex ]]</td>
+                        </tr>
+                        <tr v-if="result.reading_for_detail_speed">
+                            <td>Изучающее чтение текста должно занять</td>
+                            <td>[[ result.reading_for_detail_speed ]] мин</td>
+                        </tr>
+                        <tr v-if="result.skim_reading_speed">
+                            <td>Просмотровое чтение текста должно занять</td>
+                            <td>[[ result.skim_reading_speed ]] мин</td>
+                        </tr>
+                        <tr v-if="result.too_long_sentence && result.too_long_sentence.length > 0">
+                            <td>Слишком длинные предложения, лучше разбить на несколько</td>
+                            <td>[[ result.too_long_sentence ]]</td>
+                        </tr>
+                        <tr v-if="result.cool_words && result.cool_words.length > 0">
+                            <td>Самые полезные слова</td>
+                            <td>[[ result.cool_words ]]</td>
+                        </tr>
+                        <tr v-if="result.new_and_frequent && result.new_and_frequent.length > 0">
+                            <td>Новые и частотные слова (стоит объяснить в первую очередь)</td>
+                            <td>[[ result.cnew_and_frequent ]]</td>
+                        </tr>
+                        <tr v-if="result.cool_but_not_in_slovnik && result.cool_but_not_in_slovnik.length > 0">
+                            <td>Нет в словнике, есть в списках Келли</td>
+                            <td>[[ result.cool_but_not_in_slovnik ]]</td>
+                        </tr>
+                        <tr v-if="result.rare_words && result.rare_words.length > 0">
+                            <td>Редкие слова (возможно, стоит заменить на синоним)</td>
+                            <td>[[ result.rare_words ]]</td>
+                        </tr>
+                        <tr v-if="result.names_and_geo && result.names_and_geo.length > 0">
+                            <td>Имена собственные</td>
+                            <td>[[ result.names_and_geo ]]</td>
+                        </tr>
+                        <tr v-if="result.bastards && result.bastards.length > 0">
+                            <td>Этих слов нет в словаре, может, опечатка?</td>
+                            <td>[[ result.bastards ]]</td>
+                        </tr>
+                        <tr v-if="result.level_number">
+                            <td>Информация по лексическим минимумам: </td>
+                            <td></td>
+                        </tr>
+                        <tr v-if="result.inA1">
+                            <td>Лексический минимум А1 покрывает </td>
+                            <td>[[ result.inA1 ]] % текста</td>
+                        </tr>
+                        <tr v-if="result.not_inA1">
+                            <td>Не входит в лексический минимум А1: </td>
+                            <td>[[ result.not_inA1 ]]</td>
+                        </tr>
+                        <tr v-if="result.inA2">
+                            <td>Лексический минимум А2 покрывает </td>
+                            <td>[[ result.inA2 ]] % текста</td>
+                        </tr>
+                        <tr v-if="result.not_inA2">
+                            <td>Не входит в лексический минимум А2: </td>
+                            <td>[[ result.not_inA2 ]]</td>
+                        </tr>
+                        <tr v-if="result.inB1">
+                            <td>Лексический минимум B1 покрывает </td>
+                            <td>[[ result.inB1 ]] % текста</td>
+                        </tr>
+                        <tr v-if="result.not_inB1">
+                            <td>Не входит в лексический минимум B1: </td>
+                            <td>[[ result.not_inB1 ]]</td>
+                        </tr>
+                        <tr v-if="result.inB2">
+                            <td>Лексический минимум B2 покрывает </td>
+                            <td>[[ result.inB2 ]] % текста</td>
+                        </tr>
+                        <tr v-if="result.not_inB2">
+                            <td>Не входит в лексический минимум B2: </td>
+                            <td>[[ result.not_inB2 ]]</td>
+                        </tr>
+                        <tr v-if="result.inC1">
+                            <td>Лексический минимум C1 покрывает </td>
+                            <td>[[ result.inC1 ]] % текста</td>
+                        </tr>
+                        <tr v-if="result.not_inC1">
+                            <td>Не входит в лексический минимум C1: </td>
+                            <td>[[ result.not_inC1 ]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md text-center">
+                <a class="btn btn-warning btn-lg m-2" href="/survey">Пройти тест по определению сложности текстов</a> 
+            </div>
         </div>
     </div>
 
