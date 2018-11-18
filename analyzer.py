@@ -648,15 +648,16 @@ def start(this_text):
         
         # Знаков
         data_about_text['characters'] = len(this_text)
+
         
         # Изучающее чтение текста должно занять m мин		
-        data_about_text['reading_for_detail_speed'] = int(
-            dict_of_features['words']/reading_for_detail_speed_norm[level_int]
+        data_about_text['reading_for_detail_speed'] = round(
+            dict_of_features['words']/reading_for_detail_speed_norm[level_int],2
         )
 
         # Просмотровое чтение текста должно занять m мин
-        data_about_text['skim_reading_speed'] = int(
-            dict_of_features['words']/skim_reading_speed_norm[level_int]
+        data_about_text['skim_reading_speed'] = round(
+            dict_of_features['words']/skim_reading_speed_norm[level_int], 2
         )
         
         #Блок лексики:
@@ -665,6 +666,7 @@ def start(this_text):
         # считали датафрейм
         corpus_rnc = pd.read_csv("data/freq_rnc.csv", quotechar='`')
         lemmas_list_rnc = list(corpus_rnc['lemma'])
+        #print(len(lemmas_list_rnc))
         bag_tf_idf = dict()
         for item in unic_lemmas_list:
             if (item not in bastard_list and item not in geo_imen_list and 
@@ -675,7 +677,9 @@ def start(this_text):
                         idf = float(list(corpus_rnc[corpus_rnc['lemma'] == item]['idf'])[0])
                     else:
                         idf = float(corpus_rnc[corpus_rnc['lemma'] == item]['idf'])
+                    #print(item, idf)
                 else:
+                    #print('else', item)
                     idf = 0
                 bag_tf_idf[item] = ((
                         whole_lemmas_list.count(item)/len(whole_lemmas_list))/(
@@ -683,10 +687,32 @@ def start(this_text):
                         )
         sorted_bag = (sorted(bag_tf_idf.items(), key=lambda x: x[1], reverse=True))
         #print(sorted_bag)
-        data_about_text['key_words'] = [f[0] for f in sorted_bag[:3]]
+        data_about_text['key_words'] = [f[0] for f in sorted_bag[:5] if len(f[0]) > 2]
         
         #2. Лексическое разнообразие
         data_about_text['tt_ratio'] = dict_of_features['tt_ratio']
+
+
+        #Списки с минимумов
+        data_about_text['inA1'] = int(dict_of_features['inA1'] * 100)
+        data_about_text['not_inA1'] = list(set([
+                    f for f in clean_lemmas_list if f not in slovnik_A1_list]))
+
+        data_about_text['inA2'] = int(dict_of_features['inA2'] * 100)
+        data_about_text['not_inA2'] = list(set([
+            f for f in clean_lemmas_list if f not in slovnik_A2_list]))
+
+        data_about_text['inB1'] = int(dict_of_features['inB1'] * 100)
+        data_about_text['not_inB1'] = list(set([
+                    f for f in clean_lemmas_list if f not in slovnik_B1_list]))
+
+        data_about_text['inB2'] = int(dict_of_features['inB2'] * 100)
+        data_about_text['not_inB2'] = list(set([
+            f for f in clean_lemmas_list if f not in slovnik_B2_list]))
+
+        data_about_text['inC1'] = int(dict_of_features['inC1'] * 100)
+        data_about_text['not_inC1'] = list(set([
+            f for f in clean_lemmas_list if f not in slovnik_C1_list]))
         
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
@@ -712,6 +738,7 @@ def start(this_text):
                             f not in cool_words
                             and f not in slovnik_by_levels[level_int]
                             and f not in kelly_by_levels[level_int]
+                            and f not in data_about_text['key_words']
                             and (f not in fr_10000_list
                             or f in bastard_list)
                         )
@@ -780,6 +807,7 @@ def start(this_text):
                         if (
                             f not in cool_words_more_4
                             and f not in slovnik_by_levels[4]
+                            and f not in data_about_text['key_words']
                             and (f not in fr_10000_list
                             or f in bastard_list)
                         )
