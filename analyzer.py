@@ -170,6 +170,10 @@ def load_dictionaries():
     global dale_russian_3000_list
     dale_russian_3000_list = [f.replace('\n', '') for f in dale_russian_3000]
 
+    with open('data/stop_list.txt', 'r', encoding='utf_8') as f:
+        stop = f.readlines()
+    global stop_list
+    stop_list = [f.replace('\n', '') for f in stop]
 
     # семантические списки
     with open ('data/lex_abstract.txt','r', encoding = 'utf_8') as f:
@@ -312,7 +316,7 @@ def start(this_text):
     if len(this_text) > 3000:
         data_about_text['text_ok'] = False
         data_about_text['text_error_message'] = ('Ошибка! Введите текст не '
-            'более 3 000 слов.')
+            'более 3 000 знаков.')
         logging.debug(data_about_text)
         return data_about_text
     
@@ -382,7 +386,7 @@ def start(this_text):
 
     clean_lemmas_list = [
         f for f in whole_lemmas_list if f not in geo_imen_list
-            and f not in bastard_list
+            and f not in bastard_list and f not in stop_list
     ]
     noun_unic_list = list(set(noun_list)) # список уникальных сущ.
     
@@ -585,17 +589,17 @@ def start(this_text):
                 ("начало A2", 1, 1.3), 
                 ("середина A2", 1.3, 1.6),
                 ("конец A2", 1.6, 2),
-                ("начало B1", 2, 2.3), 
-                ("середина B1", 2.3, 2.6),
-                ("конец B1", 2.6, 3),
-                ("начало B2", 3, 3.3), 
-                ("середина B2", 3.3, 3.6),
-                ("конец B2", 3.6, 4),
-                ("начало C1", 4, 4.3), 
-                ("середина C1", 4.3, 4.6),
-                ("конец C1", 4.6, 5),
-                ("C2, уровень носителя", 5, 6), 
-                ("ой-ой-ой, этот текст сложный даже для носителя", 6, 20)]
+                ("начало B1", 2, 2.5), 
+                ("середина B1", 2.5, 3.5),
+                ("конец B1", 3.5, 4.3),
+                ("начало B2", 4.3, 4.5), 
+                ("середина B2", 4.5, 5.5),
+                ("конец B2", 5.5, 5.8),
+                ("начало C1", 5.8, 6.2), 
+                ("середина C1", 6.2, 6.5),
+                ("конец C1", 6.5, 6.8),
+                ("C2, уровень носителя", 6.8, 7.5), 
+                ("ой-ой-ой, этот текст сложный даже для носителя", 7.5, 20)]
                 
     # Принимает на вход уровень текста и выдает статистику.
     def tell_me_about_text(element):
@@ -668,9 +672,11 @@ def start(this_text):
         lemmas_list_rnc = list(corpus_rnc['lemma'])
         #print(len(lemmas_list_rnc))
         bag_tf_idf = dict()
-        for item in unic_lemmas_list:
-            if (item not in bastard_list and item not in geo_imen_list and 
-            whole_lemmas_list.count(item) > 2):
+        # берем только основные части речи
+        for item in count_content_pos:
+            if (item not in bastard_list and item not in geo_imen_list
+            and item not in slovnik_A1_list
+            and whole_lemmas_list.count(item) > 1):
                 if item in lemmas_list_rnc:
                     # если омонимы, берем cамый частотный
                     if lemmas_list_rnc.count(item) > 1:
