@@ -2,18 +2,24 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import render_template
-import redis
-import analyzer
+from analyzer import Analyzer
+import logging
+
+logging.basicConfig(filename="logs.log", level=logging.INFO)
 
 app = Flask(__name__)
-cache = redis.Redis(host='redis', port=6379)
+logging.info('Flask app created')
+analyzer_object = Analyzer()
+logging.info('Analyzer object created')
 
 @app.route('/')
 def index():
-    print('hits: ' + str(cache.incr('hits')))
+    logging.info('new user ip: ' + request.remote_addr)
     return render_template('index.html')
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    info = analyzer.start(request.get_json()['text'])
+    text = request.get_json()['text']
+    logging.info(text)
+    info = analyzer_object.start(text)
     return jsonify(result=info)

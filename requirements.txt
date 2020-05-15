@@ -1,5 +1,4 @@
  Flask
- redis
  numpy
  scipy
  pandas
