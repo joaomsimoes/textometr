@@ -6,33 +6,33 @@ Get some information about text.
 1. Install Python 3 and pip
 
 2. Create virtual environment
-```bash
-python3 -m venv env
-```
+   ```bash
+   python3 -m venv env
+   ```
 
 3. Activate venv
-```bash
-source env/bin/activate
-```
+   ```bash
+   source env/bin/activate
+   ```
 
 4. Deactivate venv
-```bash
-deactivate
-```
+   ```bash
+   deactivate
+   ```
 
 5. Install packages
-```bash
-pip3 install -r requirements.txt
-python3 -m nltk.downloader punkt
-```
+   ```bash
+   pip3 install -r requirements.txt
+   python3 -m nltk.downloader punkt
+   ```
 
 ## Run
 
 1. Command
-```
-export FLASK_APP=app.py
-flask run
-```
+   ```
+   export FLASK_APP=app.py
+   flask run
+   ```
 
 ## Docker
 
@@ -53,4 +53,14 @@ flask run
 2. Run tests local or inside Docker container
    ```bash
    python -m unittest tests/tests.py
+   ```
+## Production
+
+1. Start
+   ```bash
+   docker-compose up -d
+   ```
+2. Stop
+   ```bash
+   docker stop CONTAINER_NAME
    ```
