@@ -225,14 +225,14 @@ class Analyzer:
         # первая проверка текста - не слишком маленький
         if len(text) < 10:
             data_about_text['text_ok'] = False
-            data_about_text['text_error_message'] = ('Ошибка! Введите текст на'
+            data_about_text['text_error_message'] = ('Введите текст на'
                 ' русском языке не менее 5 слов.')
             return data_about_text
         
         # Вторая проверка текста - не слишком большой
         if len(text) > 3000:
             data_about_text['text_ok'] = False
-            data_about_text['text_error_message'] = ('Ошибка! Введите текст не '
+            data_about_text['text_error_message'] = ('Введите текст не '
                 'более 3 000 знаков.')
             return data_about_text
 
@@ -277,7 +277,7 @@ class Analyzer:
             self.__count_passive_form(i)
     
         data_about_text['text_ok'] = self.__check_input_text()
-        data_about_text['text_error_message'] = ('Ошибка! Введите текст на'
+        data_about_text['text_error_message'] = ('Введите текст на'
             ' русском языке не менее 5 слов.')
 
         if data_about_text['text_ok'] == False:
@@ -380,11 +380,8 @@ class Analyzer:
             if i[1] < element < i[2]:
                 level_comment = i[0]
 
-        data_about_text['level_number'] = '%.1f' % element
+        data_about_text['level_number'] = float('%.1f' % element)
         data_about_text['level_comment'] = level_comment
-        # служебный атрибут для Тони
-        data_about_text['level_int'] = level_int
-        
         
         # Ищем средние значения по уровням
         f_by_levels = [
