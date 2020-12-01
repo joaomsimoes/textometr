@@ -1,7 +1,0 @@
- Flask
- numpy
- scipy
- pandas
- nltk
- sklearn
- pymystem3

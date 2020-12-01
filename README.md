@@ -1,26 +1,27 @@
-# discover-your-text
-Get some information about text.
+# Textometr
+Textometr allows you to quickly obtain information about a text that is relevant for its preparation for a Russian lesson: the level of complexity of the text, key and most useful words, statistics on the occurrence of words in lexical minimums.
 
-## Installation
+## Backend Installation
+1. Go to `backend` folder
 
-1. Install Python 3 and pip
+2. Install Python 3 and pip
 
-2. Create virtual environment
+3. Create virtual environment
    ```bash
    python3 -m venv env
    ```
 
-3. Activate venv
+4. Activate venv
    ```bash
    source env/bin/activate
    ```
 
-4. Deactivate venv
+5. Deactivate venv
    ```bash
    deactivate
    ```
 
-5. Install packages
+6. Install packages
    ```bash
    pip3 install -r requirements.txt
    python3 -m nltk.downloader punkt
@@ -52,7 +53,7 @@ Get some information about text.
 
 2. Run tests local or inside Docker container
    ```bash
-   python -m unittest tests/tests.py
+   python3 -m unittest
    ```
 ## Production
 

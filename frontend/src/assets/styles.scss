@@ -1,0 +1,118 @@
+@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../node_modules/bulma/sass/utilities/functions';
+
+$primary: #007a7a;
+$warning: #fea02f;
+
+$navbar-height: 4rem;
+$navbar-item-img-max-height: 3rem;
+
+// Setup Custom Colors
+$easy: green;
+$easy-invert: findColorInvert($easy);
+$mild: yellow;
+$mild-invert: findColorInvert($mild);
+$moderate: orange;
+$moderate-invert: findColorInvert($moderate);
+$difficult: red;
+$difficult-invert: findColorInvert($difficult);
+$very-difficult: brown;
+$very-difficult-invert: findColorInvert($very-difficult);
+
+// Add new color variables to the color map.
+@import '../../node_modules/bulma/sass/utilities/derived-variables';
+$addColors: (
+  'easy':($easy, $easy-invert),
+  'mild': ($mild, $mild-invert),
+  'moderate': ($moderate, $moderate-invert),
+  'difficult': ($difficult, $difficult-invert),
+  'very-difficult': ($very-difficult, $very-difficult-invert),
+);
+$colors: map-merge($colors, $addColors);
+
+@import '../../node_modules/bulma/bulma';
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $primary;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: $warning;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  width: 250px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -125px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}

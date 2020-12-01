@@ -1,0 +1,14 @@
+curl 'http://localhost:8000/analyze' \
+  -H 'Connection: keep-alive' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'User-Agent: Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Mobile Safari/537.36' \
+  -H 'Content-Type: application/json;charset=UTF-8' \
+  -H 'Origin: http://localhost:8081' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Referer: http://localhost:8081/' \
+  -H 'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'Cookie: lang=ru; auth=%7B%22access_token%22%3A%22bc06b1b7-8535-4881-b4df-53b429036515%22%2C%22token_type%22%3A%22bearer%22%2C%22refresh_token%22%3A%22e8dfdf55-cad5-4d57-a86a-67a51039ac5e%22%2C%22expires_in%22%3A3599%2C%22scope%22%3A%22read%20write%22%7D' \
+  --data-binary '{"text":"Инцидент произошел днем 28 ноября на полигоне в Красносельском районе города около дома 54 по Гатчинскому шоссе — там часто проходят частные мероприятия и исторические фестивали с элементами военной реконструкции, отмечает «Комсомольская правда».","mode":"foreign"}' \
+  --compressed
