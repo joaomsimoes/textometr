@@ -504,7 +504,7 @@
 
     <footer class="footer">
       <div class="content has-text-centered">
-        <p>Лаборатория Института Пушкина</p>
+        <a href="http://digital-pushkin.tilda.ws">Лаборатория Института Пушкина</a>
       </div>
     </footer>
   </div>
