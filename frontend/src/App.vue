@@ -697,7 +697,7 @@ export default {
     analyze: function () {
       this.clear()
       this.loading = true
-      axios.post('http://localhost:8000/analyze', { text: this.text, mode: this.mode })
+      axios.post(process.env.VUE_APP_API_URL + '/analyze', { text: this.text, mode: this.mode })
         .then(response => {
           this.result = response.data
           if (response.data.text_ok) {

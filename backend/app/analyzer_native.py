@@ -1,5 +1,4 @@
 # Быстренько обучаем модель и анализируем входной текст
-
 import nltk
 import pymystem3
 import statistics
@@ -28,6 +27,8 @@ class Analyzer_native:
     ]
 
     def __init__(self):
+
+        print('Init Analyzer_native')
 
         self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
 
@@ -198,6 +199,8 @@ class Analyzer_native:
 
     # начало цикла анализа этого текста
     def start(self, raw_text):
+
+        print('Start Analyzer_native')
 
         text = self.__clean_text(raw_text)
         # создаем словарь и будем в него все складывать

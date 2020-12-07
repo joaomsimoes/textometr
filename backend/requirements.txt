@@ -4,5 +4,4 @@ pandas
 nltk
 sklearn
 pymystem3
-fastapi
-uvicorn
+joblib

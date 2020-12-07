@@ -30,9 +30,8 @@ Textometr allows you to quickly obtain information about a text that is relevant
 ## Run
 
 1. Command
-   ```
-   export FLASK_APP=app.py
-   flask run
+   ```sh
+   uvicorn main:app --reload
    ```
 
 ## Docker

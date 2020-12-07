@@ -8,6 +8,7 @@ from collections import defaultdict
 import statistics
 from nltk.tokenize import sent_tokenize
 import re
+from joblib import dump, load
 
 
 class Analyzer_foreign:
@@ -93,6 +94,8 @@ class Analyzer_foreign:
 
     def __init__(self):
 
+        print('Init Analyzer_foreign')
+
         self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
 
         self.ridge = linear_model.Ridge(alpha=0.1)
@@ -155,6 +158,15 @@ class Analyzer_foreign:
         self.count_kotoryi = []
         self.count_content_pos = []
         self.count_passive = []
+
+        # Обучаем модель
+        # x_train, y_train = self.features[Analyzer_foreign.COLUMNS_NEEDED], self.features['level']
+        # self.ridge.fit(x_train, y_train)
+        # dump(self.ridge, 'data/model.joblib')
+        
+        # Загружаем уже обученную модель
+        self.ridge = load('data/model.joblib')
+
 
     # считаем слоги и буквы
     def __count_syllables(self, element):
@@ -338,6 +350,8 @@ class Analyzer_foreign:
 
     def start(self, raw_text):
 
+        print('Start Analyzer_foreign')
+
         # создаем словарь и будем в него все складывать
         self.data_about_text = {}
         self.whole_lemmas_list = []
@@ -419,9 +433,7 @@ class Analyzer_foreign:
         test_features_array = np.array(features_for_test_text)
         test_features_array = test_features_array.reshape(1, -1)
 
-        x_train, y_train = self.features[Analyzer_foreign.COLUMNS_NEEDED], self.features['level']
-
-        prediction = self.__fit_and_predict(test_features_array, x_train, y_train)
+        prediction = self.__predict(test_features_array)
 
         self.__tell_me_about_text(prediction, clean_lemmas_list)
 
@@ -586,11 +598,9 @@ class Analyzer_foreign:
         self.dict_of_features['contentPOS'] = (
                 len(self.count_content_pos) / len(self.whole_lemmas_list)
     )
-
-    # Основная функция, где обучаем модель на полученных признаках и
-    # делаем предсказание
-    def __fit_and_predict(self, y, x_train, y_train):
-        self.ridge.fit(x_train, y_train)
+   
+    # Делаем предсказание
+    def __predict(self, y):
         prediction = self.ridge.predict(y)
         if prediction < 0:
             prediction = 0

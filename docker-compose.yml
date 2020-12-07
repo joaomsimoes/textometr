@@ -1,0 +1,14 @@
+version: "3"
+services:
+  frontend:
+    image: 1eshkin/textometr-frontend
+    ports:
+      - "8888:80"
+  backend:
+    image: 1eshkin/textometr-backend
+    ports:
+      - "8889:80"
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
