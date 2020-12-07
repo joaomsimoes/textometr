@@ -56,11 +56,43 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```
 ## Production
 
-1. Start
+Deploy services to Docker Swarm
+
+1. Build image for frontend
    ```bash
-   docker-compose up -d
+   cd frontend # from the project directory
+   docker build -t 1eshkin/textometr-frontend
+   ```   
+2. Push frontend image to the Docker Hub
+   ```bash
+   docker push 1eshkin/textometr-frontend
    ```
-2. Stop
+3. Build image for backend
    ```bash
-   docker stop CONTAINER_NAME
+   cd backend # from the project directory
+   docker build -t 1eshkin/textometr-backend
+   ```
+4. Push backend image to the Docker Hub
+   ```bash
+   docker push 1eshkin/textometr-backend
+   ```
+5. Copy `docker-compose.yml` to the `textometr` folder on remote server
+
+6. Create Docker Swarm on the remote server
+   ```bash
+   docker swarm init
+   ```
+7. Run Docker Compose script for building images
+   ```bash
+   docker-compose up
+   ```
+   Then Ctrl+C to shutdown
+8. Deploy services to Docker Swarm
+   ```bash
+   docker stack deploy --compose-file docker-compose.yml textometr
+   ```
+9. Watch running services
+   ```bash
+   docker service ls # to view active replicas
+   docker stats # to monitor resource usage
    ```
