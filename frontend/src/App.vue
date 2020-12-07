@@ -696,6 +696,12 @@ export default {
   methods: {
     analyze: function () {
       this.clear()
+      if (this.text.length < 10) {
+          this.result = {
+            text_ok: false,
+            text_error_message: 'Текст слишком короткий.'
+          }
+      } else {
       this.loading = true
       axios.post(process.env.VUE_APP_API_URL + '/analyze', { text: this.text, mode: this.mode })
         .then(response => {
@@ -708,10 +714,15 @@ export default {
         })
         .catch(error => {
           console.log(error)
+          this.result = {
+            text_ok: false,
+            text_error_message: 'Упс, что-то пошло не так... Попробуйте позже.'
+          }
         })
         .then(() => {
           this.loading = false
         })
+      }
     },
     clear: function() {
       this.result = null
