@@ -1,4 +1,4 @@
-# Быстренько обучаем модель и анализируем входной текст
+
 import numpy as np
 import pandas as pd
 import nltk
@@ -284,7 +284,8 @@ class Analyzer_foreign:
             return percent
 
     def __clean_text(self, input_text):
-        new_text = input_text.replace('\n', ' ')
+        new_text = input_text.replace('­\n', '')
+        new_text = new_text.replace('\n', ' ')
         new_text = new_text.replace('•', '')
         new_text = new_text.replace('…', '.')
         new_text = new_text.replace('...', '.')

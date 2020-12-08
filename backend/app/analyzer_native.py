@@ -14,7 +14,7 @@ class Analyzer_native:
 
     COLUMNS_NEEDED = ['words', 'unique_words', 'sentences', 'mean_len_word' , 'mean_len_sentence',
                       'formula_flesh_oborneva', 'formula_flesh_kinc_oborneva' , 'formula_pushkin',
-                      'structure_complex', 'lexical_complex', 'narrativity','description',
+                      'level_comment','structure_complex', 'lexical_complex', 'narrativity','description',
                       'tt_ratio', 'lex_density','lexical_complex_rki',
                       'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words']
 
@@ -25,6 +25,14 @@ class Analyzer_native:
         'прич', 'кр', 'полн', 'притяж', '1-л', 'сред', 'несов',
         'сов', 'действ', 'страд', 'неод', 'од'
     ]
+
+    # шкала сложности, высчитывается от 0 до 10, примерно соответствует классу
+    INTERPRETER = [("7-8 лет.", 0, 2),
+                   ("9-10 лет.", 2.1, 4),
+                   ("11-12 лет.", 4.1, 6),
+                   ("13-14 лет.", 6.1, 8),
+                   ("15-17 лет.", 8.1, 9),
+                   ("выпускник старшей школы.", 9.1, 10)]
 
     def __init__(self):
 
@@ -142,7 +150,8 @@ class Analyzer_native:
             return round(percent)
 
     def __clean_text(self, input_text):
-        new_text = input_text.replace('\n', ' ')
+        new_text = input_text.replace('­\n', '')
+        new_text = new_text.replace('\n', ' ')
         new_text = new_text.replace('•', '')
         new_text = new_text.replace('…', '.')
         new_text = new_text.replace('...', '.')
@@ -295,48 +304,54 @@ class Analyzer_native:
         # всего предложений в тексте
         self.data_about_text_store['sentences'] = all_sentences
         # средняя длина слова в тексте
-        self.data_about_text_store['mean_len_word'] = (sum(self.words_length_list)) / all_words
+        self.data_about_text_store['mean_len_word'] = round(((sum(self.words_length_list)) / all_words), 1)
         self.data_about_text_store['median_len_word'] = statistics.median(all_len_words)
         self.data_about_text_store['median_len_sentence'] = statistics.median(
             all_len_sentences
         )
 
         # средняя длина предложения в тексте
-        self.data_about_text_store['mean_len_sentence'] = all_words / all_sentences
+        self.data_about_text_store['mean_len_sentence'] = round((all_words / all_sentences), 1)
         self.data_about_text_store['mean_len_word_in_syllables'] = all_syllables / all_words
         self.data_about_text_store['percent_of_long_words'] = long_words / all_words
 
         # lexical density - лексическая плотность, соотношение смысловых и служебных
         # частей речи: чем она выше, тем считается что текст сложнее
-        self.data_about_text_store['lex_density'] = round((len(self.count_content_pos) / len(self.whole_lemmas_list)) * 10)
+        self.data_about_text_store['lex_density'] = f"{round((len(self.count_content_pos) / len(self.whole_lemmas_list)) * 10)} из 10"
 
         # type-token ratio (lexical diversity) - number of types/the number of tokens:
         # чем выше, тем лексика в тексте "однотипнее"
         # потом попробовать sttr: то же самое на отрезках в 1000 слов.
         # standardised type/token ratio
-        self.data_about_text_store['tt_ratio'] = round((len(unique_lemmas_list) / len(self.whole_lemmas_list)) * 10)
+        self.data_about_text_store['tt_ratio'] = f"{round((len(unique_lemmas_list) / len(self.whole_lemmas_list)) * 10)} из 10"
 
         self.data_about_text_store['passive'] = len(self.count_passive)
 
         ##формулы читабельности (адаптированные, из диссера Оборневой)##
-        formula_f_oborneva = 206.835 - (60.1 * (all_syllables / all_words)) - (1.3 * (all_words / all_sentences))
-        formula_f_k_oborneva = 0.5 * (all_words / all_sentences) + 8.4 * (all_syllables / all_words) - 15.59
-        self.data_about_text_store['formula_flesh_oborneva'] = round(formula_f_oborneva)
-        self.data_about_text_store['formula_flesh_kinc_oborneva'] = round(formula_f_k_oborneva)
-        # dict_of_features['formula_pushkin'] = round(100 - ((formula_f_oborneva + percent_of_known_words(
-        # whole_lemmas_minus_stop, laposhina_list)) / 2) - dict_of_features['прич'] - dict_of_features['страд'])
+        formula_f_oborneva = round(206.835 - (60.1 * (all_syllables / all_words)) - (1.3 * (all_words / all_sentences)))
+        formula_f_k_oborneva = round(0.5 * (all_words / all_sentences) + 8.4 * (all_syllables / all_words) - 15.59)
 
-        self.data_about_text_store['laposhina_list'] = self.__percent_of_known_words(
-            self.whole_lemmas_list, self.laposhina_list)
+        self.data_about_text_store['formula_flesh_oborneva'] = f"{formula_f_oborneva} из 100 (чем больше - тем текст легче)"
+        self.data_about_text_store['formula_flesh_kinc_oborneva'] = f"{formula_f_k_oborneva} (примерно должна соответствовать классу)"
 
-        self.data_about_text_store['detcorpus_5000'] = self.__percent_of_known_words(
+        in_laposhina_list = self.__percent_of_known_words(self.whole_lemmas_list, self.laposhina_list)
+
+        self.data_about_text_store['laposhina_list'] = f"{in_laposhina_list} %"
+
+        in_detcorpus_5000 = self.__percent_of_known_words(
            self.whole_lemmas_list, self.detcorpus_list)
 
-        self.data_about_text_store['rki_children_list'] = self.__percent_of_known_words(
+        self.data_about_text_store['detcorpus_5000'] = f"{in_detcorpus_5000} %"
+
+        in_rki_children = self.__percent_of_known_words(
             self.whole_lemmas_list, self.rki_children_list)
 
-        self.data_about_text_store['united_simple_list'] = self.__percent_of_known_words(
+        self.data_about_text_store['rki_children_list'] = f"{in_rki_children} %"
+
+        in_united_simple_list = self.__percent_of_known_words(
             self.whole_lemmas_list, self.united_list)
+
+        self.data_about_text_store['united_simple_list'] = f"{in_united_simple_list} %"
 
         self.data_about_text_store['rare_words'] = list(set([f for f in clean_lemmas_list if
                                                              f not in self.detcorpus_list and f not in self.fr_10000_list]))
@@ -350,44 +365,50 @@ class Analyzer_native:
         if structure_complex < 0:
             structure_complex = 0
 
-        self.data_about_text_store['structure_complex'] = structure_complex
+        self.data_about_text_store['structure_complex'] = f"{structure_complex} из 10"
 
-        lexical_complex = round(10 - ((((self.data_about_text_store['detcorpus_5000'] - 50) * 2) + 7) / 10))
+        lexical_complex = round(10 - ((((in_detcorpus_5000 - 50) * 2) + 7) / 10))
         if lexical_complex > 10:
             lexical_complex = 10
         if lexical_complex < 0:
             lexical_complex = 0
 
-        self.data_about_text_store['lexical_complex'] = lexical_complex
+        self.data_about_text_store['lexical_complex'] = f"{lexical_complex} из 10"
 
-        lexical_complex_rki = round(10 - ((((self.data_about_text_store['rki_children_list'] - 60) * 2)) / 10))
+        lexical_complex_rki = round(10 - ((((in_rki_children - 60) * 2)) / 10))
 
         if lexical_complex_rki > 10:
             lexical_complex_rki = 10
         if lexical_complex_rki < 0:
             lexical_complex_rki = 0
 
-        self.data_about_text_store['lexical_complex_rki'] = lexical_complex_rki
+        self.data_about_text_store['lexical_complex_rki'] = f'{lexical_complex_rki} из 10'
 
-        self.data_about_text_store['formula_pushkin'] = round(int((structure_complex + lexical_complex) / 2), 1)
+        formula_pushkin = round(((structure_complex + lexical_complex) / 2), 1)
 
-        self.data_about_text_store['narrativity'] = round(10 - 2 * (self.data_about_text_store['S'] / (self.data_about_text_store['V'] + 1)))
+        self.data_about_text_store['formula_pushkin'] = round(formula_pushkin)
 
-        if self.data_about_text_store['narrativity'] < 0:
-            self.data_about_text_store['narrativity'] = 0
+        for i in Analyzer_native.INTERPRETER:
+            if i[1] <= formula_pushkin <= i[2]:
+                self.data_about_text_store['level_comment'] = f"{round(formula_pushkin)} из 10, {i[0]}"
 
-        self.data_about_text_store['description'] = round(3 * (self.data_about_text_store['A'] / all_sentences))
+        narrativity = round(10 - 2 * (self.data_about_text_store['S'] / (self.data_about_text_store['V'] + 1)))
 
-        if self.data_about_text_store['description'] > 10:
-            self.data_about_text_store['description'] = 10
+        if narrativity < 0:
+            narrativity = 0
 
-        for i in self.data_about_text_store:
-            if isinstance(self.data_about_text_store[i], float):
-                self.data_about_text_store[i] = '%0.2f' % self.data_about_text_store[i]
+        self.data_about_text_store['narrativity'] = f"{narrativity} из 10"
+
+        description = round(3 * (self.data_about_text_store['A'] / all_sentences))
+
+        if description > 10:
+            description = 10
+
+        self.data_about_text_store['description'] = f"{description} из 10"
 
         for i in self.data_about_text_store:
             if i in Analyzer_native.COLUMNS_NEEDED:
                 self.data_about_text[i] = self.data_about_text_store[i]
 
-        #print(self.data_about_text)
+        print(self.data_about_text)
         return self.data_about_text
