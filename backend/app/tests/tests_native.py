@@ -1,86 +1,86 @@
 import unittest
-from analyzer_native import Analyzer_native
+from analyzer_2000 import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.text_analyzer = Analyzer_native()
+        cls.text_analyzer = Analyzer()
 
     def test_text_1(self):
         #print(TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.'))
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Шла Саша по шоссе и сосала сушку.')['sentences'],
             1
         )
 
     def test_text_2(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Трудно найти подходящее место для гнезда, трудно выкормить птенцов и т. п.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Трудно найти подходящее место для гнезда, трудно выкормить птенцов и т. п.')['sentences'],
             1
         )
     def test_text_3(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Реальные вещества всегда содержат какие-то примеси, даже лекарственные вещества (например, аспирин - рис. 1-2), к чистоте которых предъявляются особые требования')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Реальные вещества всегда содержат какие-то примеси, даже лекарственные вещества (например, аспирин - рис. 1-2), к чистоте которых предъявляются особые требования')['sentences'],
             1
         )
     def test_text_4(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Первое предложение.Второе сразу, без пробела.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Первое предложение.Второе сразу, без пробела.')['sentences'],
             2
         )
 
     def test_text_5(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Самая большая лисица достигает 55 см. в длину с размахом крыльев до 1,8 м. Есть свои лилипуты и великаны и '
+            TestAnalyzer.text_analyzer.start_native('Самая большая лисица достигает 55 см. в длину с размахом крыльев до 1,8 м. Есть свои лилипуты и великаны и '
                                   'в растительном мире.')['sentences'],
             2
         )
     def test_text_6(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Длина капсулы равна 0,1 мм, ширина 0.08 мм. А в 2010 году')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Длина капсулы равна 0,1 мм, ширина 0.08 мм. А в 2010 году')['sentences'],
             2
         )
     def test_text_7(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('И этот загадочный персонаж ногозначительно помолчал...')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('И этот загадочный персонаж ногозначительно помолчал...')['sentences'],
             1
         )
 
     def test_text_8(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Бывает и такое многоточие… А потом новое предложение.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Бывает и такое многоточие… А потом новое предложение.')['sentences'],
             2
         )
 
     def test_text_9(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('А в 2010 году в г. Дубае состоялось торжественное открытие самого высокого здания в мире – небоскрёба Бурдж-Халифа.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('А в 2010 году в г. Дубае состоялось торжественное открытие самого высокого здания в мире – небоскрёба Бурдж-Халифа.')['sentences'],
             1
         )
 
     def test_text_10(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('В 1821 году С.В. Морозов заплатил своему помещику Рюмину за выход на волю.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('В 1821 году С.В. Морозов заплатил своему помещику Рюмину за выход на волю.')['sentences'],
             1
         )
 
     def test_text_11(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Походка министра, таким образом, в 4.7-6.7 раза более дурацкая, чем обычная.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('Походка министра, таким образом, в 4.7-6.7 раза более дурацкая, чем обычная.')['sentences'],
             1
         )
 
     def test_text_12(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('И вы вырастили мух?- Нет пока.')['sentences'],
+            TestAnalyzer.text_analyzer.start_native('И вы вырастили мух?- Нет пока.')['sentences'],
             2
         )
 
     def test_text_13(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Пока приезжий господин осматривал свою комнату, внесены были его пожитки: прежде всего чемодан из белой кожи, '
                 'несколько поистасканный, показывавший, что был не в первый раз в дороге. Чемодан внесли кучер Селифан, низенький человек в '
                 'тулупчике, и лакей Петрушка, малый лет тридцати, в просторном подержанном сюртуке, как видно с барского плеча, малый немного '
@@ -94,7 +94,7 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_14(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Пока приезжий господин осматривал свою комнату, внесены были его пожитки: прежде всего чемодан из белой кожи, '
                 'несколько поистасканный, показывавший, что был не в первый раз в дороге. Чемодан внесли кучер Селифан, низенький человек в '
                 'тулупчике, и лакей Петрушка, малый лет тридцати, в просторном подержанном сюртуке, как видно с барского плеча, малый немного '
@@ -103,12 +103,12 @@ class TestAnalyzer(unittest.TestCase):
                 'Селифан отправился на конюшню возиться около лошадей, а лакей Петрушка стал устроиваться в маленькой передней, очень темной конурке, '
                 'куда уже успел притащить свою шинель и вместе с нею какой-то свой собственный запах, который был сообщен и принесенному вслед за '
                 'тем мешку с разным лакейским туалетом.')['lexical_complex'],
-            '3 из 10'
+            '6 из 10'
         )
 
     def test_text_15(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Пока приезжий господин осматривал свою комнату, внесены были его пожитки: прежде всего чемодан из белой кожи, '
                 'несколько поистасканный, показывавший, что был не в первый раз в дороге. Чемодан внесли кучер Селифан, низенький человек в '
                 'тулупчике, и лакей Петрушка, малый лет тридцати, в просторном подержанном сюртуке, как видно с барского плеча, малый немного '
@@ -117,12 +117,12 @@ class TestAnalyzer(unittest.TestCase):
                 'Селифан отправился на конюшню возиться около лошадей, а лакей Петрушка стал устроиваться в маленькой передней, очень темной конурке, '
                 'куда уже успел притащить свою шинель и вместе с нею какой-то свой собственный запах, который был сообщен и принесенному вслед за '
                 'тем мешку с разным лакейским туалетом.')['formula_pushkin'],
-            6
+            7
         )
 
     def test_text_16(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
                 '(арендатору) жилого помещения за определенную плату во владение и пользование с ограниченным сроком по времени и другими условиями. '
                 'Нотариальное заверение договора аренды не требуется и обязательной нотариальной формы такого договора законодательством не '
@@ -132,63 +132,63 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_17(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
                 '(арендатору) жилого помещения за определенную плату во владение и пользование с ограниченным сроком по времени и другими условиями. '
                 'Нотариальное заверение договора аренды не требуется и обязательной нотариальной формы такого договора законодательством не '
                 'предусмотрено, однако по желанию - стороны вправе предусмотреть его нотариальное удостоверение.')['lexical_complex'],
-            '8 из 10'
+            '9 из 10'
         )
 
     def test_text_18(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Это мой одноклассник Миша. Он глупый и некрасивый: глаза маленькие, рот большой, нос картошкой. Он думает, он сильный.')['lexical_complex_rki'],
             '3 из 10'
         )
 
     def test_text_19(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Как хороша эта маленькая белокаменная церковь! Одиноко стоит она возле вязовой рощи на небольшом холмике у тихого озерца.')['description'],
             '9 из 10'
         )
 
     def test_text_20(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start(
+            TestAnalyzer.text_analyzer.start_native(
                 'Меня зовут Тоня. Это мой стол. Его зовут Леша. Это его стол.')['formula_pushkin'],
             0
         )
 
     def test_text_21(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('384')['text_ok'],
+            TestAnalyzer.text_analyzer.start_native('384')['text_ok'],
             False
         )
 
     def test_text_22(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('')['text_ok'],
+            TestAnalyzer.text_analyzer.start_native('')['text_ok'],
             False
         )
 
     def test_text_23(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе.')['text_error_message'],
+            TestAnalyzer.text_analyzer.start_native('Шла Саша по шоссе.')['text_error_message'],
             'Введите текст на русском языке не менее 5 слов.'
         )
 
     def test_text_24(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе, была хорошая погода. А в тексте'
+            TestAnalyzer.text_analyzer.start_native('Шла Саша по шоссе, была хорошая погода. А в тексте'
                                     ' бывает english/vinglish')['words'],
             13
         )
 
     def test_text_25(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Сестра Криса Фармера Пенни стала журналисткой. '
+            TestAnalyzer.text_analyzer.start_native('Сестра Криса Фармера Пенни стала журналисткой. '
                                     'Когда брата убили, ей было 17 лет.В 2015 году — '
                                     'через два года после смерти отца — Пенни Фармер '
                                     'решила попытаться найти предполагаемого убийцу '
@@ -201,8 +201,8 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_26(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.')['level_comment'],
-            '2 из 10, 9-10 лет.'
+            TestAnalyzer.text_analyzer.start_native('Шла Саша по шоссе и сосала сушку.')['level_comment'],
+            '27 баллов из 100. Простой текст, подойдет для возраста 9-10 лет (3-4 класс).'
         )
 
 

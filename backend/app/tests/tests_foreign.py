@@ -1,28 +1,28 @@
 import unittest
-from analyzer_foreign import Analyzer_foreign
+from analyzer_2000 import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.text_analyzer = Analyzer_foreign()
+        cls.text_analyzer = Analyzer()
 
     def test_text_1(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.')['sentences'],
+            TestAnalyzer.text_analyzer.start_foreign('Шла Саша по шоссе и сосала сушку.')['sentences'],
             1
         )
 
     def test_text_2(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.')['words'],
+            TestAnalyzer.text_analyzer.start_foreign('Шла Саша по шоссе и сосала сушку.')['words'],
             7
         )
 
     def test_text_3(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Все рабочие — от доярок до сварщиков, под команды,'
+            TestAnalyzer.text_analyzer.start_foreign('Все рабочие — от доярок до сварщиков, под команды,'
                                     ' доносившиеся из радиоприемника, дружно приседали и бегали'
                                     ' на месте! Производственная гимнастика, как и многое в СССР,'
                                     ' было добровольно-принудительным занятием. Перед обедом или'
@@ -35,26 +35,26 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_4(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('384')['text_ok'],
+            TestAnalyzer.text_analyzer.start_foreign('384')['text_ok'],
             False
         )
 
     def test_text_5(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('')['text_ok'],
+            TestAnalyzer.text_analyzer.start_foreign('')['text_ok'],
             False
         )
 
     def test_text_6(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Шла Саша по шоссе, была хорошая погода. А в тексте'
+            TestAnalyzer.text_analyzer.start_foreign('Шла Саша по шоссе, была хорошая погода. А в тексте'
                                     ' бывает english/vinglish')['words'],
             13
         )
 
     def test_text_7(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Сестра Криса Фармера Пенни стала журналисткой. Когда брата убили, ей было 17 лет.В 2015 году — '
+            TestAnalyzer.text_analyzer.start_foreign('Сестра Криса Фармера Пенни стала журналисткой. Когда брата убили, ей было 17 лет.В 2015 году — '
                                     'через два года после смерти отца — Пенни Фармер '
                                     'решила попытаться найти предполагаемого убийцу '
                                     'брата в фейсбуке. У нее получилось моментально; '
@@ -73,7 +73,7 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_8(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Это моя одноклассница Лена. Она глупая и некрасивая: глаза круглые, уши большие, '
+            TestAnalyzer.text_analyzer.start_foreign('Это моя одноклассница Лена. Она глупая и некрасивая: глаза круглые, уши большие, '
                                              'нос курносый, характер ужасный. Она думает, она самая умная, потому что учится хорошо. '
                                              'А я знаю: она учится хорошо, потому что уроки делает три часа в день! Она не знает, '
                                              'как называются динозавры, какие бывают автомобили. И она не играет в футбол! ')['level_int'],
@@ -82,13 +82,13 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_9(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Это мой друг. Это моя подруга. Это мой дом. Это мое место. Это моя комната. Это моё окно. Это мой город.')['inA1'],
+            TestAnalyzer.text_analyzer.start_foreign('Это мой друг. Это моя подруга. Это мой дом. Это мое место. Это моя комната. Это моё окно. Это мой город.')['inA1'],
             100
         )
 
     def test_text_10(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Мария шла домой с работы. Около дома она увидела Андрея. Раньше они часто встречались,гуляли, ходили в кино, им нравилось быть вместе.'
+            TestAnalyzer.text_analyzer.start_foreign('Мария шла домой с работы. Около дома она увидела Андрея. Раньше они часто встречались,гуляли, ходили в кино, им нравилось быть вместе.'
                                              ' Но однажды Мария и Андрей поссорились и вот уже 4 месяца не видели друг друга. '
                                              'Андрей не приходил, не звонил, и Мария подумала, что у него есть другая девушка. Мария жила одна. Дома ее ждала только рыжая '
                                              'собака Бимка. Она всегда была рада, когда Мария приходила домой с работы. Девушка нашла собаку зимой на улице 3 месяца назад. '
@@ -106,9 +106,9 @@ class TestAnalyzer(unittest.TestCase):
             1
         )
 
-    def test_text_10(self):
+    def test_text_11(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
+            TestAnalyzer.text_analyzer.start_foreign('Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
                                              '(арендатору) жилого помещения за определенную плату во владение и пользование с ограниченным сроком по времени и другими '
                                              'условиями. Нотариальное заверение договора аренды не требуется и обязательной нотариальной формы такого договора '
                                              'законодательством не предусмотрено, однако по желанию - стороны вправе предусмотреть его нотариальное удостоверение. '
@@ -121,16 +121,15 @@ class TestAnalyzer(unittest.TestCase):
                                              'центральное отопление, коммунальные услуги, телефон (абонентская ежемесячная плата).') ['inB1'],
             48)
 
-    def test_text_11(self):
+    def test_text_12(self):
         with self.assertRaises(KeyError):
-            TestAnalyzer.text_analyzer.start(
-                'Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
+            TestAnalyzer.text_analyzer.start_foreign('Договор аренды квартиры — документ подтверждающий предоставление собственником квартиры (арендодателем) другой стороне '
                 '(арендатору) жилого помещения за определенную плату во владение и пользование с ограниченным сроком по времени и другими '
                 'условиями.')['characters']
 
-    def test_text_12(self):
+    def test_text_13(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start('Минобороны Азербайджана впервые опубликовало данные о военных потерях в ходе конфликта в Карабахе.\n\n   '
+            TestAnalyzer.text_analyzer.start_foreign('Минобороны Азербайджана впервые опубликовало данные о военных потерях в ходе конфликта в Карабахе.\n\n   '
                                              'По информации ведомства, погибли 2783 военнослужащих. Еще более ста считаются пропавшими без вести. \t'
                                              '   В госпиталях находятся 1245 военных.')['text_ok'],
             True

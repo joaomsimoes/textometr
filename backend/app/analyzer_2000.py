@@ -1,3 +1,4 @@
+### Объединенный файл из двух аналайзеров, для рки и для родного.
 
 import numpy as np
 import pandas as pd
@@ -10,8 +11,7 @@ from nltk.tokenize import sent_tokenize
 import re
 from joblib import dump, load
 
-
-class Analyzer_foreign:
+class Analyzer:
     SYLLABLES = ['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'ю', 'я', 'э']
 
     TWO_VOWELS = ['ия', 'ии', 'ые', 'ие', 'ио', 'ию', 'иу', 'ее', 'ею', 'ея', 'ою', 'ая', 'яя', 'ое',
@@ -22,7 +22,7 @@ class Analyzer_foreign:
         'хотеть', 'должный', 'хотеться'
     ]
 
-    COLUMNS_NEEDED = [
+    COLUMNS_NEEDED_FOREIGN = [
         'inA2', 'kellyC2', 'simple850', 'simple1000', 'simple2000',
         'dale3000', 'infr1000', 'infr3000', 'infr5000', 'infr10000',
         'lex_abstract', 'formula_smog', 'mean_len_word', 'median_len_word',
@@ -37,6 +37,12 @@ class Analyzer_foreign:
         'сов', 'действ', 'страд', 'неод', 'од', 'нп', 'пе'
     ]
 
+    COLUMNS_NEEDED_NATIVE = ['words', 'unique_words', 'sentences', 'mean_len_word' , 'mean_len_sentence',
+                      'formula_flesh_oborneva', 'formula_flesh_kinc_oborneva' , 'formula_pushkin', 'formula_pushkin_100',
+                      'level_comment','structure_complex', 'lexical_complex','narrativity','description',
+                      'tt_ratio', 'lex_density','lexical_complex_rki',
+                      'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words']
+
     COLUMNS_OUTPUT = [ 'text_ok', 'text_error_message', 'level_number', 'level_comment', 'level_int', 'words', 'sentences',
                        'unique_words', 'reading_for_detail_speed', 'skim_reading_speed', 'key_words', 'cool_words',
                        'inA1', 'not_inA1', 'inA2', 'not_inA2', 'inB1', 'not_inB1', 'inB2', 'not_inB2', 'inC1', 'not_inC1',
@@ -50,25 +56,8 @@ class Analyzer_foreign:
         'сов', 'действ', 'страд', 'неод', 'од'
     ]
 
-    # растянутая шкала от 0 до 10
-    INTERPRETER = [("A1. Элементарный уровень.", 0, 1.4),
-                   ("Начало A2. Базовый уровень.", 1.5, 1.8),
-                   ("Середина A2. Базовый уровень.", 1.9, 2.2),
-                   ("Конец A2. Базовый уровень.", 2.3, 2.8),
-                   ("Начало B1.  I сертификационный уровень.", 2.9, 3.5),
-                   ("Середина B1. I сертификационный уровень.", 3.6, 4.9),
-                   ("Конец B1. I сертификационный уровень.", 5, 6),
-                   ("Начало B2. II сертификационный уровень.", 6.1, 6.3),
-                   ("Середина B2. II сертификационный уровень.", 6.4, 7.7),
-                   ("Конец B2. II сертификационный уровень.", 7.8, 8.1),
-                   ("Начало C1. III сертификационный уровень.", 8.2, 8.5),
-                   ("Середина C1. III сертификационный уровень.", 8.6, 8.9),
-                   ("Конец C1. III сертификационный уровень.", 9, 9.2),
-                   ("C2, уровень носителя. IV сертификационный уровень.", 9.3, 9.5),
-                   ("ой-ой-ой, этот текст сложный даже для носителя", 9.5, 10)]
-
     # Список потенциально сложных тем
-    GR_FEATURES = [
+    DIFFICULT_GRAM = [
         'A', 'ADV', 'ADVPRO', 'ANUM', 'APRO',
         'NUM', 'SPRO', 'им', 'пр', 'род', 'твор', 'деепр', 'пов',
         'прич', 'кр', 'полн', 'притяж', 'несов',
@@ -88,13 +77,39 @@ class Analyzer_foreign:
         'Вид глагола', 'Модальные глаголы', 'Пассивные формы'
     ]
 
+
     READING_FOR_DETAIL_SPEED_NORM = [10, 30, 50, 50, 100, 120, 120, 120]
 
     SKIM_READING_SPEED_NORM = [20, 50, 100, 300, 400, 500, 500, 500]
 
-    def __init__(self):
+    # растянутая шкала от 0 до 10
+    INTERPRETER_FOREIGN = [("A1. Элементарный уровень.", 0, 1.4),
+                   ("Начало A2. Базовый уровень.", 1.5, 1.8),
+                   ("Середина A2. Базовый уровень.", 1.9, 2.2),
+                   ("Конец A2. Базовый уровень.", 2.3, 2.8),
+                   ("Начало B1.  I сертификационный уровень.", 2.9, 3.5),
+                   ("Середина B1. I сертификационный уровень.", 3.6, 4.9),
+                   ("Конец B1. I сертификационный уровень.", 5, 6),
+                   ("Начало B2. II сертификационный уровень.", 6.1, 6.3),
+                   ("Середина B2. II сертификационный уровень.", 6.4, 7.7),
+                   ("Конец B2. II сертификационный уровень.", 7.8, 8.1),
+                   ("Начало C1. III сертификационный уровень.", 8.2, 8.5),
+                   ("Середина C1. III сертификационный уровень.", 8.6, 8.9),
+                   ("Конец C1. III сертификационный уровень.", 9, 9.2),
+                   ("C2, уровень носителя. IV сертификационный уровень.", 9.3, 9.5),
+                   ("ой-ой-ой, этот текст сложный даже для носителя", 9.5, 10)]
 
-        print('Init Analyzer_foreign')
+    # шкала сложности, высчитывается от 0 до 10, примерно соответствует классу
+    INTERPRETER_NATIVE = [("Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс).", 0, 20),
+                   ("Простой текст, подойдет для возраста 9-10 лет (3-4 класс).", 21, 40),
+                   ("Достаточно простой текст, подойдет для возраста 11-12 лет (5-6 класс).", 41, 60),
+                   ("Текст подойдет для возраста 13-15 лет (7-9 класс).", 61, 75),
+                   ("Текст подойдет для возраста 16-17 лет (10-11 класс).", 76, 85),
+                   ("Сложный текст, подойдет для студента ВУЗа и старше", 86, 91),
+                   ("Очень сложный текст, подойдет для выпускника ВУЗа и старше", 92, 100)]
+
+    def __init__(self):
+        print('Init Analyzer_2000')
 
         self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
 
@@ -139,6 +154,12 @@ class Analyzer_foreign:
         # семантические списки
         self.lex_abstract_list = self.__load('data/lex_abstract.txt')
 
+        # списки слов для родного
+        self.laposhina_list = self.__load('data/laposhina_list_from_formula.txt')
+        self.detcorpus_list = self.__load('data/detcorpus_5000.txt')
+        self.rki_children_list = self.__load('data/rki_children_list.txt')
+        self.united_list = self.__load('data/united_simple_list.txt')
+
         # считали датафрейм
         self.corpus_rnc = pd.read_csv('data/freq_rnc.csv', quotechar='`')
         self.lemmas_list_rnc = list(self.corpus_rnc['lemma'])
@@ -163,27 +184,26 @@ class Analyzer_foreign:
         # x_train, y_train = self.features[Analyzer_foreign.COLUMNS_NEEDED], self.features['level']
         # self.ridge.fit(x_train, y_train)
         # dump(self.ridge, 'data/model.joblib')
-        
+
         # Загружаем уже обученную модель
         self.ridge = load('data/model.joblib')
-
 
     # считаем слоги и буквы
     def __count_syllables(self, element):
         i_text = element.get('text')
         i_text_syl_counter = 0
         for ii in i_text:
-            if ii in Analyzer_foreign.SYLLABLES:
+            if ii in Analyzer.SYLLABLES:
                 # print('marker')
                 i_text_syl_counter += 1
-        for i in Analyzer_foreign.TWO_VOWELS:
+        for i in Analyzer.TWO_VOWELS:
             if i_text.find(i) != -1:
                 # print('two')
                 i_text_syl_counter -= 1
         if i_text == 'его':
-            i_text_syl_counter == 1
+            i_text_syl_counter = 1
         if i_text_syl_counter == 0:
-            i_text_syl_counter == 1
+            i_text_syl_counter = 1
         self.number_of_syllables_list.append(i_text_syl_counter)
         self.words_length_list.append(len(i_text))
         if i_text_syl_counter >= 4:
@@ -209,7 +229,7 @@ class Analyzer_foreign:
                 element.get('analysis')[0]['lex'] == 'зато'
         ):
             self.conj_adversative_list.append(element.get('analysis')[0]['lex'])
-        if element.get('analysis')[0]['lex'] in Analyzer_foreign.MODAL_WORDS:
+        if element.get('analysis')[0]['lex'] in Analyzer.MODAL_WORDS:
             self.modal_words_list.append(element.get('analysis')[0]['lex'])
         if element.get('analysis')[0]['lex'] == 'который':
             self.count_kotoryi.append(element.get('analysis')[0]['lex'])
@@ -221,7 +241,7 @@ class Analyzer_foreign:
         gr_info = gr_info.replace(',', '<b>')
         gr_info = gr_info.replace('=', '<b>')
         gr_info = gr_info.split('<b>')
-        for i in Analyzer_foreign.GRAM_FEATURES:
+        for i in Analyzer.GRAM_FEATURES:
             if i in gr_info:
                 self.dict_of_features[i] += 1
         if 'S' in gr_info:
@@ -275,12 +295,21 @@ class Analyzer_foreign:
         return True
 
     # Вычисляем процент слов из разных словников и частотных списков
+    #!!! когда буду переписывать модель, унифицировать везде процент! Оставить тот который _100
     def __percent_of_known_words(self, element, list_of_words):
         if len(list_of_words) == 0 or len(element) == 0:
             return 0
         else:
             known_words = [w for w in element if w in list_of_words]
-            percent = len(known_words) / len(element)
+            percent = round((len(known_words) / len(element)),2)
+            return percent
+
+    def __percent_of_known_words_100(self, element, list_of_words):
+        if len(list_of_words) == 0 or len(element) == 0:
+            return 0
+        else:
+            known_words = [w for w in element if w in list_of_words]
+            percent = round((len(known_words) / len(element))*100)
             return percent
 
     def __clean_text(self, input_text):
@@ -345,15 +374,25 @@ class Analyzer_foreign:
             output_int = round(element)
             output_str = str(output_int) + ' мин.'
         else:
-            output_sek = (round(element * 6) * 10) + 10
+            output_sek = (round(element * 6) * 10)
+            if output_sek < 30:
+                output_sek += 10
             output_str = str(output_sek) + ' сек.'
         return output_str
 
-    def start(self, raw_text):
+    def __output_ballov(self, element):
+        last_number = element % 10
+        ball_str = ''
+        if last_number == 1:
+            ball_str = 'балл'
+        if 2 <= last_number <= 4:
+            ball_str = 'балла'
+        else:
+            ball_str = 'баллов'
+        return ball_str
 
-        print('Start Analyzer_foreign')
+    def __clear_fields(self):
 
-        # создаем словарь и будем в него все складывать
         self.data_about_text = {}
         self.whole_lemmas_list = []
         self.noun_list = []
@@ -369,20 +408,127 @@ class Analyzer_foreign:
         self.count_content_pos = []
         self.count_passive = []
 
-        text = self.__clean_text(raw_text)
+        return True
+
+    def __first_check_len_text(self, element):
 
         # первая проверка текста - не слишком маленький
-        if len(text) < 10:
+        if len(element) < 10:
             self.data_about_text['text_ok'] = False
             self.data_about_text['text_error_message'] = ('Введите текст на'
-                                                     ' русском языке не менее 5 слов.')
+                                                          ' русском языке не менее 5 слов.')
             return self.data_about_text
 
         # Вторая проверка текста - не слишком большой
-        if len(text) > 10000:
+        if len(element) > 10000:
             self.data_about_text['text_ok'] = False
             self.data_about_text['text_error_message'] = ('Введите текст не '
-                                                     'более 10 000 знаков.')
+                                                          'более 10 000 знаков.')
+            return self.data_about_text
+
+        self.data_about_text['text_ok'] = True
+        self.data_about_text['text_error_message'] = ('')
+
+        return self.data_about_text
+
+    def __second_check_len_text(self, element):
+        if len(element) < 5:
+            self.data_about_text['text_ok'] = False
+            self.data_about_text['text_error_message'] = ('Введите текст на'
+                                                          ' русском языке не менее 5 слов.')
+            return self.data_about_text
+
+        self.data_about_text['text_ok'] = True
+        self.data_about_text['text_error_message'] = ('')
+        return self.data_about_text
+
+
+    def __set_numbers_about_foreign_text(self, clean_lemmas_list):
+
+        self.all_words = len(self.whole_analyzed_text)
+        self.all_len_words = [len(f) for f in self.whole_lemmas_list]
+        self.all_syllables = sum(self.number_of_syllables_list)
+        self.all_len_sentences = [len(f.split(' ')) for f in self.sentences]
+        self.all_sentences = len(self.sentences)
+        self.long_words = len(self.long_words_list)
+        self.unique_lemmas_list = list(set(self.whole_lemmas_list))
+
+        self.noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
+
+        # всего слов в тексте
+        self.dict_of_features['words'] = (len(self.whole_analyzed_text))
+        # всего предложений в тексте
+        self.dict_of_features['sentences'] = (len(self.sentences))
+        # средняя длина слова в тексте
+        self.dict_of_features['mean_len_word'] = round(((sum(self.words_length_list)) / self.all_words),1)
+        self.dict_of_features['median_len_word'] = statistics.median(self.all_len_words)
+        self.dict_of_features['median_len_sentence'] = statistics.median(self.all_len_sentences)
+
+        # средняя длина предложения в тексте
+        self.dict_of_features['mean_len_sentence'] = round((self.all_words / self.all_sentences), 1)
+        self.dict_of_features['mean_len_word_in_syllables'] = round((self.all_syllables / self.all_words),1)
+        self.dict_of_features['percent_of_long_words'] = round((self.long_words / self.all_words),2)
+
+        # type-token ratio - number of types and the number of tokens -
+        # lexical variety
+        self.dict_of_features['tt_ratio'] = round(((len(self.unique_lemmas_list) / len(self.whole_lemmas_list))),2)
+
+        # Среднее количество модальных глаголов и противительных союзов
+        # на предложение
+        self.dict_of_features['conj_adversative'] = (
+                len(self.conj_adversative_list) / self.all_sentences
+        )
+        self.dict_of_features['modal_verbs'] = len(self.modal_words_list) / self.all_words
+        self.dict_of_features['kotoryi/words'] = (
+                len(self.count_kotoryi) / len(self.whole_lemmas_list)
+        )
+        self.dict_of_features['kotoryi/sentences'] = len(self.count_kotoryi) / self.all_sentences
+        self.dict_of_features['contentPOS'] = round((
+                len(self.count_content_pos) / len(self.whole_lemmas_list)), 2
+        )
+        self.dict_of_features['passive'] = len(self.count_passive)
+
+        # формулы читабельности (адаптированные, из Бегтина)
+        self.dict_of_features['formula_smog'] = round(((30 * (self.long_words / self.all_sentences)) ** 0.5),2)
+
+        self.dict_of_features['unique_words'] = len(self.unique_lemmas_list)
+
+        # Доля названий и бастардов
+        self.dict_of_features['lex_names_and_geo'] = len(self.geo_imen_list)
+        self.dict_of_features['lex_bastards'] = len(self.bastard_list)
+
+        LEXICAL_LISTS = {'inA1': self.slovnik_A1_list, 'inA2': self.slovnik_A2_list, 'inB1': self.slovnik_B1_list,
+                         'inB2': self.slovnik_B2_list, 'inC1': self.slovnik_C1_list, 'kellyA1': self.kelly_A1_list,
+                         'kellyA2': self.kelly_A2_list, 'kellyB1': self.kelly_B1_list, 'kellyB2': self.kelly_B2_list,
+                         'kellyC1': self.kelly_C1_list, 'kellyC2': self.kelly_C2_list, 'infr1000': self.fr_1000_list,
+                         'infr3000': self.fr_3000_list, 'infr5000': self.fr_5000_list, 'infr10000': self.fr_10000_list,
+                         'infr_more_than_5': self.fr_more_than_5list, 'infr_spoken': self.fr_spoken_list,
+                         'simple850': self.simple_russian_850_list, 'simple1000': self.simple_russian_1000_list,
+                         'simple2000': self.simple_russian_2000_list, 'dale3000': self.dale_russian_3000_list}
+
+        # Доля слов, входящих в различные лексические списки
+        for i in LEXICAL_LISTS:
+            new_key = self.__percent_of_known_words(clean_lemmas_list, LEXICAL_LISTS[i])
+            self.dict_of_features[i] = new_key
+
+        # Доля абстрактных/конкретных сущ. от всех сущ.
+        self.dict_of_features['lex_abstract'] = self.__percent_of_known_words(
+            self.noun_unique_list, self.lex_abstract_list
+        )
+
+        return self.dict_of_features
+
+    def start_foreign(self, raw_text):
+
+        self.__clear_fields()
+        print('Start Analyzer_foreign')
+
+        text = self.__clean_text(raw_text)
+
+        # первая проверка текста на длину
+        self.data_about_text = self.__first_check_len_text(text)
+
+        if self.data_about_text['text_ok'] == False:
             return self.data_about_text
 
         self.sentences = self.__sent_tokenize_plus(text)
@@ -392,42 +538,39 @@ class Analyzer_foreign:
         # создаем словарь со всеми данными из текста
         self.dict_of_features = defaultdict(int)
 
-        for i in Analyzer_foreign.GRAM_FEATURES:
+        for i in Analyzer.GRAM_FEATURES:
             self.dict_of_features[i] = 0
 
         # запускаем функцию со всеми грам. анализами
         self.__gram_analyze(self.whole_analyzed_text)
 
+        # подсчитываем пассивные формы
         for i in analyzed_bigrams:
             self.__count_passive_form(i)
 
-        if len(self.whole_lemmas_list) < 5:
-            self.data_about_text['text_ok'] = False
-            self.data_about_text['text_error_message'] = ('Введите текст на'
-                                                 ' русском языке не менее 5 слов.')
+        #вторая проверка, не менее 5 слов
+        self.data_about_text  = self.__second_check_len_text(self.whole_lemmas_list)
+        if self.data_about_text['text_ok'] == False:
             return self.data_about_text
-
-        self.data_about_text['text_ok'] = True
-        self.data_about_text['text_error_message'] = ('')
 
         # меняем значения в словаре с простых счетчиков на процент
         # встречаемости в тексте
-        for i in Analyzer_foreign.GRAM_FEATURES:
-            self.dict_of_features[i] = self.dict_of_features[i] / len(self.whole_lemmas_list)
+        for i in Analyzer.GRAM_FEATURES:
+            self.dict_of_features[i] = round((self.dict_of_features[i] / len(self.whole_lemmas_list)),2)
 
         clean_lemmas_list = [
             f for f in self.whole_lemmas_list if
             f not in self.geo_imen_list and f not in self.bastard_list and f not in self.stop_list
         ]
 
-        self.__set_numbers_about_text(clean_lemmas_list)
+        self.__set_numbers_about_foreign_text(clean_lemmas_list)
 
         self.whole_analyzed_text.clear()
         analyzed_bigrams.clear()
 
         # из словаря признаков делаем список
         features_for_test_text = []
-        for ii in Analyzer_foreign.COLUMNS_NEEDED:
+        for ii in Analyzer.COLUMNS_NEEDED_FOREIGN:
             # словарь с признаками
             features_for_test_text.append(self.dict_of_features[ii])
 
@@ -438,168 +581,10 @@ class Analyzer_foreign:
 
         self.__tell_me_about_text(prediction, clean_lemmas_list)
 
+        print(self.data_about_text)
+
         return self.data_about_text
 
-
-    # Собираем цифры про текст в словарь, который потом подадим модели.
-    def __set_numbers_about_text(self, clean_lemmas_list):
-        all_words = len(self.whole_analyzed_text)
-        all_len_words = [len(f) for f in self.whole_lemmas_list]
-        all_syllables = sum(self.number_of_syllables_list)
-        all_len_sentences = [len(f.split(' ')) for f in self.sentences]
-        all_sentences = len(self.sentences)
-        long_words = len(self.long_words_list)
-        unique_lemmas_list = list(set(self.whole_lemmas_list))
-
-        noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
-
-        # всего слов в тексте
-        self.dict_of_features['words'] = (len(self.whole_analyzed_text))
-        # всего предложений в тексте
-        self.dict_of_features['sentences'] = (len(self.sentences))
-        # средняя длина слова в тексте
-        self.dict_of_features['mean_len_word'] = (sum(self.words_length_list)) / all_words
-        self.dict_of_features['median_len_word'] = statistics.median(all_len_words)
-        self.dict_of_features['median_len_sentence'] = statistics.median(all_len_sentences)
-
-        # средняя длина предложения в тексте
-        self.dict_of_features['mean_len_sentence'] = all_words / all_sentences
-        self.dict_of_features['mean_len_word_in_syllables'] = all_syllables / all_words
-        self.dict_of_features['percent_of_long_words'] = long_words / all_words
-
-        # type-token ratio - number of types and the number of tokens -
-        # lexical variety
-        self.dict_of_features['tt_ratio'] = (len(unique_lemmas_list) / len(self.whole_lemmas_list))
-
-        # Среднее количество модальных глаголов и противительных союзов
-        # на предложение
-        self.dict_of_features['conj_adversative'] = (
-                len(self.conj_adversative_list) / all_sentences
-        )
-        self.dict_of_features['modal_verbs'] = len(self.modal_words_list) / all_words
-        self.dict_of_features['kotoryi/words'] = (
-                len(self.count_kotoryi) / len(self.whole_lemmas_list)
-        )
-        self.dict_of_features['kotoryi/sentences'] = len(self.count_kotoryi) / all_sentences
-        self.dict_of_features['contentPOS'] = (
-                len(self.count_content_pos) / len(self.whole_lemmas_list)
-        )
-        self.dict_of_features['passive'] = len(self.count_passive)
-
-        # формулы читабельности (адаптированные, из Бегтина)
-        self.dict_of_features['formula_smog'] = (30 * (long_words / all_sentences)) ** 0.5
-
-        # Доля слов, входящих в лексические минимумы
-        self.dict_of_features['inA1'] = self.__percent_of_known_words(
-            clean_lemmas_list,
-            self.slovnik_A1_list
-        )
-        self.dict_of_features['inA2'] = self.__percent_of_known_words(
-            clean_lemmas_list,
-            self.slovnik_A2_list
-        )
-        self.dict_of_features['inB1'] = self.__percent_of_known_words(
-            clean_lemmas_list,
-            self.slovnik_B1_list
-        )
-        self.dict_of_features['inB2'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.slovnik_B2_list
-        )
-        self.dict_of_features['inC1'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.slovnik_C1_list
-        )
-
-        # Доля слов, входящих в списки Kelly
-        self.dict_of_features['kellyA1'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_A1_list
-        )
-        self.dict_of_features['kellyA2'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_A2_list
-        )
-        self.dict_of_features['kellyB1'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_B1_list
-        )
-        self.dict_of_features['kellyB2'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_B2_list
-        )
-        self.dict_of_features['kellyC1'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_C1_list
-        )
-        self.dict_of_features['kellyC2'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.kelly_C2_list
-        )
-
-        # Доля слов, входящих в частотные списки
-        self.dict_of_features['infr100'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_100_list
-        )
-        self.dict_of_features['infr300'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_300_list
-        )
-        self.dict_of_features['infr500'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_500_list
-        )
-        self.dict_of_features['infr1000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_1000_list
-        )
-        self.dict_of_features['infr3000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_3000_list
-        )
-        self.dict_of_features['infr5000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_5000_list
-        )
-        self.dict_of_features['infr10000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_10000_list
-        )
-        self.dict_of_features['infr_more_than_5'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_more_than_5list
-        )
-        self.dict_of_features['infr_spoken'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.fr_spoken_list
-        )
-
-        # Доля слов, которую покрывает Simple Russian
-        self.dict_of_features['simple850'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.simple_russian_850_list
-        )
-        self.dict_of_features['simple1000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.simple_russian_1000_list
-        )
-        self.dict_of_features['simple2000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.simple_russian_2000_list
-        )
-        self.dict_of_features['dale3000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.dale_russian_3000_list
-        )
-        self.dict_of_features['brown10000'] = self.__percent_of_known_words(
-            clean_lemmas_list, self.brown_russian_10000_list
-        )
-
-        # Доля абстрактных/конкретных сущ. от всех сущ.
-        self.dict_of_features['lex_abstract'] = self.__percent_of_known_words(
-            noun_unique_list, self.lex_abstract_list
-        )
-
-        self.dict_of_features['unique_words'] = len(unique_lemmas_list)
-
-        # Доля названий и бастардов
-        self.dict_of_features['lex_names_and_geo'] = len(self.geo_imen_list)
-        self.dict_of_features['lex_bastards'] = len(self.bastard_list)
-
-        # Среднее количество модальных глаголов и противительных
-        # союзов на предложение
-        self.dict_of_features['conj_adversative'] = (
-                len(self.conj_adversative_list) / len(self.sentences)
-        )
-        self.dict_of_features['modal_verbs'] = len(self.modal_words_list) / all_words
-        self.dict_of_features['kotoryi/words'] = (
-                len(self.count_kotoryi) / len(self.whole_lemmas_list)
-        )
-        self.dict_of_features['kotoryi/sentences'] = len(self.count_kotoryi) / len(self.sentences)
-        self.dict_of_features['contentPOS'] = (
-                len(self.count_content_pos) / len(self.whole_lemmas_list)
-    )
-   
     # Делаем предсказание
     def __predict(self, y):
         prediction = self.ridge.predict(y)
@@ -629,7 +614,7 @@ class Analyzer_foreign:
         # уровень * 1.4, чтобы растянуть шкалу
         level_for_scale = round((prediction * 1.4), 1)
 
-        for i in Analyzer_foreign.INTERPRETER:
+        for i in Analyzer.INTERPRETER_FOREIGN:
             if i[1] <= level_for_scale <= i[2]:
                 level_comment = i[0]
 
@@ -664,15 +649,14 @@ class Analyzer_foreign:
 
         self.data_about_text['unique_words'] = self.dict_of_features['unique_words']
 
-
         # Изучающее чтение текста должно занять m мин
         self.data_about_text['reading_for_detail_speed'] = self.__output_of_min(
-            self.dict_of_features['words'] / Analyzer_foreign.READING_FOR_DETAIL_SPEED_NORM[level_int]
+            self.dict_of_features['words'] / Analyzer.READING_FOR_DETAIL_SPEED_NORM[level_int]
         )
 
         # Просмотровое чтение текста должно занять m мин
         self.data_about_text['skim_reading_speed'] = self.__output_of_min(
-            self.dict_of_features['words'] / Analyzer_foreign.SKIM_READING_SPEED_NORM[level_int])
+            self.dict_of_features['words'] / Analyzer.SKIM_READING_SPEED_NORM[level_int])
 
         # Блок лексики:
         # 1. Считаем ключевые слова по tf/idf
@@ -720,6 +704,15 @@ class Analyzer_foreign:
         self.data_about_text['inC1'] = round(self.dict_of_features['inC1'] * 100)
         self.data_about_text['not_inC1'] = list(set([
             f for f in clean_lemmas_list if f not in self.slovnik_C1_list]))
+
+        ##Если уровень высокий, не выводим слова, не входящие в списки низких уровней: это примерно все:)
+
+        if level_int >= 3:
+            self.data_about_text['not_inA1'] = ''
+        if level_int >= 4:
+            self.data_about_text['not_inA2'] = ''
+        if level_int >= 6:
+            self.data_about_text['not_inB1'] = ''
 
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
@@ -799,11 +792,219 @@ class Analyzer_foreign:
 
         gram_complex = []
 
-        for i in Analyzer_foreign.GR_FEATURES:
+        for i in Analyzer.DIFFICULT_GRAM:
             compare = self.dict_of_features[i] / (np.mean(f_by_levels[level_int][i] + 0.00000001))
             if compare > 2:
-                gram_complex.append(Analyzer_foreign.GR_FEATURES_NAMES[Analyzer_foreign.GR_FEATURES.index(i)])
+                gram_complex.append(Analyzer.GR_FEATURES_NAMES[Analyzer.DIFFICULT_GRAM.index(i)])
 
         self.data_about_text['gram_complex'] = list(set(gram_complex))
 
         return True
+
+
+    def start_native(self, raw_text):
+
+        self.__clear_fields()
+        print('Start Analyzer_native')
+
+        text = self.__clean_text(raw_text)
+
+        # создаем словарь и будем в него все складывать
+        self.dict_of_features = {}
+
+        # чистый финальный списочек параметров
+        self.data_about_text = {}
+
+        # первая проверка текста на длину
+        self.data_about_text = self.__first_check_len_text(text)
+
+        if self.data_about_text['text_ok'] == False:
+            return self.data_about_text
+
+        self.sentences = self.__sent_tokenize_plus(text)
+        self.whole_analyzed_text = self.mystem.analyze(text)  # весь текст одним списком
+        analyzed_bigrams = list(nltk.bigrams(self.whole_analyzed_text))  # биграммочки
+
+        for i in Analyzer.GRAM_FEATURES:
+            self.dict_of_features[i] = 0
+
+        # запускаем функцию со всеми грам. анализами
+        self.__gram_analyze(self.whole_analyzed_text)
+
+        for i in analyzed_bigrams:
+            self.__count_passive_form(i)
+
+        # вторая проверка, не менее 5 слов
+        self.data_about_text = self.__second_check_len_text(self.whole_lemmas_list)
+        if self.data_about_text['text_ok'] == False:
+            return self.data_about_text
+
+        self.clean_lemmas_list = [
+            f for f in self.whole_lemmas_list if
+            f not in self.geo_imen_list and f not in self.bastard_list and f not in self.stop_list
+        ]
+
+        all_words = len(self.whole_analyzed_text)
+        all_sentences = len(self.sentences)
+        all_syllables = sum(self.number_of_syllables_list)
+
+        all_len_words = [len(f) for f in self.whole_lemmas_list]
+        all_len_sentences = [len(f.split(' ')) for f in self.sentences]
+
+        long_words = len(self.long_words_list)
+        whole_lemmas_minus_stop = [f for f in self.whole_lemmas_list if f not in self.stop_list]
+        unique_lemmas_list = list(set(whole_lemmas_minus_stop))
+        noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
+
+        # Цифры про текст:
+        # всего слов в тексте
+        self.dict_of_features['words'] = (len(self.whole_analyzed_text))
+        self.dict_of_features['syllables'] = all_syllables
+        self.dict_of_features['unique_words'] = len(unique_lemmas_list)
+        # всего предложений в тексте
+        self.dict_of_features['sentences'] = all_sentences
+        # средняя длина слова в тексте
+        self.dict_of_features['mean_len_word'] = round(((sum(self.words_length_list)) / all_words), 1)
+        self.dict_of_features['median_len_word'] = statistics.median(all_len_words)
+        self.dict_of_features['median_len_sentence'] = statistics.median(
+            all_len_sentences
+        )
+
+        # средняя длина предложения в тексте
+        self.dict_of_features['mean_len_sentence'] = round((all_words / all_sentences), 1)
+        self.dict_of_features['mean_len_word_in_syllables'] = all_syllables / all_words
+        self.dict_of_features['percent_of_long_words'] = long_words / all_words
+
+        # lexical density - лексическая плотность, соотношение смысловых и служебных
+        # частей речи: чем она выше, тем считается что текст сложнее
+        self.dict_of_features[
+            'lex_density'] = f"{round((len(self.count_content_pos) / len(self.whole_lemmas_list)) * 10)} из 10"
+
+        # type-token ratio (lexical diversity) - number of types/the number of tokens:
+        # чем выше, тем лексика в тексте "однотипнее"
+        # потом попробовать sttr: то же самое на отрезках в 1000 слов.
+        # standardised type/token ratio
+        self.dict_of_features[
+            'tt_ratio'] = f"{round((len(unique_lemmas_list) / len(self.whole_lemmas_list)) * 10)} из 10"
+
+        self.dict_of_features['passive'] = len(self.count_passive)
+
+        ##формулы читабельности (адаптированные, из диссера Оборневой)##
+        formula_f_oborneva_genuine = round(
+            206.835 - (60.1 * (all_syllables / all_words)) - (1.3 * (all_words / all_sentences)))
+
+        formula_f_oborneva = formula_f_oborneva_genuine
+
+        if formula_f_oborneva > 100:
+            formula_f_oborneva = 100
+        if formula_f_oborneva < 0:
+            formula_f_oborneva = 0
+
+        self.dict_of_features[
+            'formula_flesh_oborneva'] = f"{formula_f_oborneva} из 100 (чем больше - тем текст легче)"
+
+        formula_f_k_oborneva = round(0.5 * (all_words / all_sentences) + 8.4 * (all_syllables / all_words) - 15.59)
+
+        if formula_f_k_oborneva < 0:
+            formula_f_k_oborneva = 0
+
+        self.dict_of_features[
+            'formula_flesh_kinc_oborneva'] = f"{formula_f_k_oborneva} (примерно должна соответствовать школьному классу)"
+
+        in_laposhina_list = self.__percent_of_known_words_100(self.clean_lemmas_list, self.laposhina_list)
+
+        self.dict_of_features['laposhina_list'] = f"{in_laposhina_list} %"
+
+        in_detcorpus_5000 = self.__percent_of_known_words_100(
+            self.clean_lemmas_list, self.detcorpus_list)
+
+        self.dict_of_features['detcorpus_5000'] = f"{in_detcorpus_5000} %"
+
+        in_rki_children = self.__percent_of_known_words_100(
+            self.whole_lemmas_list, self.rki_children_list)
+
+        self.dict_of_features['rki_children_list'] = f"{in_rki_children} %"
+
+        in_united_simple_list = self.__percent_of_known_words_100(
+            self.whole_lemmas_list, self.united_list)
+
+        self.dict_of_features['united_simple_list'] = f"{in_united_simple_list} %"
+
+        self.dict_of_features['rare_words'] = list(set([f for f in self.clean_lemmas_list if
+                                                        f not in self.detcorpus_list and f not in self.fr_10000_list]))
+
+        structure_complex_genuine = round(
+            (100 - formula_f_oborneva_genuine + self.dict_of_features['прич'] + self.dict_of_features[
+                'страд'] + self.dict_of_features[
+                 'passive']) / 10)
+
+        structure_complex = structure_complex_genuine
+
+        if structure_complex < 0:
+            structure_complex = 0
+        if structure_complex > 10:
+            structure_complex = 10
+
+        self.dict_of_features['structure_complex'] = f"{structure_complex} из 10"
+
+        lexical_complex_genuine = round(10 - (((in_laposhina_list - 50) * 2) / 10))
+
+        lexical_complex = lexical_complex_genuine
+
+        if lexical_complex > 10:
+            lexical_complex = 10
+        if lexical_complex < 0:
+            lexical_complex = 0
+
+        self.dict_of_features['lexical_complex'] = f"{lexical_complex} из 10"
+
+        lexical_complex_rki = round(10 - ((((in_detcorpus_5000 - 60) * 2)) / 10))
+
+        if lexical_complex_rki > 10:
+            lexical_complex_rki = 10
+        if lexical_complex_rki < 0:
+            lexical_complex_rki = 0
+
+        self.dict_of_features['lexical_complex_rki'] = f'{lexical_complex_rki} из 10'
+
+        narrativity = round(10 - 2 * (self.dict_of_features['S'] / (self.dict_of_features['V'] + 1)))
+
+        if narrativity < 0:
+            narrativity = 0
+
+        self.dict_of_features['narrativity'] = f"{narrativity} из 10"
+
+        description = round(3 * (self.dict_of_features['A'] / all_sentences))
+
+        if description > 10:
+            description = 10
+
+        self.dict_of_features['description'] = f"{description} из 10"
+
+        formula_pushkin_100 = round((((structure_complex_genuine + lexical_complex_genuine) * 5) - narrativity), 1)
+
+        if formula_pushkin_100 > 100:
+            formula_pushkin_100 = 100
+        if formula_pushkin_100 < 0:
+            formula_pushkin_100 = 0
+
+        self.dict_of_features['formula_pushkin_100'] = round(formula_pushkin_100)
+
+        self.dict_of_features['formula_pushkin'] = round(formula_pushkin_100 / 10)
+
+        ball = self.__output_ballov(formula_pushkin_100)
+
+        for i in Analyzer.INTERPRETER_NATIVE:
+            if i[1] <= formula_pushkin_100 <= i[2]:
+                self.dict_of_features['level_comment'] = f"{round(formula_pushkin_100)} {ball} из 100. {i[0]}"
+
+        for i in self.dict_of_features:
+            if i in Analyzer.COLUMNS_NEEDED_NATIVE:
+                self.data_about_text[i] = self.dict_of_features[i]
+
+        print(self.data_about_text)
+        return self.data_about_text
+
+
+
+

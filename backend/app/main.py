@@ -3,13 +3,12 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-import analyzer_foreign
-import analyzer_native
+from analyzer_2000 import Analyzer
+
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
-foreign = analyzer_foreign.Analyzer_foreign()
-native = analyzer_native.Analyzer_native()
+analyzer = Analyzer()
 
 logging.info('Analyzer objects have been created')
 
@@ -38,6 +37,6 @@ app.add_middleware(
 def analyze(text: Text):
     logging.info(text.text)
     if text.mode == 'foreign':
-      return foreign.start(text.text)
+      return analyzer.start_foreign(text.text)
     else:
-      return native.start(text.text)
+      return analyzer.start_native(text.text)
