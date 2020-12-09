@@ -24,6 +24,7 @@ app.add_middleware(
     allow_origins=[
       'http://localhost',
       'http://localhost:8888',
+      'http://localhost:8080',
       'http://pushkin-lab.ru',
       'http://pushkin-lab.ru:8888',
       'https://pushkin-lab.ru'

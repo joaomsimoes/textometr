@@ -77,13 +77,13 @@
           <table v-if="mode === 'foreign'"  class="table is-hoverable is-fullwidth">
             <tbody>
               <tr>
-                <th style="min-width: 250px;">{{ TEXT_FEATURES['level_number'].title }}</th>
+                <th style="width: 250px;">{{ TEXT_FEATURES['level_number'].title }}</th>
                 <td>
                   <progress class="progress"
                             :class="getProgressClass(result.level_number)"
                             :value="result.level_number"
                             max="8">{{ result.level_number}}</progress>
-                    <span>{{ result.level_comment }}</span>
+                    <strong>{{ result.level_comment }}</strong>
                 </td>
               </tr>
               <tr>
@@ -249,12 +249,13 @@
            <table v-if="mode === 'native'" class="table is-hoverable is-fullwidth">
             <tbody>
               <tr>
-                <th style="min-width: 250px;">{{ TEXT_FEATURES['formula_pushkin'].title }}</th>
+                <th style="width: 250px;">{{ TEXT_FEATURES['formula_pushkin'].title }}</th>
                 <td>
                   <progress class="progress"
                             :class="getProgressClass(result.formula_pushkin)"
                             :value="result.formula_pushkin"
                             max="10">{{ result.formula_pushkin}}</progress>
+                  <strong>{{ result.level_comment }}</strong>
                 </td>
               </tr>
               <tr>
@@ -475,22 +476,16 @@
                         какой-то функции, обязательно напишите мне, с пометкой "Текстометр".
                         Мы очень любим и ценим обратную связь!
                       </p>
-                      <div class="level">
-                        <div class="level-left">
-                          <div class="level-item">
-                            <a href="mailto:antonina.laposhina@gmail.com">
-                              <i class="far fa-envelope"></i> antonina.laposhina@gmail.com
-                            </a>
-                          </div>
-                        </div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <a href="https://www.facebook.com/antonina.laposhina">
-                              <i class="fab fa-facebook"></i> https://www.facebook.com/antonina.laposhina
-                            </a>
-                          </div>
-                        </div>
-                      </div>
+                      <p>
+                        <a href="mailto:antonina.laposhina@gmail.com">
+                          <i class="far fa-envelope"></i> antonina.laposhina@gmail.com
+                        </a>
+                      </p>
+                      <p>
+                        <a href="https://www.facebook.com/antonina.laposhina">
+                          <i class="fab fa-facebook"></i> https://www.facebook.com/antonina.laposhina
+                        </a>
+                      </p>
                     </div>
                   </div>
                 </article>
