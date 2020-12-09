@@ -23,14 +23,15 @@ Textometr allows you to quickly obtain information about a text that is relevant
 
 6. Install packages
    ```bash
-   pip3 install -r requirements.txt
-   python3 -m nltk.downloader punkt
+   pip install -r requirements.txt
+   python -m nltk.downloader punkt
    ```
 
 ## Run
 
 1. Command
    ```sh
+   cd app
    uvicorn main:app --reload
    ```
 
@@ -56,7 +57,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```
 ## Production
 
-Deploy services to Docker Swarm
+### Deploy app stack in Docker Swarm
 
 1. Build image for frontend
    ```bash
@@ -96,3 +97,16 @@ Deploy services to Docker Swarm
    docker service ls # to view active replicas
    docker stats # to monitor resource usage
    ```
+### Update stack in Docker Swarm
+
+1. Pull updated images
+   ```bash
+   docker pull 1eshkin/textometr-frontend
+   docker pull 1eshkin/textometr-backend
+   ```
+
+2. Deploy app stack in Docker Swarm
+   ```bash
+   docker stack deploy --compose-file docker-compose.yml textometr
+   ```
+

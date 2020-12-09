@@ -6,6 +6,8 @@ services:
       - "8888:80"
   backend:
     image: 1eshkin/textometr-backend
+    environment:
+      - MAX_WORKERS=1
     ports:
       - "8889:80"
     deploy:
