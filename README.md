@@ -62,7 +62,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
 1. Build image for frontend
    ```bash
    cd frontend # from the project directory
-   docker build -t 1eshkin/textometr-frontend
+   docker build -t 1eshkin/textometr-frontend .
    ```   
 2. Push frontend image to the Docker Hub
    ```bash
@@ -71,7 +71,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
 3. Build image for backend
    ```bash
    cd backend # from the project directory
-   docker build -t 1eshkin/textometr-backend
+   docker build -t 1eshkin/textometr-backend .
    ```
 4. Push backend image to the Docker Hub
    ```bash

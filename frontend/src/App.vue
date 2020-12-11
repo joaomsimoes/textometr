@@ -38,7 +38,7 @@
             <div class="level-item has-text-centered">
               <div class="field">
                 <div class="control">
-                  <label class="switch">
+                  <label class="switch mr-5 ml-5">
                     <input type="checkbox" v-model="checkboxMode" @click="clear">
                     <span class="slider round"></span>
                   </label>
@@ -383,7 +383,7 @@
               <p>
                 Определение уровня по шкале SEFR от А1 до С2 происходит автоматически,
                 с помощью регрессионной модели, обученной на корпусе из 700 текстов из
-                пособий по рки. Подробнее о параметрах модели и признаках, на которых
+                пособий по РКИ. Подробнее о параметрах модели и признаках, на которых
                 она обучалась, можно почитать <a href="#publications">здесь [1].</a>
               </p>
               <p>
@@ -461,31 +461,35 @@
             <div class="content">
               <div class="box">
                 <article class="media">
-                  <div class="media-left">
-                    <figure class="image is-128x128">
-                      <img src="./assets/tonya.png">
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <div class="content">
-                      <p>
-                        Куратор проекта — <a href="https://www.pushkin.institute/sveden/employees/detail.php?ELEMENT_ID=15425">Антонина Лапошина</a>
-                      </p>
-                      <p>
-                        Если у вас возник вопрос, вы нашли ошибку или считаете, что не хватает
-                        какой-то функции, обязательно напишите мне, с пометкой "Текстометр".
-                        Мы очень любим и ценим обратную связь!
-                      </p>
-                      <p>
-                        <a href="mailto:antonina.laposhina@gmail.com">
-                          <i class="far fa-envelope"></i> antonina.laposhina@gmail.com
-                        </a>
-                      </p>
-                      <p>
-                        <a href="https://www.facebook.com/antonina.laposhina">
-                          <i class="fab fa-facebook"></i> https://www.facebook.com/antonina.laposhina
-                        </a>
-                      </p>
+                  <div class="columns">
+                    <div class="column is-narrow">
+                      <figure class="image is-128x128">
+                        <img src="./assets/tonya.png">
+                      </figure>
+                    </div>
+                    <div class="column">
+                      <div class="content">
+                        <p>
+                          Куратор проекта — <a href="https://www.pushkin.institute/sveden/employees/detail.php?ELEMENT_ID=15425">Антонина Лапошина</a>
+                        </p>
+                        <p>
+                          Если у вас возник вопрос, вы нашли ошибку или считаете, что не хватает
+                          какой-то функции, обязательно напишите мне, с пометкой "Текстометр".
+                          Мы очень любим и ценим обратную связь!
+                        </p>
+                        <p>
+                          <a href="mailto:antonina.laposhina@gmail.com">
+                            <span class="icon">
+                              <i class="far fa-envelope"></i>
+                            </span>
+                          </a>
+                          <a href="https://www.facebook.com/antonina.laposhina">
+                            <span class="icon">
+                              <i class="fab fa-facebook"></i>
+                            </span>
+                          </a>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -698,7 +702,7 @@ export default {
           }
       } else {
       this.loading = true
-      axios.post(process.env.VUE_APP_API_URL + '/analyze', { text: this.text, mode: this.mode })
+      axios.post('/analyze', { text: this.text, mode: this.mode })
         .then(response => {
           this.result = response.data
           if (response.data.text_ok) {
