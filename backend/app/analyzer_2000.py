@@ -312,6 +312,17 @@ class Analyzer:
             percent = round((len(known_words) / len(element))*100)
             return percent
 
+    def __count_freq_by_rnc(self, element):
+        if element in self.lemmas_list_rnc:
+            # если омонимы, берем cамый частотный
+            if self.lemmas_list_rnc.count(element) > 1:
+                idf = float(list(self.corpus_rnc[self.corpus_rnc['lemma'] == element]['idf'])[0])
+            else:
+                idf = float(self.corpus_rnc[self.corpus_rnc['lemma'] == element]['idf'])
+        else:
+            idf = 0
+        return idf
+
     def __clean_text(self, input_text):
         new_text = input_text.replace('­\n', '')
         new_text = new_text.replace('\n', ' ')
@@ -508,7 +519,7 @@ class Analyzer:
 
         # Доля слов, входящих в различные лексические списки
         for i in LEXICAL_LISTS:
-            new_key = self.__percent_of_known_words(clean_lemmas_list, LEXICAL_LISTS[i])
+            new_key = self.__percent_of_known_words(self.whole_lemmas_list, LEXICAL_LISTS[i])
             self.dict_of_features[i] = new_key
 
         # Доля абстрактных/конкретных сущ. от всех сущ.
@@ -558,12 +569,12 @@ class Analyzer:
         for i in Analyzer.GRAM_FEATURES:
             self.dict_of_features[i] = round((self.dict_of_features[i] / len(self.whole_lemmas_list)),2)
 
-        clean_lemmas_list = [
+        self.clean_lemmas_list = [
             f for f in self.whole_lemmas_list if
             f not in self.geo_imen_list and f not in self.bastard_list and f not in self.stop_list
         ]
 
-        self.__set_numbers_about_foreign_text(clean_lemmas_list)
+        self.__set_numbers_about_foreign_text(self.clean_lemmas_list)
 
         self.whole_analyzed_text.clear()
         analyzed_bigrams.clear()
@@ -579,7 +590,7 @@ class Analyzer:
 
         prediction = self.__predict(test_features_array)
 
-        self.__tell_me_about_text(prediction, clean_lemmas_list)
+        self.__tell_me_about_text(prediction)
 
         print(self.data_about_text)
 
@@ -593,14 +604,14 @@ class Analyzer:
         return prediction
 
     # Принимает на вход уровень текста и выдает статистику
-    def __tell_me_about_text(self, element, clean_lemmas_list):
+    def __tell_me_about_text(self, element):
 
         prediction = element
 
         if prediction > 0:
             prediction = round(prediction[0], 1)
-        if prediction < 0:
-            prediction = 0
+        if prediction < 0.5:
+            prediction = 0.5
         if prediction > 7:
             prediction = 7
 
@@ -621,6 +632,7 @@ class Analyzer:
         self.data_about_text['level_number'] = prediction
         self.data_about_text['level_comment'] = level_comment
         self.data_about_text['level_int'] = level_int
+
         f_by_levels = [
             self.features.iloc[:, :][self.features['level'] == 0],
             self.features.iloc[:, :][self.features['level'] == 1],
@@ -661,57 +673,53 @@ class Analyzer:
         # Блок лексики:
         # 1. Считаем ключевые слова по tf/idf
 
+
         bag_tf_idf = dict()
         # берем только основные части речи
         for item in self.count_content_pos:
             if (
+                    len(item) > 2 and
                     item not in self.bastard_list and
                     item not in self.geo_imen_list and
                     item not in self.slovnik_A1_list and
                     self.whole_lemmas_list.count(item) > 1
             ):
-                if item in self.lemmas_list_rnc:
-                    # если омонимы, берем cамый частотный
-                    if self.lemmas_list_rnc.count(item) > 1:
-                        idf = float(list(self.corpus_rnc[self.corpus_rnc['lemma'] == item]['idf'])[0])
-                    else:
-                        idf = float(self.corpus_rnc[self.corpus_rnc['lemma'] == item]['idf'])
-                else:
-                    idf = 0
+                idf = self.__count_freq_by_rnc(item)
                 bag_tf_idf[item] = (
                         (self.whole_lemmas_list.count(item) / len(self.whole_lemmas_list)) / (0.00001 + idf))
+
         sorted_bag = (sorted(bag_tf_idf.items(), key=lambda x: x[1], reverse=True))
 
-        self.data_about_text['key_words'] = [f[0] for f in sorted_bag[:5] if len(f[0]) > 2]
+        self.data_about_text['key_words'] = [f[0] for f in sorted_bag[:5]]
 
         # Списки с минимумов
         self.data_about_text['inA1'] = round(self.dict_of_features['inA1'] * 100)
         self.data_about_text['not_inA1'] = list(set([
-            f for f in clean_lemmas_list if f not in self.slovnik_A1_list]))
+            f for f in self.clean_lemmas_list if len(f) > 1 and f not in self.stop_list and f not in self.slovnik_A1_list]))
 
         self.data_about_text['inA2'] = round(self.dict_of_features['inA2'] * 100)
         self.data_about_text['not_inA2'] = list(set([
-            f for f in clean_lemmas_list if f not in self.slovnik_A2_list]))
+            f for f in self.clean_lemmas_list if len(f) > 1 and f not in self.stop_list and f not in self.slovnik_A2_list]))
 
         self.data_about_text['inB1'] = round(self.dict_of_features['inB1'] * 100)
         self.data_about_text['not_inB1'] = list(set([
-            f for f in clean_lemmas_list if f not in self.slovnik_B1_list]))
+            f for f in self.clean_lemmas_list if len(f) > 1 and f not in self.stop_list and f not in self.slovnik_B1_list]))
 
         self.data_about_text['inB2'] = round(self.dict_of_features['inB2'] * 100)
         self.data_about_text['not_inB2'] = list(set([
-            f for f in clean_lemmas_list if f not in self.slovnik_B2_list]))
+            f for f in self.clean_lemmas_list if len(f) > 1 and f not in self.stop_list and f not in self.slovnik_B2_list]))
 
         self.data_about_text['inC1'] = round(self.dict_of_features['inC1'] * 100)
         self.data_about_text['not_inC1'] = list(set([
-            f for f in clean_lemmas_list if f not in self.slovnik_C1_list]))
+            f for f in self.clean_lemmas_list if len(f) > 1 and f not in self.stop_list and f not in self.slovnik_C1_list]))
 
         ##Если уровень высокий, не выводим слова, не входящие в списки низких уровней: это примерно все:)
 
-        if level_int >= 3:
+        if level_for_scale >= 3:
             self.data_about_text['not_inA1'] = ''
-        if level_int >= 4:
+        if level_for_scale >= 6:
             self.data_about_text['not_inA2'] = ''
-        if level_int >= 6:
+        if level_for_scale >= 8:
             self.data_about_text['not_inB1'] = ''
 
         # Можем работать с лексическими списками только до 4 уровня,
@@ -725,21 +733,31 @@ class Analyzer:
             # Самые полезные слова
             cool_words = list(set(
                 [
-                    f for f in clean_lemmas_list
+                    f for f in self.clean_lemmas_list
                     if f not in slovnik_by_levels[(level_int - 1)]
                        and (f in self.fr_3000_list
                             or f in kelly_by_levels[level_int]
                             or self.whole_lemmas_list.count(f) > 2)
                 ]
             ))
+
+            if len(cool_words) > 20:
+                bag_cool_words = {}
+                for item in cool_words:
+                    idf = self.__count_freq_by_rnc(item)
+                    bag_cool_words[item] = (idf)
+                sorted_cool_bag = (sorted(bag_cool_words.items(), key=lambda x: x[1], reverse=True))
+                cool_words = [f[0] for f in sorted_cool_bag[:20]]
+
             self.data_about_text['cool_words'] = cool_words
 
             # Избавиться от этих слов
             self.data_about_text['rare_words'] = list(set(
                 [
-                    f for f in clean_lemmas_list
+                    f for f in self.clean_lemmas_list
                     if (
                         f not in cool_words
+                        and f not in self.geo_imen_list
                         and f not in slovnik_by_levels[level_int]
                         and f not in kelly_by_levels[level_int]
                         and f not in self.data_about_text['key_words']
@@ -752,7 +770,7 @@ class Analyzer:
             # нет в словнике есть в Келли
             self.data_about_text['cool_but_not_in_slovnik'] = list(set(
                 [
-                    f for f in clean_lemmas_list
+                    f for f in self.clean_lemmas_list
                     if (
                         f not in slovnik_by_levels[level_int]
                         and f in kelly_by_levels[level_int]
@@ -765,7 +783,7 @@ class Analyzer:
             # Самые полезные слова
             cool_words_more_4 = list(set(
                 [
-                    f for f in clean_lemmas_list
+                    f for f in self.clean_lemmas_list
                     if (f not in slovnik_by_levels[3]
                         and (f in slovnik_by_levels[4]
                              or f in self.fr_5000_list
@@ -773,14 +791,24 @@ class Analyzer:
                              or self.whole_lemmas_list.count(f) > 3))
                 ]
             ))
+
+            if len(cool_words_more_4) > 20:
+                bag_cool_words_more_4 = {}
+                for item in cool_words_more_4:
+                    idf = self.__count_freq_by_rnc(item)
+                    bag_cool_words_more_4[item] = (idf)
+                sorted_cool_bag_more_4 = (sorted(bag_cool_words_more_4.items(), key=lambda x: x[1], reverse=True))
+                cool_words_more_4 = [f[0] for f in sorted_cool_bag_more_4[:20]]
+
             self.data_about_text['cool_words'] = cool_words_more_4
 
             # Избавиться от этих слов
             rare_words_more_4 = list(set(
                 [
-                    f for f in clean_lemmas_list
+                    f for f in self.clean_lemmas_list
                     if (
                         f not in cool_words_more_4
+                        and f not in self.geo_imen_list
                         and f not in slovnik_by_levels[4]
                         and f not in self.data_about_text['key_words']
                         and (f not in self.fr_10000_list
@@ -911,12 +939,12 @@ class Analyzer:
         self.dict_of_features[
             'formula_flesh_kinc_oborneva'] = f"{formula_f_k_oborneva} (примерно должна соответствовать школьному классу)"
 
-        in_laposhina_list = self.__percent_of_known_words_100(self.clean_lemmas_list, self.laposhina_list)
+        in_laposhina_list = self.__percent_of_known_words_100(self.whole_lemmas_list, self.laposhina_list)
 
         self.dict_of_features['laposhina_list'] = f"{in_laposhina_list} %"
 
         in_detcorpus_5000 = self.__percent_of_known_words_100(
-            self.clean_lemmas_list, self.detcorpus_list)
+            self.whole_lemmas_list, self.detcorpus_list)
 
         self.dict_of_features['detcorpus_5000'] = f"{in_detcorpus_5000} %"
 
