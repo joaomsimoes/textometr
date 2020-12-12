@@ -38,7 +38,7 @@
             <div class="level-item has-text-centered">
               <div class="field">
                 <div class="control">
-                  <label class="switch">
+                  <label class="switch mr-5 ml-5">
                     <input type="checkbox" v-model="checkboxMode" @click="clear">
                     <span class="slider round"></span>
                   </label>
@@ -77,13 +77,14 @@
           <table v-if="mode === 'foreign'"  class="table is-hoverable is-fullwidth">
             <tbody>
               <tr>
-                <th style="width: 250px;">{{ TEXT_FEATURES['level_number'].title }}</th>
-                <td>
-                  <progress class="progress"
-                            :class="getProgressClass(result.level_number)"
+                <td colspan="2">
+                  <div class="mb-2">
+                    <strong>{{ result.level_comment }}</strong>
+                  </div>
+                  <progress class="progress mb-4"
+                            :class="getProgressClassForeign(result.level_number)"
                             :value="result.level_number"
                             max="8">{{ result.level_number}}</progress>
-                    <strong>{{ result.level_comment }}</strong>
                 </td>
               </tr>
               <tr>
@@ -97,6 +98,11 @@
               <tr>
                 <th>{{ TEXT_FEATURES['unique_words'].title }}</th>
                 <td>{{ result.unique_words }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <br>
+                </td>
               </tr>
               <tr v-if="result.key_words.length > 0">
                 <th>
@@ -128,6 +134,11 @@
                       {{ word }}
                     </span>
                   </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <br>
                 </td>
               </tr>
               <tr>
@@ -221,6 +232,11 @@
                 </td>
               </tr>
               <tr>
+                <td colspan="2">
+                  <br>
+                </td>
+              </tr>
+              <tr>
                 <th>{{ TEXT_FEATURES['reading_for_detail_speed'].title }}</th>
                 <td>{{ result.reading_for_detail_speed }}</td>
               </tr>
@@ -249,13 +265,14 @@
            <table v-if="mode === 'native'" class="table is-hoverable is-fullwidth">
             <tbody>
               <tr>
-                <th style="width: 250px;">{{ TEXT_FEATURES['formula_pushkin'].title }}</th>
-                <td>
-                  <progress class="progress"
-                            :class="getProgressClass(result.formula_pushkin)"
+                <td colspan="2">
+                  <div class="mb-2">
+                    <strong>{{ result.level_comment }}</strong>
+                  </div>
+                  <progress class="progress mb-4"
+                            :class="getProgressClassNative(result.formula_pushkin)"
                             :value="result.formula_pushkin"
                             max="10">{{ result.formula_pushkin}}</progress>
-                  <strong>{{ result.level_comment }}</strong>
                 </td>
               </tr>
               <tr>
@@ -273,6 +290,11 @@
               <tr>
                 <th>{{ TEXT_FEATURES['description'].title }}</th>
                 <td>{{ result.description }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <br>
+                </td>
               </tr>
               <tr>
                 <th>{{ TEXT_FEATURES['sentences'].title }}</th>
@@ -295,12 +317,22 @@
                 <td>{{ result.mean_len_sentence }}</td>
               </tr>
               <tr>
+                <td colspan="2">
+                  <br>
+                </td>
+              </tr>
+              <tr>
                 <th>{{ TEXT_FEATURES['formula_flesh_oborneva'].title }}</th>
                 <td>{{ result.formula_flesh_oborneva }}</td>
               </tr>
               <tr>
                 <th>{{ TEXT_FEATURES['formula_flesh_kinc_oborneva'].title }}</th>
                 <td>{{ result.formula_flesh_kinc_oborneva }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <br>
+                </td>
               </tr>
               <tr>
                 <th>
@@ -353,6 +385,11 @@
                 </td>
               </tr>
               <tr>
+                <td colspan="2">
+                  <br>
+                </td>
+              </tr>
+              <tr>
                 <th>{{ TEXT_FEATURES['rki_children_list'].title }}</th>
                 <td>{{ result.rki_children_list }}</td>
               </tr>
@@ -378,12 +415,12 @@
                 Подробнее о том, как получаются эти данные.
               </p>
             </div>
-            <h5 class="title is-5">Определение уровня</h5>
+            <h5 class="title is-5">Определение уровня текста для иностранных учащихся</h5>
             <div class="content">
               <p>
                 Определение уровня по шкале SEFR от А1 до С2 происходит автоматически,
                 с помощью регрессионной модели, обученной на корпусе из 700 текстов из
-                пособий по рки. Подробнее о параметрах модели и признаках, на которых
+                пособий по РКИ. Подробнее о параметрах модели и признаках, на которых
                 она обучалась, можно почитать <a href="#publications">здесь [1].</a>
               </p>
               <p>
@@ -391,14 +428,14 @@
                 немного завышать уровень сложности текста, поскольку она производит
                 расчеты исходя из данных лексических минимумов. Практика же показывает,
                 что студенты обычно знают (или угадывают из контекста) больше слов,
-                чем в минимумах. Особенно это касается интернационализмов и слов с
-                латинскими корнями. Это стоит учитывать при подготовке текстов для
-                славяно- или англоговорящих учеников. Подробнее об эксперименте со
-                сравнением работы программы, мнения экспертов-преподавателей и самих
-                студентов можно почитать <a href="#publications">здесь [3].</a>
+                чем в минимумах. Особенно это касается интернационализмов и слов,
+                которые похоже звучат на родном языке ученика. Это стоит учитывать
+                при подготовке текстов для славяно- или англоговорящих учеников.
+                Подробнее об эксперименте со сравнением работы программы,
+                мнения экспертов-преподавателей и самих студентов можно почитать <a href="#publications">здесь [3].</a>
               </p>
             </div>
-            <h5 class="title is-5">Определение уровня текста для носителей языка</h5>
+            <h5 class="title is-5">Определение уровня текста для носителей языка (beta-версия)</h5>
             <div class="content">
               <p>
                 Уровни сложности текста для иностранцев хорошо стандартизированы и задокументированы.
@@ -408,11 +445,11 @@
                 особенности затруднительно.
               </p>
               <p>
-                Поэтому тексты для чтения носителем языка система оценивает по двум критериям: структурная
+                Поэтому тексты для чтения носителем языка наша система оценивает по двум критериям: структурная
                 сложность и лексическая. <strong>Структурная сложность</strong> учитывает классическую формулу читабельности
                 Флеша, адаптированную для русского языка, а также наличие частей речи и оборотов, затрудняющих
-                чтение (причастия, пассивные формы и др.) <strong>Лексическая сложность</strong> рассчитывается на основании
-                вхождения слов текста в различные частотные списки.
+                чтение (причастия, пассивные формы и др.) <strong>Лексическая сложность</strong> рассчитывается
+                на основании вхождения слов текста в специализированные частотные списки.
               </p>
             </div>
           </div>
@@ -461,31 +498,35 @@
             <div class="content">
               <div class="box">
                 <article class="media">
-                  <div class="media-left">
-                    <figure class="image is-128x128">
-                      <img src="./assets/tonya.png">
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <div class="content">
-                      <p>
-                        Куратор проекта — <a href="https://www.pushkin.institute/sveden/employees/detail.php?ELEMENT_ID=15425">Антонина Лапошина</a>
-                      </p>
-                      <p>
-                        Если у вас возник вопрос, вы нашли ошибку или считаете, что не хватает
-                        какой-то функции, обязательно напишите мне, с пометкой "Текстометр".
-                        Мы очень любим и ценим обратную связь!
-                      </p>
-                      <p>
-                        <a href="mailto:antonina.laposhina@gmail.com">
-                          <i class="far fa-envelope"></i> antonina.laposhina@gmail.com
-                        </a>
-                      </p>
-                      <p>
-                        <a href="https://www.facebook.com/antonina.laposhina">
-                          <i class="fab fa-facebook"></i> https://www.facebook.com/antonina.laposhina
-                        </a>
-                      </p>
+                  <div class="columns">
+                    <div class="column is-narrow">
+                      <figure class="image is-128x128">
+                        <img src="./assets/tonya.png">
+                      </figure>
+                    </div>
+                    <div class="column">
+                      <div class="content">
+                        <p>
+                          Куратор проекта — <a href="https://www.pushkin.institute/sveden/employees/detail.php?ELEMENT_ID=15425">Антонина Лапошина</a>
+                        </p>
+                        <p>
+                          Если у вас возник вопрос, вы нашли ошибку или считаете, что не хватает
+                          какой-то функции, обязательно напишите мне с пометкой "Текстометр".
+                          Мы очень любим и ценим обратную связь!
+                        </p>
+                        <p>
+                          <a href="mailto:antonina.laposhina@gmail.com">
+                            <span class="icon">
+                              <i class="far fa-envelope"></i>
+                            </span>
+                          </a>
+                          <a href="https://www.facebook.com/antonina.laposhina">
+                            <span class="icon">
+                              <i class="fab fa-facebook"></i>
+                            </span>
+                          </a>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -698,7 +739,7 @@ export default {
           }
       } else {
       this.loading = true
-      axios.post(process.env.VUE_APP_API_URL + '/analyze', { text: this.text, mode: this.mode })
+      axios.post('/analyze', { text: this.text, mode: this.mode })
         .then(response => {
           this.result = response.data
           if (response.data.text_ok) {
@@ -722,20 +763,46 @@ export default {
     clear: function() {
       this.result = null
     },
-    getProgressClass: function(level) {
-      if (level < 2) {
+    getProgressClassForeign: function(level) {
+      if (level <= 1) {
+        return 'is-very-easy'
+      }
+      if (level > 1 && level <= 2) {
         return 'is-easy'
       }
-      if (level >= 2 && level < 4.4) {
+      if (level > 2 && level <= 4.3) {
         return 'is-mild'
       }
-      if (level >= 4.4 && level < 5.9) {
+      if (level > 4.3 && level <= 5.8) {
         return 'is-moderate'
       }
-      if (level >= 5.9 && level <= 8) {
+      if (level > 5.8 && level <= 6.8) {
+        return 'is-upper-moderate'
+      }
+      if (level > 6.8 && level <= 7.9) {
         return 'is-difficult'
       }
-      if (level > 8) {
+      if (level > 7.9) {
+        return 'is-very-difficult'
+      }
+    },
+    getProgressClassNative: function(level) {
+      if (level <= 2) {
+        return 'is-very-easy'
+      }
+      if (level > 2 && level <= 6) {
+        return 'is-easy'
+      }
+      if (level > 6 && level <= 7.5) {
+        return 'is-mild'
+      }
+      if (level > 7.5 && level <= 8.5) {
+        return 'is-upper-moderate'
+      }
+      if (level > 8.5 && level <= 9.1) {
+        return 'is-difficult'
+      }
+      if (level > 9.1) {
         return 'is-very-difficult'
       }
     },
