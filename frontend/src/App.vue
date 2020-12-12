@@ -46,7 +46,7 @@
               </div>
             </div>
             <div class="level-item">
-              <span class="is-size-5 has-text-left">Русский как родной (beta)</span>
+              <span class="is-size-5 has-text-left">Русский как родной<sup>beta</sup></span>
             </div>
           </div>
           <article v-if="result && result.text_ok === false" class="message is-danger">
