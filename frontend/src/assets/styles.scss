@@ -4,27 +4,33 @@
 $primary: #007a7a;
 $warning: #fea02f;
 
-$navbar-height: 4rem;
-$navbar-item-img-max-height: 3rem;
+$navbar-height: 3.5rem;
+$navbar-item-img-max-height: 2.5rem;
 
 // Setup Custom Colors
-$easy: green;
+$very-easy: #c9e265;
+$very-easy-invert: findColorInvert($very-easy);
+$easy: #008037;
 $easy-invert: findColorInvert($easy);
-$mild: yellow;
+$mild: #ffde59;
 $mild-invert: findColorInvert($mild);
-$moderate: orange;
+$moderate: #ffbd59;
 $moderate-invert: findColorInvert($moderate);
-$difficult: red;
+$upper-moderate: #ff914d;
+$upper-moderate-invert: findColorInvert($upper-moderate);
+$difficult: #d81919;
 $difficult-invert: findColorInvert($difficult);
-$very-difficult: brown;
+$very-difficult: #6b0808;
 $very-difficult-invert: findColorInvert($very-difficult);
 
 // Add new color variables to the color map.
 @import '../../node_modules/bulma/sass/utilities/derived-variables';
 $addColors: (
-  'easy':($easy, $easy-invert),
+  'very-easy': ($very-easy, $very-easy-invert),
+  'easy': ($easy, $easy-invert),
   'mild': ($mild, $mild-invert),
   'moderate': ($moderate, $moderate-invert),
+  'upper-moderate': ($upper-moderate, $upper-moderate-invert),
   'difficult': ($difficult, $difficult-invert),
   'very-difficult': ($very-difficult, $very-difficult-invert),
 );
@@ -96,7 +102,7 @@ input:checked + .slider:before {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  width: 250px;
   background-color: black;
   color: #fff;
   text-align: center;
@@ -106,10 +112,21 @@ input:checked + .slider:before {
   /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
-  width: 250px;
-  bottom: 100%;
+
+  top: 100%;
   left: 50%;
   margin-left: -125px;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */

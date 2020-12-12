@@ -1,16 +1,25 @@
-version: "3"
+version: '3'
+
 services:
   frontend:
     image: 1eshkin/textometr-frontend
-    ports:
-      - "8888:80"
+
   backend:
     image: 1eshkin/textometr-backend
     environment:
       - MAX_WORKERS=1
-    ports:
-      - "8889:80"
     deploy:
       resources:
         limits:
           memory: 1000M
+
+  proxy:
+    image: staticfloat/nginx-certbot
+    ports:
+        - 80:80/tcp
+        - 443:443/tcp
+    environment:
+        CERTBOT_EMAIL: alaposhin@gmail.com
+    volumes:
+      - ./proxy/conf.d:/etc/nginx/user.conf.d:ro
+      - ./proxy/letsencrypt:/etc/letsencrypt
