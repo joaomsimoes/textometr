@@ -55,6 +55,15 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    python3 -m unittest
    ```
+
+## Frontend
+
+1. Generate icons
+   ```bash
+   cd work
+   npx vue-pwa-asset-generator -a logo.svg -o output
+   ```
+
 ## Production
 
 ### Deploy app stack in Docker Swarm

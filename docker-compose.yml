@@ -1,13 +1,15 @@
-version: '3'
+version: "3"
 
 services:
   frontend:
     image: 1eshkin/textometr-frontend
 
   backend:
-    image: 1eshkin/textometr-backend
+    image: 1eshkin/textometr-backend:1.0.0
     environment:
       - MAX_WORKERS=1
+    volumes:
+      - ./logs:/app/logs
     deploy:
       resources:
         limits:

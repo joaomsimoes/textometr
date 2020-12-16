@@ -1,4 +1,4 @@
-curl 'http://pushkin-lab.ru:8889/analyze' \
+curl 'https://pushkin-lab.ru/analyze' \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36' \
@@ -10,7 +10,7 @@ curl 'http://pushkin-lab.ru:8889/analyze' \
   --compressed
 
 #####
-curl 'http://localhost:8889/analyze' \
+curl 'http://localhost:8080/analyze' \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36' \
