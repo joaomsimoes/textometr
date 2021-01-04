@@ -5,7 +5,8 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="http://pushkin-lab.ru">
-            <img src="./assets/logo.png">
+            <img id="logo" class="mr-2" src="./assets/logo.png">
+            <img src="./assets/santa.png">
           </a>
 
           <a role="button" class="navbar-burger" data-target="navMenu"
@@ -21,6 +22,12 @@
             <a class="navbar-item" href="#publications">Публикации</a>
             <a class="navbar-item" href="#contacts">Контакты</a>
             <a class="navbar-item" href="https://www.facebook.com/textometr">Мы в Facebook</a>
+            <div class="navbar-item">
+              <span class="icon is-clickable" @click="changeTheme">
+                <i v-if="theme === 'light'" class="fas fa-moon"></i>
+                <i v-if="theme === 'dark'" class="fas fa-sun"></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -717,7 +724,8 @@ export default {
       loading: false,
       text: '',
       result: null,
-      TEXT_FEATURES: TEXT_FEATURES
+      TEXT_FEATURES: TEXT_FEATURES,
+      theme: 'light'
     }
   },
   computed: {
@@ -728,6 +736,12 @@ export default {
       get: function() {
         return this.mode === 'native'
       }
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('theme') === 'dark') {
+      this.theme = 'dark'
+      document.body.classList.add('dark-theme')
     }
   },
   methods: {
@@ -835,6 +849,15 @@ export default {
       element.click()
 
       document.body.removeChild(element)
+    },
+    changeTheme() {
+      if (this.theme === 'light') {
+        this.theme = 'dark'
+      } else {
+        this.theme = 'light'
+      }
+      localStorage.setItem('theme', this.theme)
+      document.body.classList.toggle('dark-theme')
     }
   }
 }

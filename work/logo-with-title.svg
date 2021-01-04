@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
    version="1.1"
    id="svg4710"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="1286.8755"
-     inkscape:cy="543.40318"
+     inkscape:zoom="0.35"
+     inkscape:cx="1587.6765"
+     inkscape:cy="388.67981"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -38,7 +38,8 @@
      inkscape:window-height="1009"
      inkscape:window-x="64"
      inkscape:window-y="34"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     units="mm" />
   <metadata
      id="metadata4707">
     <rdf:RDF>
@@ -54,9 +55,10 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,-87)">
     <g
-       transform="matrix(0.50770647,0,0,0.51637445,1.6399735,129.25122)"
+       transform="matrix(0.50770647,0,0,0.51637445,9.1994973,164.02503)"
        id="g4677"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
@@ -97,16 +99,16 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35.27777863px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="59.153275"
-       y="167.16518"
+       x="66.712799"
+       y="201.93898"
        id="text4736"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:export-filename="/home/alexey/projects/tonya/textometr/frontend/src/assets/logo.png"><tspan
          sodipodi:role="line"
          id="tspan4734"
-         x="59.153275"
-         y="167.16518"
+         x="66.712799"
+         y="201.93898"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35.27777863px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:0.26458332">Текстомéтр</tspan></text>
   </g>
 </svg>

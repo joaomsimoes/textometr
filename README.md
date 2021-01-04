@@ -110,8 +110,8 @@ Textometr allows you to quickly obtain information about a text that is relevant
 
 1. Pull updated images
    ```bash
-   docker pull 1eshkin/textometr-frontend
-   docker pull 1eshkin/textometr-backend
+   docker pull 1eshkin/textometr-frontend:x.x.x
+   docker pull 1eshkin/textometr-backend:x.x.x
    ```
 
 2. Deploy app stack in Docker Swarm
