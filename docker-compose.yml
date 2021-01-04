@@ -2,7 +2,7 @@ version: "3"
 
 services:
   frontend:
-    image: 1eshkin/textometr-frontend:1.1.0-new-year
+    image: 1eshkin/textometr-frontend:1.1.1-new-year
 
   backend:
     image: 1eshkin/textometr-backend:1.0.0
