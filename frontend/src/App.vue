@@ -26,8 +26,7 @@
       </div>
     </nav>
 
-    <div class="columns">
-      <div class="column"></div>
+    <div class="columns is-centered">
       <div class="column is-two-thirds">
         <section class="section">
           <h4 class="title is-4 has-text-centered">Оценка сложности учебного текста</h4>
@@ -516,13 +515,16 @@
                         </p>
                         <p>
                           <a href="mailto:antonina.laposhina@gmail.com">
-                            <span class="icon">
+                            <span class="icon-text">
                               <i class="far fa-envelope"></i>
+                              <span class="ml-1">antonina.laposhina@gmail.com</span>
                             </span>
                           </a>
+                          <br>
                           <a href="https://www.facebook.com/antonina.laposhina">
-                            <span class="icon">
+                            <span class="icon-text">
                               <i class="fab fa-facebook"></i>
+                              <span class="ml-1">antonina.laposhina</span>
                             </span>
                           </a>
                         </p>
@@ -535,7 +537,6 @@
           </div>
         </section>
       </div>
-      <div class="column"></div>
     </div>
 
     <footer class="footer">
