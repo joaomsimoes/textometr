@@ -1,1 +1,3 @@
 .vscode/*
+logs/
+proxy/letsencrypt

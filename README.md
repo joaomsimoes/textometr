@@ -55,6 +55,15 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    python3 -m unittest
    ```
+
+## Frontend
+
+1. Generate icons
+   ```bash
+   cd work
+   npx vue-pwa-asset-generator -a logo.svg -o output
+   ```
+
 ## Production
 
 ### Deploy app stack in Docker Swarm
@@ -62,20 +71,20 @@ Textometr allows you to quickly obtain information about a text that is relevant
 1. Build image for frontend
    ```bash
    cd frontend # from the project directory
-   docker build -t 1eshkin/textometr-frontend .
+   docker build -t 1eshkin/textometr-frontend:x.x.x .
    ```   
 2. Push frontend image to the Docker Hub
    ```bash
-   docker push 1eshkin/textometr-frontend
+   docker push 1eshkin/textometr-frontend:x.x.x
    ```
 3. Build image for backend
    ```bash
    cd backend # from the project directory
-   docker build -t 1eshkin/textometr-backend .
+   docker build -t 1eshkin/textometr-backend:x.x.x .
    ```
 4. Push backend image to the Docker Hub
    ```bash
-   docker push 1eshkin/textometr-backend
+   docker push 1eshkin/textometr-backend:x.x.x
    ```
 5. Copy `docker-compose.yml` to the `textometr` folder on remote server
 
@@ -101,12 +110,13 @@ Textometr allows you to quickly obtain information about a text that is relevant
 
 1. Pull updated images
    ```bash
-   docker pull 1eshkin/textometr-frontend
-   docker pull 1eshkin/textometr-backend
+   docker pull 1eshkin/textometr-frontend:x.x.x
+   docker pull 1eshkin/textometr-backend:x.x.x
    ```
 
 2. Deploy app stack in Docker Swarm
    ```bash
+   cd textometr
    docker stack deploy --compose-file docker-compose.yml textometr
    ```
 

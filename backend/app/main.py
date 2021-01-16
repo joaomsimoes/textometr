@@ -1,14 +1,22 @@
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
 from analyzer_2000 import Analyzer
 
-logging.basicConfig(filename="logs.log", level=logging.INFO)
+# prepare logger
+formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
+handler = TimedRotatingFileHandler('logs/textometr.log', when="D", interval=10)
+handler.suffix = "%Y-%m-%d"
+handler.setFormatter(formatter)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
 
 analyzer = Analyzer()
 
-logging.info('Analyzer objects have been created')
+logger.info('Analyzer object has been created')
 
 class Text(BaseModel):
     text: str
@@ -18,7 +26,7 @@ app = FastAPI()
 
 @app.post('/analyze')
 def analyze(text: Text):
-    logging.info(text.text)
+    logger.info(text.text)
     if text.mode == 'foreign':
       return analyzer.start_foreign(text.text)
     else:

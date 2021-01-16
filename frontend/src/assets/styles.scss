@@ -45,6 +45,12 @@ $colors: map-merge($colors, $addColors);
   height: 34px;
 }
 
+@media (max-width: $tablet) {
+  .switch {
+    transform: rotate(90deg);
+  }
+}
+
 .switch input {
   opacity: 0;
   width: 0;
@@ -132,4 +138,110 @@ input:checked + .slider:before {
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.fa-sun {
+  color: $warning;
+  animation: spin 15s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+body.dark-theme {
+  $text-color: #ccc;
+  $background-color: #121212;
+  $ref-color: #2278dc;
+  $ref-color-hover: #53a2fe;
+
+  background-color: black;
+  color: $text-color;
+
+  .title {
+    color: $text-color;
+  }
+
+  .box {
+    background-color: $background-color;
+    color: $text-color;
+  }
+
+  textarea {
+    background-color: $background-color;
+    color: $text-color;
+  }
+
+  textarea::placeholder {
+    color: #666;
+  }
+
+  nav {
+    background-color: black;
+  }
+
+  .has-shadow {
+    box-shadow: 0 2px 0 0 #555;
+  }
+
+  .navbar-item {
+    color: #aaa;
+  }
+
+  .navbar-item:hover {
+    background-color: black;
+  }
+
+  .navbar-menu {
+    background-color: black;
+  }
+
+  footer {
+    background-color: $background-color;
+  }  
+
+  a {
+    color: $ref-color;
+  }
+
+  a:hover {
+    color: $ref-color-hover;
+  }
+
+  table {
+    background-color: black;
+    color: $text-color;
+  }
+
+  th, strong {
+    color: $text-color;
+  }
+
+  tr:hover, th:hover {
+    background-color: black !important;
+    color: #fff !important;
+  }
+
+  #logo {
+    filter: invert(0.9)
+  }
+
+  .tag {
+    background-color: #82dcc1 !important;
+    color: #1e5832 !important;
+  }
+  
+  button {
+    background-color: $background-color;
+    color: $text-color;
+  }
+
+  .tooltip .tooltiptext {
+    background-color: $background-color;
+  }
 }

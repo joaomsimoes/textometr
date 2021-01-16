@@ -5,7 +5,8 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="http://pushkin-lab.ru">
-            <img src="./assets/logo.png">
+            <img id="logo" class="mr-2" src="./assets/logo.png">
+            <img src="./assets/santa.png">
           </a>
 
           <a role="button" class="navbar-burger" data-target="navMenu"
@@ -21,13 +22,18 @@
             <a class="navbar-item" href="#publications">Публикации</a>
             <a class="navbar-item" href="#contacts">Контакты</a>
             <a class="navbar-item" href="https://www.facebook.com/textometr">Мы в Facebook</a>
+            <div class="navbar-item">
+              <span class="icon is-clickable" @click="changeTheme">
+                <i v-if="theme === 'light'" class="fas fa-moon"></i>
+                <i v-if="theme === 'dark'" class="fas fa-sun"></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="columns">
-      <div class="column"></div>
+    <div class="columns is-centered">
       <div class="column is-two-thirds">
         <section class="section">
           <h4 class="title is-4 has-text-centered">Оценка сложности учебного текста</h4>
@@ -46,7 +52,7 @@
               </div>
             </div>
             <div class="level-item">
-              <span class="is-size-5 has-text-left">Русский как родной (beta)</span>
+              <span class="is-size-5 has-text-left">Русский как родной<sup>beta</sup></span>
             </div>
           </div>
           <article v-if="result && result.text_ok === false" class="message is-danger">
@@ -516,13 +522,16 @@
                         </p>
                         <p>
                           <a href="mailto:antonina.laposhina@gmail.com">
-                            <span class="icon">
+                            <span class="icon-text">
                               <i class="far fa-envelope"></i>
+                              <span class="ml-1">antonina.laposhina@gmail.com</span>
                             </span>
                           </a>
+                          <br>
                           <a href="https://www.facebook.com/antonina.laposhina">
-                            <span class="icon">
+                            <span class="icon-text">
                               <i class="fab fa-facebook"></i>
+                              <span class="ml-1">antonina.laposhina</span>
                             </span>
                           </a>
                         </p>
@@ -535,7 +544,6 @@
           </div>
         </section>
       </div>
-      <div class="column"></div>
     </div>
 
     <footer class="footer">
@@ -716,7 +724,8 @@ export default {
       loading: false,
       text: '',
       result: null,
-      TEXT_FEATURES: TEXT_FEATURES
+      TEXT_FEATURES: TEXT_FEATURES,
+      theme: 'light'
     }
   },
   computed: {
@@ -727,6 +736,12 @@ export default {
       get: function() {
         return this.mode === 'native'
       }
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('theme') === 'dark') {
+      this.theme = 'dark'
+      document.body.classList.add('dark-theme')
     }
   },
   methods: {
@@ -834,6 +849,15 @@ export default {
       element.click()
 
       document.body.removeChild(element)
+    },
+    changeTheme() {
+      if (this.theme === 'light') {
+        this.theme = 'dark'
+      } else {
+        this.theme = 'light'
+      }
+      localStorage.setItem('theme', this.theme)
+      document.body.classList.toggle('dark-theme')
     }
   }
 }
