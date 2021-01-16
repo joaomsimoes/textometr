@@ -6,7 +6,6 @@
         <div class="navbar-brand">
           <a class="navbar-item" href="http://pushkin-lab.ru">
             <img id="logo" class="mr-2" src="./assets/logo.png">
-            <img src="./assets/santa.png">
           </a>
 
           <a role="button" class="navbar-burger" data-target="navMenu"
