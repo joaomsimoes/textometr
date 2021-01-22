@@ -23,8 +23,8 @@
             <a class="navbar-item" href="https://www.facebook.com/textometr">Мы в Facebook</a>
             <div class="navbar-item">
               <span class="icon is-clickable" @click="changeTheme">
-                <i v-if="theme === 'light'" class="fas fa-moon"></i>
-                <i v-if="theme === 'dark'" class="fas fa-sun"></i>
+                <font-awesome-icon v-if="theme === 'light'" :icon="['fas', 'moon']" />
+                <font-awesome-icon v-if="theme === 'dark'" :icon="['fas', 'sun']"/>
               </span>
             </div>
           </div>
@@ -113,7 +113,7 @@
                 <th>
                   {{ TEXT_FEATURES['key_words'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['key_words'].description }}</span>
                   </div>
                 </th>
@@ -129,7 +129,7 @@
                 <th>
                   {{ TEXT_FEATURES['cool_words'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['cool_words'].description }}</span>
                   </div>
                 </th>
@@ -253,7 +253,7 @@
                 <th>
                   {{ TEXT_FEATURES['gram_complex'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['gram_complex'].description }}</span>
                   </div>
                 </th>
@@ -343,7 +343,7 @@
                 <th>
                   {{ TEXT_FEATURES['lex_density'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['lex_density'].description }}</span>
                   </div>
                 </th>
@@ -353,7 +353,7 @@
                 <th>
                   {{ TEXT_FEATURES['tt_ratio'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['tt_ratio'].description }}</span>
                   </div>
                 </th>
@@ -363,7 +363,7 @@
                 <th>
                   {{ TEXT_FEATURES['laposhina_list'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['laposhina_list'].description }}</span>
                   </div>
                 </th>
@@ -373,7 +373,7 @@
                 <th>
                   {{ TEXT_FEATURES['detcorpus_5000'].title }}
                   <div class="tooltip">
-                    <i class="far fa-question-circle"></i>
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
                     <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['detcorpus_5000'].description }}</span>
                   </div>
                 </th>
@@ -506,7 +506,7 @@
                   <div class="columns">
                     <div class="column is-narrow">
                       <figure class="image is-128x128">
-                        <img src="./assets/tonya.png">
+                        <img src="./assets/tonya.png" loading="lazy">
                       </figure>
                     </div>
                     <div class="column">
@@ -522,14 +522,14 @@
                         <p>
                           <a href="mailto:antonina.laposhina@gmail.com">
                             <span class="icon-text">
-                              <i class="far fa-envelope"></i>
+                              <font-awesome-icon :icon="['far', 'envelope']" />
                               <span class="ml-1">antonina.laposhina@gmail.com</span>
                             </span>
                           </a>
                           <br>
                           <a href="https://www.facebook.com/antonina.laposhina">
                             <span class="icon-text">
-                              <i class="fab fa-facebook"></i>
+                              <font-awesome-icon :icon="['fab', 'facebook']" />
                               <span class="ml-1">antonina.laposhina</span>
                             </span>
                           </a>
