@@ -108,11 +108,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```
 ### Update stack in Docker Swarm
 
-1. Pull updated images
-   ```bash
-   docker pull 1eshkin/textometr-frontend:x.x.x
-   docker pull 1eshkin/textometr-backend:x.x.x
-   ```
+1. Copy `docker-compose.yml` to the `textometr` folder on remote server
 
 2. Deploy app stack in Docker Swarm
    ```bash
