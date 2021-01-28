@@ -16,17 +16,15 @@ Textometr allows you to quickly obtain information about a text that is relevant
    source env/bin/activate
    ```
 
-5. Deactivate venv
-   ```bash
-   deactivate
-   ```
-
-6. Install packages
+5. Install packages
    ```bash
    pip install -r requirements.txt
    python -m nltk.downloader punkt
    ```
-
+6. Deactivate venv
+   ```bash
+   deactivate
+   ```
 ## Run
 
 1. Command
@@ -62,6 +60,19 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    cd work
    npx vue-pwa-asset-generator -a logo.svg -o output
+   ```
+
+## Load Testing
+
+1. Install Artillery
+   ```bash
+   npm install -g artillery
+   ```
+
+2. Run load test
+   ```bash
+   cd load-tests
+   artillery run artillery-load-test.yaml
    ```
 
 ## Production
