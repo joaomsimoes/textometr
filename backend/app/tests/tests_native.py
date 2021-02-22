@@ -301,6 +301,12 @@ class TestAnalyzer(unittest.TestCase):
             '100 баллов из 100. Очень сложный текст, подойдет для выпускника ВУЗа и старше'
         )
 
+    def test_text_33(self):
+        self.assertEqual(
+            TestAnalyzer.text_analyzer.start_native('Мы едем, едем, едем в далёкие далёкие края. Веселые соседи и добрые друзья.')['frequency_bag'],
+            [('ехать', 3), ('далекий', 2), ('веселый', 1), ('добрый', 1), ('друг', 1), ('край', 1), ('сосед', 1)]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

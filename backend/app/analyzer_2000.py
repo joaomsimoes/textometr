@@ -41,12 +41,12 @@ class Analyzer:
                       'formula_flesh_oborneva', 'formula_flesh_kinc_oborneva' , 'formula_pushkin', 'formula_pushkin_100',
                       'level_comment','structure_complex', 'lexical_complex','narrativity','description',
                       'tt_ratio', 'lex_density','lexical_complex_rki',
-                      'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words']
+                      'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words', 'frequency_bag']
 
     COLUMNS_OUTPUT = [ 'text_ok', 'text_error_message', 'level_number', 'level_comment', 'level_int', 'words', 'sentences',
                        'unique_words', 'reading_for_detail_speed', 'skim_reading_speed', 'key_words', 'cool_words',
                        'inA1', 'not_inA1', 'inA2', 'not_inA2', 'inB1', 'not_inB1', 'inB2', 'not_inB2', 'inC1', 'not_inC1',
-                       'rare_words', 'cool_but_not_in_slovnik', 'gram_complex'
+                       'rare_words', 'cool_but_not_in_slovnik', 'gram_complex','frequency_bag'
     ]
 
     GRAM_FEATURES = [ 'A', 'ADV', 'ADVPRO', 'ANUM', 'APRO', 'COM', 'CONJ', 'INTJ',
@@ -179,6 +179,7 @@ class Analyzer:
         self.count_kotoryi = []
         self.count_content_pos = []
         self.count_passive = []
+        self.whole_lemmas_minus_geo = []
 
         # Обучаем модель
         # x_train, y_train = self.features[Analyzer_foreign.COLUMNS_NEEDED], self.features['level']
@@ -323,6 +324,14 @@ class Analyzer:
             idf = 0
         return idf
 
+    def __get_frequency_bag(self, element):
+        frequency_bag = dict()
+        unique_lemmas = sorted(list(set(element)))
+        for i in unique_lemmas:
+            frequency_bag[i] = element.count(i)
+        sorted_fr_bag = (sorted(frequency_bag.items(), key=lambda x: x[1], reverse=True))
+        return sorted_fr_bag
+
     def __clean_text(self, input_text):
         new_text = input_text.replace('­\n', '')
         new_text = new_text.replace('\n', ' ')
@@ -418,7 +427,7 @@ class Analyzer:
         self.count_kotoryi = []
         self.count_content_pos = []
         self.count_passive = []
-
+        self.whole_lemmas_minus_geo = []
         return True
 
     def __first_check_len_text(self, element):
@@ -465,6 +474,8 @@ class Analyzer:
         self.unique_lemmas_list = list(set(self.whole_lemmas_list))
 
         self.noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
+
+        self.whole_lemmas_minus_geo = [f for f in self.whole_lemmas_list if f not in self.geo_imen_list]
 
         # всего слов в тексте
         self.dict_of_features['words'] = (len(self.whole_analyzed_text))
@@ -519,7 +530,7 @@ class Analyzer:
 
         # Доля слов, входящих в различные лексические списки
         for i in LEXICAL_LISTS:
-            new_key = self.__percent_of_known_words(self.whole_lemmas_list, LEXICAL_LISTS[i])
+            new_key = self.__percent_of_known_words(self.whole_lemmas_minus_geo, LEXICAL_LISTS[i])
             self.dict_of_features[i] = new_key
 
         # Доля абстрактных/конкретных сущ. от всех сущ.
@@ -670,6 +681,11 @@ class Analyzer:
         self.data_about_text['skim_reading_speed'] = self.__output_of_min(
             self.dict_of_features['words'] / Analyzer.SKIM_READING_SPEED_NORM[level_int])
 
+        #частотный словарь по тексту
+
+        all_lemmas_minus_stop = [f for f in self.whole_lemmas_list if f not in self.stop_list]
+
+        self.data_about_text['frequency_bag'] = self.__get_frequency_bag(all_lemmas_minus_stop)
         # Блок лексики:
         # 1. Считаем ключевые слова по tf/idf
 
@@ -884,6 +900,10 @@ class Analyzer:
         whole_lemmas_minus_stop = [f for f in self.whole_lemmas_list if f not in self.stop_list]
         unique_lemmas_list = list(set(whole_lemmas_minus_stop))
         noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
+
+        #Частотник по тексту
+
+        self.dict_of_features['frequency_bag'] = self.__get_frequency_bag(whole_lemmas_minus_stop)
 
         # Цифры про текст:
         # всего слов в тексте
