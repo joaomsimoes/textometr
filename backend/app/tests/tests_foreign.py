@@ -213,9 +213,15 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_19(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native('Мы едем, едем, едем в далёкие далёкие края. '
+            TestAnalyzer.text_analyzer.start_foreign('Мы едем, едем, едем в далёкие далёкие края. '
                                                     'Веселые соседи и добрые друзья.')['frequency_bag'],
-            [('ехать', 3), ('далекий', 2), ('веселый', 1), ('добрый', 1), ('друг', 1), ('край', 1), ('сосед', 1)]
+            [('ехать', 3), ('далекий', 2), ('в', 1), ('веселый', 1), ('добрый', 1), ('друг', 1), ('и', 1), ('край', 1), ('мы', 1), ('сосед', 1)]
+        )
+
+    def test_text_20(self):
+        self.assertEqual(
+            TestAnalyzer.text_analyzer.start_foreign('- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и ку - ку.')['not_inB2'],
+            ['бегом']
         )
 
 if __name__ == '__main__':

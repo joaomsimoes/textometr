@@ -683,10 +683,7 @@ class Analyzer:
 
         #частотный словарь по тексту
 
-        all_lemmas_minus_stop = [f for f in self.whole_lemmas_list if f not in self.stop_list]
-
-        self.data_about_text['frequency_bag'] = self.__get_frequency_bag(all_lemmas_minus_stop)
-        # Блок лексики:
+        self.data_about_text['frequency_bag'] = self.__get_frequency_bag(self.whole_lemmas_list)
         # 1. Считаем ключевые слова по tf/idf
 
 
@@ -903,7 +900,7 @@ class Analyzer:
 
         #Частотник по тексту
 
-        self.dict_of_features['frequency_bag'] = self.__get_frequency_bag(whole_lemmas_minus_stop)
+        self.dict_of_features['frequency_bag'] = self.__get_frequency_bag(self.whole_lemmas_list)
 
         # Цифры про текст:
         # всего слов в тексте
@@ -975,7 +972,7 @@ class Analyzer:
         self.dict_of_features['rki_children_list'] = f"{in_rki_children} %"
 
         in_united_simple_list = self.__percent_of_known_words_100(
-            self.whole_lemmas_list, self.united_list)
+           self.whole_lemmas_list, self.united_list)
 
         self.dict_of_features['united_simple_list'] = f"{in_united_simple_list} %"
 
@@ -1053,6 +1050,8 @@ class Analyzer:
 
         print(self.data_about_text)
         return self.data_about_text
+
+
 
 
 
