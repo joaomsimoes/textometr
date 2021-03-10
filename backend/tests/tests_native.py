@@ -1,5 +1,5 @@
 import unittest
-from analyzer_2000 import Analyzer
+from app.analyzer_2000 import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
@@ -9,7 +9,6 @@ class TestAnalyzer(unittest.TestCase):
         cls.text_analyzer = Analyzer()
 
     def test_text_1(self):
-        #print(TestAnalyzer.text_analyzer.start('Шла Саша по шоссе и сосала сушку.'))
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native('Шла Саша по шоссе и сосала сушку.')['sentences'],
             1
