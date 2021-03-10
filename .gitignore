@@ -1,3 +1,5 @@
 .vscode/*
 logs/
 proxy/letsencrypt
+/.idea/
+/backend/venv/
