@@ -397,14 +397,23 @@ class Analyzer:
         return output_str
 
     def __output_ballov(self, element):
-        last_number = element % 10
         ball_str = ''
-        if last_number == 1:
-            ball_str = 'балл'
-        if 2 <= last_number <= 4:
-            ball_str = 'балла'
+        if element < 10:
+            last_number = element
+            if last_number == 1:
+                ball_str = 'балл'
+            if 2 <= last_number <= 4:
+                ball_str = 'балла'
+            if 5 <= last_number <= 9:
+                ball_str = 'баллов'
         else:
-            ball_str = 'баллов'
+            last_number = element % 10
+            if last_number == 1:
+                ball_str = 'балл'
+            if 2 <= last_number <= 4:
+                ball_str = 'балла'
+            if 5 <= last_number <= 9 or last_number == 0:
+                ball_str = 'баллов'
         return ball_str
 
     def __clear_fields(self):
@@ -832,7 +841,7 @@ class Analyzer:
 
         self.data_about_text['gram_complex'] = list(set(gram_complex))
 
-        return True
+        return self.data_about_text
 
 
     def start_native(self, raw_text):
@@ -1019,13 +1028,16 @@ class Analyzer:
         formula_pushkin_100 = round((((structure_complex_genuine + lexical_complex_genuine) * 5) - narrativity), 1)
 
         if formula_pushkin_100 > 100:
-            formula_pushkin_100 = 100
-        if formula_pushkin_100 < 0:
-            formula_pushkin_100 = 0
+            formula_pushkin_100 = 99
+        if formula_pushkin_100 < 1:
+            formula_pushkin_100 = 1
 
         self.dict_of_features['formula_pushkin_100'] = round(formula_pushkin_100)
 
-        self.dict_of_features['formula_pushkin'] = round((formula_pushkin_100 / 10),1)
+        self.dict_of_features['formula_pushkin'] = round((formula_pushkin_100 / 10) , 1)
+
+        if self.dict_of_features['formula_pushkin'] < 1:
+            self.dict_of_features['formula_pushkin'] = 1
 
         ball = self.__output_ballov(formula_pushkin_100)
 

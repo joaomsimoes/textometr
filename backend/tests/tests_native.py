@@ -157,7 +157,7 @@ class TestAnalyzer(unittest.TestCase):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
                 'Меня зовут Тоня. Это мой стол. Его зовут Леша. Это его стол.')['formula_pushkin'],
-            0
+            1
         )
 
     def test_text_21(self):
@@ -297,7 +297,7 @@ class TestAnalyzer(unittest.TestCase):
                                                     'заверение договора аренды не требуется и обязательной нотариальной формы '
                                                     'такого договора законодательством не предусмотрено, однако по желанию - '
                                                     'стороны вправе предусмотреть его нотариальное удостоверение. ')['level_comment'],
-            '100 баллов из 100. Очень сложный текст, подойдет для выпускника ВУЗа и старше'
+            '99 баллов из 100. Очень сложный текст, подойдет для выпускника ВУЗа и старше'
         )
 
     def test_text_33(self):
@@ -310,6 +310,12 @@ class TestAnalyzer(unittest.TestCase):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native('- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и ку - ку.')['laposhina_list'],
             '95 %'
+        )
+
+    def test_text_35(self):
+        self.assertEqual(
+            TestAnalyzer.text_analyzer.start_native('- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и ку - ку.')['level_comment'],
+            '1 балл из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс).'
         )
 
 if __name__ == '__main__':
