@@ -2,10 +2,10 @@ version: "3"
 
 services:
   frontend:
-    image: 1eshkin/textometr-frontend:1.2.1
+    image: 1eshkin/textometr-frontend:1.2.2
 
   backend:
-    image: 1eshkin/textometr-backend:1.0.1
+    image: 1eshkin/textometr-backend:1.0.8
     environment:
       - MAX_WORKERS=1
     volumes:
@@ -13,7 +13,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1000M
+          memory: 700M
 
   proxy:
     image: staticfloat/nginx-certbot

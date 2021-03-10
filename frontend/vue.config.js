@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
-    proxy: 'https://pushkin-lab.ru'
+    proxy: 'http://backend:8888'
   },
   pwa: {
     name: 'Текстометр',

@@ -265,6 +265,22 @@
                   </div>
                 </td>
               </tr>
+              <tr id="frequency_bag">
+                <th>{{ TEXT_FEATURES['frequency_bag'].title }}</th>
+                <td>
+                  <table class="table is-narrow is-bordered mb-1">
+                    <tbody>
+                      <tr v-for="item in wordFrequencyArray" :key="item[0]">
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[1] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <a href="#frequency_bag" @click="toggleShowAll()">
+                    {{ showAll ? 'Скрыть' : 'Показать все' }}
+                  </a>
+                </td>
+              </tr>
             </tbody>
           </table>
            <table v-if="mode === 'native'" class="table is-hoverable is-fullwidth">
@@ -401,6 +417,22 @@
               <tr>
                 <th>{{ TEXT_FEATURES['lexical_complex_rki'].title }}</th>
                 <td>{{ result.lexical_complex_rki }}</td>
+              </tr>
+              <tr id="frequency_bag">
+                <th>{{ TEXT_FEATURES['frequency_bag'].title }}</th>
+                <td>
+                  <table class="table is-narrow is-bordered">
+                    <tbody>
+                      <tr v-for="item in wordFrequencyArray" :key="item[0]">
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[1] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <a href="#frequency_bag" @click="toggleShowAll()">
+                    {{ showAll ? 'Скрыть' : 'Показать все' }}
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -713,6 +745,10 @@ const TEXT_FEATURES = {
     title: 'Лексическая сложность текста для детей-иностранцев',
     type: 'number'
   },
+  frequency_bag: {
+    title: 'Частотный словарь по тексту',
+    type: 'list'
+  }
 }
 
 export default {
@@ -724,6 +760,7 @@ export default {
       text: '',
       result: null,
       TEXT_FEATURES: TEXT_FEATURES,
+      showAll: false,
       theme: 'light'
     }
   },
@@ -735,6 +772,10 @@ export default {
       get: function() {
         return this.mode === 'native'
       }
+    },
+    wordFrequencyArray: function() {
+      let res = this.result && this.result.frequency_bag ? this.result.frequency_bag : []
+      return this.showAll ? res : res.slice(0, 10)
     }
   },
   mounted() {
@@ -742,6 +783,9 @@ export default {
       this.theme = 'dark'
       document.body.classList.add('dark-theme')
     }
+
+    this.addMenuInteraction()
+    this.addSmoothScrollForAllAnchors()
   },
   methods: {
     analyze: function () {
@@ -776,6 +820,7 @@ export default {
     },
     clear: function() {
       this.result = null
+      this.showAll = false
     },
     getProgressClassForeign: function(level) {
       if (level <= 1) {
@@ -857,41 +902,44 @@ export default {
       }
       localStorage.setItem('theme', this.theme)
       document.body.classList.toggle('dark-theme')
+    },
+    toggleShowAll() {
+      this.showAll = !this.showAll
+    },
+    addSmoothScrollForAllAnchors() {
+      // add smooth scroll for all anchors
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault()
+
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          })
+        })
+      })
+    },
+    addMenuInteraction() {
+      // Get all "navbar-burger" elements
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0)
+
+      // Check if there are any navbar burgers
+      if ($navbarBurgers.length > 0) {
+        // Add a click event on each of them
+        $navbarBurgers.forEach( el => {
+          el.addEventListener('click', () => {
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target)
+
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle('is-active')
+            $target.classList.toggle('is-active')
+          })
+        })
+      }
     }
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  // add smooth scroll for all anchors
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault()
-
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth'
-      })
-    })
-  })
-
-  // Get all "navbar-burger" elements
-  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0)
-
-  // Check if there are any navbar burgers
-  if ($navbarBurgers.length > 0) {
-    // Add a click event on each of them
-    $navbarBurgers.forEach( el => {
-      el.addEventListener('click', () => {
-        // Get the target from the "data-target" attribute
-        const target = el.dataset.target;
-        const $target = document.getElementById(target)
-
-        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-        el.classList.toggle('is-active')
-        $target.classList.toggle('is-active')
-      })
-    })
-  }
-})
 </script>
 
 <style lang="scss">

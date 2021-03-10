@@ -1,8 +1,8 @@
 config:
   target: "https://pushkin-lab.ru"
   phases:
-    - duration: 1
-      arrivalCount: 10
+    - duration: 10
+      arrivalCount: 100
 scenarios:
   - flow:
       - get:

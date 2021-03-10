@@ -1,27 +1,43 @@
 # Textometr
 Textometr allows you to quickly obtain information about a text that is relevant for its preparation for a Russian lesson: the level of complexity of the text, key and most useful words, statistics on the occurrence of words in lexical minimums.
 
+## Development
+### Run with Docker
+1. Run
+   ```bash
+   docker-compose -f docker-compose.dev.yml up
+   ```
+
+2. Open http://localhost:8080
+
+3. Run `bash` inside Docker container
+   ```bash
+   docker exec -it CONTAINER_NAME bash
+   ```
+
+4. Run tests local or inside Docker container
+   ```bash
+   python3 -m unittest
+   ```
 ## Backend Installation
 1. Go to `backend` folder
 
-2. Install Python 3 and pip
-
-3. Create virtual environment
+2. Create virtual environment
    ```bash
    python3 -m venv env
    ```
 
-4. Activate venv
+3. Activate venv
    ```bash
    source env/bin/activate
    ```
 
-5. Install packages
+4. Install packages
    ```bash
    pip install -r requirements.txt
    python -m nltk.downloader punkt
    ```
-6. Deactivate venv
+4. Deactivate venv
    ```bash
    deactivate
    ```
@@ -32,28 +48,6 @@ Textometr allows you to quickly obtain information about a text that is relevant
    cd app
    uvicorn main:app --reload
    ```
-
-## Docker
-
-1. Start
-   ```bash
-   docker-compose up
-   ```
-
-2. Go to URL http://localhost:9001/
-
-## Development in Docker
-
-1. Run bash inside Docker container
-   ```bash
-   docker exec -it CONTAINER_NAME bash
-   ```
-
-2. Run tests local or inside Docker container
-   ```bash
-   python3 -m unittest
-   ```
-
 ## Frontend
 
 1. Generate icons

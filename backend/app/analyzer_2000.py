@@ -109,8 +109,6 @@ class Analyzer:
                    ("Очень сложный текст, подойдет для выпускника ВУЗа и старше", 91, 100)]
 
     def __init__(self):
-        print('Init Analyzer_2000')
-
         self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
 
         self.ridge = linear_model.Ridge(alpha=0.1)
@@ -195,11 +193,9 @@ class Analyzer:
         i_text_syl_counter = 0
         for ii in i_text:
             if ii in Analyzer.SYLLABLES:
-                # print('marker')
                 i_text_syl_counter += 1
         for i in Analyzer.TWO_VOWELS:
             if i_text.find(i) != -1:
-                # print('two')
                 i_text_syl_counter -= 1
         if i_text == 'его':
             i_text_syl_counter = 1
@@ -464,7 +460,6 @@ class Analyzer:
 
 
     def __set_numbers_about_foreign_text(self, clean_lemmas_list):
-
         self.all_words = len(self.whole_analyzed_text)
         self.all_len_words = [len(f) for f in self.whole_lemmas_list]
         self.all_syllables = sum(self.number_of_syllables_list)
@@ -541,9 +536,7 @@ class Analyzer:
         return self.dict_of_features
 
     def start_foreign(self, raw_text):
-
         self.__clear_fields()
-        print('Start Analyzer_foreign')
 
         text = self.__clean_text(raw_text)
 
@@ -602,8 +595,6 @@ class Analyzer:
         prediction = self.__predict(test_features_array)
 
         self.__tell_me_about_text(prediction)
-
-        print(self.data_about_text)
 
         return self.data_about_text
 
@@ -845,9 +836,7 @@ class Analyzer:
 
 
     def start_native(self, raw_text):
-
         self.__clear_fields()
-        print('Start Analyzer_native')
 
         text = self.__clean_text(raw_text)
 
@@ -1048,7 +1037,6 @@ class Analyzer:
             if i in Analyzer.COLUMNS_NEEDED_NATIVE:
                 self.data_about_text[i] = self.dict_of_features[i]
 
-        print(self.data_about_text)
         return self.data_about_text
 
 
