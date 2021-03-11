@@ -177,7 +177,7 @@ class Analyzer:
         self.count_kotoryi = []
         self.count_content_pos = []
         self.count_passive = []
-        self.whole_lemmas_minus_geo = []
+        self.whole_lemmas_minus_geo_and_stop = []
 
         # Обучаем модель
         # x_train, y_train = self.features[Analyzer_foreign.COLUMNS_NEEDED], self.features['level']
@@ -432,7 +432,7 @@ class Analyzer:
         self.count_kotoryi = []
         self.count_content_pos = []
         self.count_passive = []
-        self.whole_lemmas_minus_geo = []
+        self.whole_lemmas_minus_geo_and_stop = []
         return True
 
     def __first_check_len_text(self, element):
@@ -479,7 +479,7 @@ class Analyzer:
 
         self.noun_unique_list = list(set(self.noun_list))  # список уникальных сущ.
 
-        self.whole_lemmas_minus_geo = [f for f in self.whole_lemmas_list if f not in self.geo_imen_list]
+        self.whole_lemmas_minus_geo_and_stop = [f for f in self.whole_lemmas_list if f not in self.geo_imen_list and f not in self.stop_list]
 
         # всего слов в тексте
         self.dict_of_features['words'] = (len(self.whole_analyzed_text))
@@ -534,7 +534,7 @@ class Analyzer:
 
         # Доля слов, входящих в различные лексические списки
         for i in LEXICAL_LISTS:
-            new_key = self.__percent_of_known_words(self.whole_lemmas_minus_geo, LEXICAL_LISTS[i])
+            new_key = self.__percent_of_known_words(self.whole_lemmas_minus_geo_and_stop, LEXICAL_LISTS[i])
             self.dict_of_features[i] = new_key
 
         # Доля абстрактных/конкретных сущ. от всех сущ.

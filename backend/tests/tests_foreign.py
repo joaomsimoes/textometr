@@ -224,5 +224,11 @@ class TestAnalyzer(unittest.TestCase):
             ['бегом']
         )
 
+    def test_text_21(self):
+        self.assertEqual(
+            TestAnalyzer.text_analyzer.start_foreign('- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и ку - ку.')['inB1'],
+            86
+        )
+
 if __name__ == '__main__':
     unittest.main()
