@@ -1,5 +1,5 @@
 config:
-  target: "https://pushkin-lab.ru"
+  target: "https://textometr.ru"
   phases:
     - duration: 10
       arrivalCount: 100
