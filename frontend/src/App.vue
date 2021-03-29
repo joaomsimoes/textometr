@@ -4,7 +4,7 @@
          role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item" href="http://pushkin-lab.ru">
+          <a class="navbar-item" href="https://textometr.ru">
             <img id="logo" class="mr-2" src="./assets/logo.png">
           </a>
 
@@ -488,6 +488,69 @@
                 чтение (причастия, пассивные формы и др.) <strong>Лексическая сложность</strong> рассчитывается
                 на основании вхождения слов текста в специализированные частотные списки.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <div class="columns">
+              <div class="column is-flex is-align-items-stretch">
+                <div class="box">
+                  <div class="columns is-mobile">
+                    <div class="column is-narrow">
+                      <figure class="image is-64x64">
+                        <img class="is-rounded" src="./assets/maximova.jpg">
+                      </figure>
+                    </div>
+                    <div class="column">
+                      <div class="has-text-weight-bold">Виктория Максимова</div>
+                      <div class="is-size-7">преподаватель РКИ, основатель FB сообщества «Сторителлинг в РКИ»</div>
+                    </div>
+                  </div>
+                  <p>
+                    Теперь, когда Текстометр появился, мне уже трудно представить, как бы я готовила тексты без него. Это незаменимый инструмент для моей работы: строгие объективные параметры оценки, простой и интуитивно понятный дизайн. Спасибо разработчикам проекта!
+                  </p>
+                </div>
+              </div>
+
+              <div class="column is-flex is-align-items-stretch">
+                <div class="box">
+                  <div class="columns is-mobile">
+                    <div class="column is-narrow">
+                      <figure class="image is-64x64">
+                        <img class="is-rounded" src="./assets/golubeva.jpg">
+                      </figure>
+                    </div>
+                    <div class="column">
+                      <div class="has-text-weight-bold">Анна Голубева</div>
+                      <div class="is-size-7">главный редактор издательства «Златоуст»</div>
+                    </div>
+                  </div>
+                  <p>
+                    Сервис очень помогает в работе и при общении с авторами! Особенно полезен частотный список, объективирует, что целесообразно оставлять в тексте, а что адаптировать или тренировать. Спасибо коллегам из Института Пушкина!
+                  </p>
+                </div>
+              </div>
+
+              <div class="column is-flex is-align-items-stretch">
+                <div class="box">
+                  <div class="columns is-mobile">
+                    <div class="column is-narrow">
+                      <figure class="image is-64x64">
+                        <img class="is-rounded" src="./assets/nekrasova.jpg">
+                      </figure>
+                    </div>
+                    <div class="column">
+                      <div class="has-text-weight-bold">Юлия Некрасова</div>
+                      <div class="is-size-7">преподаватель РКИ Университета Салерно</div>
+                    </div>
+                  </div>
+                  <p>
+                    Очень ценная методическая находка! Огромный потенциал для подготовки заданий для уровней B1 &mdash; C1, диктантов, заданий для экзаменов и т.п. Прошу прощения за сленг, но огромный респект разработчикам!
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
