@@ -16,8 +16,10 @@ from sklearn import linear_model
 class Analyzer:
     SYLLABLES = ['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'ю', 'я', 'э']
 
-    TWO_VOWELS = ['ия', 'ии', 'ые', 'ие', 'ио', 'ию', 'иу', 'ее', 'ею', 'ея', 'ою', 'ая', 'яя', 'ое',
-                  'аю', 'аэ', 'ье', 'ья', 'еа', 'ау', 'ую', 'юю', 'эт']
+    TWO_VOWELS = [
+        'ия', 'ии', 'ые', 'ие', 'ио', 'ию', 'иу', 'ее', 'ею', 'ея', 'ою', 'ая', 'яя', 'ое',
+        'аю', 'аэ', 'ье', 'ья', 'еа', 'ау', 'ую', 'юю', 'эт'
+    ]
 
     MODAL_WORDS = [
         'хочется', 'нужно', 'надо', 'кажется', 'казаться', 'пожалуй',
@@ -39,19 +41,23 @@ class Analyzer:
         'сов', 'действ', 'страд', 'неод', 'од', 'нп', 'пе'
     ]
 
-    COLUMNS_NEEDED_NATIVE = ['words', 'unique_words', 'sentences', 'mean_len_word', 'mean_len_sentence',
-                      'formula_flesh_oborneva', 'formula_flesh_kinc_oborneva', 'formula_pushkin', 'formula_pushkin_100',
-                      'level_comment', 'structure_complex', 'lexical_complex', 'narrativity', 'description',
-                      'tt_ratio', 'lex_density','lexical_complex_rki',
-                      'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words', 'frequency_bag']
-
-    COLUMNS_OUTPUT = [ 'text_ok', 'text_error_message', 'level_number', 'level_comment', 'level_int', 'words', 'sentences',
-                       'unique_words', 'reading_for_detail_speed', 'skim_reading_speed', 'key_words', 'cool_words',
-                       'inA1', 'not_inA1', 'inA2', 'not_inA2', 'inB1', 'not_inB1', 'inB2', 'not_inB2', 'inC1', 'not_inC1',
-                       'rare_words', 'cool_but_not_in_slovnik', 'gram_complex','frequency_bag'
+    COLUMNS_NEEDED_NATIVE = [
+        'words', 'unique_words', 'sentences', 'mean_len_word', 'mean_len_sentence',
+        'formula_flesh_oborneva', 'formula_flesh_kinc_oborneva', 'formula_pushkin', 'formula_pushkin_100',
+        'level_comment', 'structure_complex', 'lexical_complex', 'narrativity', 'description',
+        'tt_ratio', 'lex_density','lexical_complex_rki',
+        'laposhina_list','detcorpus_5000', 'rki_children_list','rare_words', 'frequency_bag'
     ]
 
-    GRAM_FEATURES = [ 'A', 'ADV', 'ADVPRO', 'ANUM', 'APRO', 'COM', 'CONJ', 'INTJ',
+    COLUMNS_OUTPUT = [
+        'text_ok', 'text_error_message', 'level_number', 'level_comment', 'level_int', 'words', 'sentences',
+        'unique_words', 'reading_for_detail_speed', 'skim_reading_speed', 'key_words', 'cool_words',
+        'inA1', 'not_inA1', 'inA2', 'not_inA2', 'inB1', 'not_inB1', 'inB2', 'not_inB2', 'inC1', 'not_inC1',
+        'rare_words', 'cool_but_not_in_slovnik', 'gram_complex', 'frequency_bag'
+    ]
+
+    GRAM_FEATURES = [
+        'A', 'ADV', 'ADVPRO', 'ANUM', 'APRO', 'COM', 'CONJ', 'INTJ',
         'NUM', 'PART', 'PR', 'S', 'SPRO', 'V', 'непрош', 'прош',
         'им', 'пр', 'род', 'твор', 'деепр', 'изъяв', 'инф', 'пов',
         'прич', 'кр', 'полн', 'притяж', '1-л', 'сред', 'несов',
@@ -294,7 +300,7 @@ class Analyzer:
         return True
 
     # Вычисляем процент слов из разных словников и частотных списков
-    #!!! когда буду переписывать модель, унифицировать везде процент! Оставить тот который _100
+    # todo: когда буду переписывать модель, унифицировать везде процент! Оставить тот который _100
     def __percent_of_known_words(self, element, list_of_words):
         if len(list_of_words) == 0 or len(element) == 0:
             return 0
@@ -490,18 +496,18 @@ class Analyzer:
         # всего предложений в тексте
         self.dict_of_features['sentences'] = (len(self.sentences))
         # средняя длина слова в тексте
-        self.dict_of_features['mean_len_word'] = round(((sum(self.words_length_list)) / self.all_words),1)
+        self.dict_of_features['mean_len_word'] = round(((sum(self.words_length_list)) / self.all_words), 1)
         self.dict_of_features['median_len_word'] = statistics.median(self.all_len_words)
         self.dict_of_features['median_len_sentence'] = statistics.median(self.all_len_sentences)
 
         # средняя длина предложения в тексте
         self.dict_of_features['mean_len_sentence'] = round((self.all_words / self.all_sentences), 1)
-        self.dict_of_features['mean_len_word_in_syllables'] = round((self.all_syllables / self.all_words),1)
-        self.dict_of_features['percent_of_long_words'] = round((self.long_words / self.all_words),2)
+        self.dict_of_features['mean_len_word_in_syllables'] = round((self.all_syllables / self.all_words), 1)
+        self.dict_of_features['percent_of_long_words'] = round((self.long_words / self.all_words), 2)
 
         # type-token ratio - number of types and the number of tokens -
         # lexical variety
-        self.dict_of_features['tt_ratio'] = round(((len(self.unique_lemmas_list) / len(self.whole_lemmas_list))),2)
+        self.dict_of_features['tt_ratio'] = round(((len(self.unique_lemmas_list) / len(self.whole_lemmas_list))), 2)
 
         # Среднее количество модальных глаголов и противительных союзов
         # на предложение
@@ -513,13 +519,11 @@ class Analyzer:
                 len(self.count_kotoryi) / len(self.whole_lemmas_list)
         )
         self.dict_of_features['kotoryi/sentences'] = len(self.count_kotoryi) / self.all_sentences
-        self.dict_of_features['contentPOS'] = round((
-                len(self.count_content_pos) / len(self.whole_lemmas_list)), 2
-        )
+        self.dict_of_features['contentPOS'] = round((len(self.count_content_pos) / len(self.whole_lemmas_list)), 2)
         self.dict_of_features['passive'] = len(self.count_passive)
 
         # формулы читабельности (адаптированные, из Бегтина)
-        self.dict_of_features['formula_smog'] = round(((30 * (self.long_words / self.all_sentences)) ** 0.5),2)
+        self.dict_of_features['formula_smog'] = round(((30 * (self.long_words / self.all_sentences)) ** 0.5), 2)
 
         self.dict_of_features['unique_words'] = len(self.unique_lemmas_list)
 

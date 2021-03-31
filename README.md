@@ -34,7 +34,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```
 
 6. Run using Uvicorn
-   ```sh
+   ```bash
    cd app
    uvicorn main:app --reload
    ```

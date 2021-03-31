@@ -22,6 +22,7 @@ class TestAnalyzer(unittest.TestCase):
             )['sentences'],
             1
         )
+        
     def test_text_3(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
@@ -30,6 +31,7 @@ class TestAnalyzer(unittest.TestCase):
             )['sentences'],
             1
         )
+
     def test_text_4(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native('Первое предложение.Второе сразу, без пробела.')['sentences'],
@@ -44,6 +46,7 @@ class TestAnalyzer(unittest.TestCase):
             )['sentences'],
             2
         )
+
     def test_text_6(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
@@ -51,6 +54,7 @@ class TestAnalyzer(unittest.TestCase):
             )['sentences'],
             2
         )
+
     def test_text_7(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
@@ -226,14 +230,15 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_text_25(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native('Сестра Криса Фармера Пенни стала журналисткой. '
-                                    'Когда брата убили, ей было 17 лет.В 2015 году — '
-                                    'через два года после смерти отца — Пенни Фармер '
-                                    'решила попытаться найти предполагаемого убийцу '
-                                    'брата в фейсбуке. У нее получилось моментально; '
-                                    'кроме того, она нашла двух сыновей мужчины и одну '
-                                    'из его жен. Она разослала всем им сообщения — и '
-                                    'обратилась в полицию Манчестера.'
+            TestAnalyzer.text_analyzer.start_native(
+                'Сестра Криса Фармера Пенни стала журналисткой. '
+                'Когда брата убили, ей было 17 лет.В 2015 году — '
+                'через два года после смерти отца — Пенни Фармер '
+                'решила попытаться найти предполагаемого убийцу '
+                'брата в фейсбуке. У нее получилось моментально; '
+                'кроме того, она нашла двух сыновей мужчины и одну '
+                'из его жен. Она разослала всем им сообщения — и '
+                'обратилась в полицию Манчестера.'
             )['text_ok'],
             True
         )
@@ -390,6 +395,7 @@ class TestAnalyzer(unittest.TestCase):
             )['level_comment'],
             '1 балл из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс).'
         )
+
 
 if __name__ == '__main__':
     unittest.main()
