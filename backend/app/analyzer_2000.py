@@ -1,15 +1,17 @@
 ### Объединенный файл из двух аналайзеров, для рки и для родного.
 
+import re
+import statistics
+from collections import defaultdict
+
+import nltk
 import numpy as np
 import pandas as pd
-import nltk
-from sklearn import linear_model
 import pymystem3
-from collections import defaultdict
-import statistics
-from nltk.tokenize import sent_tokenize
-import re
 from joblib import dump, load
+from nltk.tokenize import sent_tokenize
+from sklearn import linear_model
+
 
 class Analyzer:
     SYLLABLES = ['а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'ю', 'я', 'э']

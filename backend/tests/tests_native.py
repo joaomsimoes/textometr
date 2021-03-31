@@ -1,4 +1,5 @@
 import unittest
+
 from app.analyzer_2000 import Analyzer
 
 
