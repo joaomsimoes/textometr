@@ -97,7 +97,6 @@ class TestAnalyzer(unittest.TestCase):
             100
         )
 
-
     def test_text_10(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_foreign(
@@ -115,7 +114,7 @@ class TestAnalyzer(unittest.TestCase):
                 'Арендодатель последствия аварий и повреждений, происшедших не по вине Арендатора, устраняет своими '
                 'силами. Арендодатель оплачивает: эксплуатационные расходы, центральное отопление, коммунальные '
                 'услуги, телефон (абонентская ежемесячная плата).'
-            ) ['inB1'],
+            )['inB1'],
             48
         )
 
@@ -172,7 +171,6 @@ class TestAnalyzer(unittest.TestCase):
             )['level_int'],
             1
         )
-
 
     def test_text_15(self):
         self.assertEqual(
@@ -289,6 +287,7 @@ class TestAnalyzer(unittest.TestCase):
             )['inB1'],
             86
         )
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -72,7 +72,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    cd frontend # from the project directory
    docker build -t 1eshkin/textometr-frontend:x.x.x .
-   ```   
+   ```
 2. Push frontend image to the Docker Hub
    ```bash
    docker push 1eshkin/textometr-frontend:x.x.x

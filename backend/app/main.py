@@ -20,16 +20,19 @@ analyzer = Analyzer()
 
 logger.info('Analyzer object has been created')
 
+
 class Text(BaseModel):
     text: str
     mode: Optional[str] = 'foreign'
 
+
 app = FastAPI()
+
 
 @app.post('/analyze')
 def analyze(text: Text):
     logger.info(text.text)
     if text.mode == 'foreign':
-      return analyzer.start_foreign(text.text)
+        return analyzer.start_foreign(text.text)
     else:
-      return analyzer.start_native(text.text)
+        return analyzer.start_native(text.text)
