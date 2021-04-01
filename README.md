@@ -2,7 +2,7 @@
 
 Textometr allows you to quickly obtain information about a text that is relevant for its preparation for a Russian lesson: the level of complexity of the text, key and most useful words, statistics on the occurrence of words in lexical minimums.
 
-[![GitHub Super-Linter](https://github.com/leshkin/textometr/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/leshkin/textometr/workflows/Super-Linter/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 ## Run application in the development mode using Docker
 
