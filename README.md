@@ -1,8 +1,13 @@
 # Textometr
+
 Textometr allows you to quickly obtain information about a text that is relevant for its preparation for a Russian lesson: the level of complexity of the text, key and most useful words, statistics on the occurrence of words in lexical minimums.
 
+[![GitHub Super-Linter](https://github.com/leshkin/textometr/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 ## Run application in the development mode using Docker
+
 1. Run
+
    ```bash
    docker-compose -f docker-compose.dev.yml up
    ```
@@ -10,30 +15,36 @@ Textometr allows you to quickly obtain information about a text that is relevant
 2. Open <http://localhost:8080>
 
 ## Backend installation, testing and running
+
 1. Go to `backend` folder
 
 2. Create virtual environment
+
    ```bash
    python3 -m venv env
    ```
 
 3. Activate venv
+
    ```bash
    source env/bin/activate
    ```
 
 4. Install packages
+
    ```bash
    pip install -r requirements.txt
    python -m nltk.downloader punkt
    ```
 
 5. Run tests local or inside Docker container
+
    ```bash
    python3 -m unittest
    ```
 
 6. Run using Uvicorn
+
    ```bash
    cd app
    uvicorn main:app --reload
@@ -43,6 +54,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    deactivate
    ```
+
 ## Frontend
 
 1. Generate icons
@@ -54,6 +66,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
 ## Load Testing
 
 1. Install Artillery
+
    ```bash
    npm install -g artillery
    ```
@@ -106,6 +119,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    docker service ls # to view active replicas
    docker stats # to monitor resource usage
    ```
+
 ### Update stack in Docker Swarm
 
 1. Copy `docker-compose.yml` to the `textometr` folder on remote server
@@ -115,4 +129,3 @@ Textometr allows you to quickly obtain information about a text that is relevant
    cd textometr
    docker stack deploy --compose-file docker-compose.yml textometr
    ```
-
