@@ -6,7 +6,6 @@ from app.analyzer_2000 import Analyzer
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-
 # prepare logger
 formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
 handler = TimedRotatingFileHandler("logs/textometr.log", when="D", interval=10)
