@@ -4,15 +4,16 @@ from app.analyzer_2000 import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.text_analyzer = Analyzer()
 
     def test_text_1(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("Шла Саша по шоссе и сосала сушку.")["sentences"],
-            1
+            TestAnalyzer.text_analyzer.start_native(
+                "Шла Саша по шоссе и сосала сушку."
+            )["sentences"],
+            1,
         )
 
     def test_text_2(self):
@@ -20,22 +21,24 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "Трудно найти подходящее место для гнезда, трудно выкормить птенцов и т. п."
             )["sentences"],
-            1
+            1,
         )
-        
+
     def test_text_3(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
                 "Реальные вещества всегда содержат какие-то примеси, даже лекарственные вещества (например, "
                 "аспирин - рис. 1-2), к чистоте которых предъявляются особые требования"
             )["sentences"],
-            1
+            1,
         )
 
     def test_text_4(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("Первое предложение.Второе сразу, без пробела.")["sentences"],
-            2
+            TestAnalyzer.text_analyzer.start_native(
+                "Первое предложение.Второе сразу, без пробела."
+            )["sentences"],
+            2,
         )
 
     def test_text_5(self):
@@ -44,7 +47,7 @@ class TestAnalyzer(unittest.TestCase):
                 "Самая большая лисица достигает 55 см. в длину с размахом крыльев до 1,8 м. Есть свои лилипуты и "
                 "великаны и в растительном мире."
             )["sentences"],
-            2
+            2,
         )
 
     def test_text_6(self):
@@ -52,7 +55,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "Длина капсулы равна 0,1 мм, ширина 0.08 мм. А в 2010 году"
             )["sentences"],
-            2
+            2,
         )
 
     def test_text_7(self):
@@ -60,7 +63,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "И этот загадочный персонаж ногозначительно помолчал..."
             )["sentences"],
-            1
+            1,
         )
 
     def test_text_8(self):
@@ -68,7 +71,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "Бывает и такое многоточие… А потом новое предложение."
             )["sentences"],
-            2
+            2,
         )
 
     def test_text_9(self):
@@ -77,7 +80,7 @@ class TestAnalyzer(unittest.TestCase):
                 "А в 2010 году в г. Дубае состоялось торжественное открытие самого высокого здания в "
                 "мире – небоскрёба Бурдж-Халифа."
             )["sentences"],
-            1
+            1,
         )
 
     def test_text_10(self):
@@ -85,7 +88,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "В 1821 году С.В. Морозов заплатил своему помещику Рюмину за выход на волю."
             )["sentences"],
-            1
+            1,
         )
 
     def test_text_11(self):
@@ -93,13 +96,15 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "Походка министра, таким образом, в 4.7-6.7 раза более дурацкая, чем обычная."
             )["sentences"],
-            1
+            1,
         )
 
     def test_text_12(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("И вы вырастили мух?- Нет пока.")["sentences"],
-            2
+            TestAnalyzer.text_analyzer.start_native("И вы вырастили мух?- Нет пока.")[
+                "sentences"
+            ],
+            2,
         )
 
     def test_text_13(self):
@@ -116,7 +121,7 @@ class TestAnalyzer(unittest.TestCase):
                 "и вместе с нею какой-то свой собственный запах, который был сообщен и принесенному вслед за тем "
                 "мешку с разным лакейским туалетом."
             )["structure_complex"],
-            "9 из 10"
+            "9 из 10",
         )
 
     def test_text_14(self):
@@ -133,7 +138,7 @@ class TestAnalyzer(unittest.TestCase):
                 "притащить свою шинель и вместе с нею какой-то свой собственный запах, который был сообщен и "
                 "принесенному вслед за тем мешку с разным лакейским туалетом."
             )["lexical_complex"],
-            "6 из 10"
+            "6 из 10",
         )
 
     def test_text_15(self):
@@ -150,7 +155,7 @@ class TestAnalyzer(unittest.TestCase):
                 "притащить свою шинель и вместе с нею какой-то свой собственный запах, который был сообщен и "
                 "принесенному вслед за тем мешку с разным лакейским туалетом."
             )["formula_pushkin"],
-            6.9
+            6.9,
         )
 
     def test_text_16(self):
@@ -162,7 +167,7 @@ class TestAnalyzer(unittest.TestCase):
                 "договора аренды не требуется и обязательной нотариальной формы такого договора законодательством "
                 "не предусмотрено, однако по желанию - стороны вправе предусмотреть его нотариальное удостоверение."
             )["structure_complex"],
-            "10 из 10"
+            "10 из 10",
         )
 
     def test_text_17(self):
@@ -174,7 +179,7 @@ class TestAnalyzer(unittest.TestCase):
                 "аренды не требуется и обязательной нотариальной формы такого договора законодательством не "
                 "предусмотрено, однако по желанию - стороны вправе предусмотреть его нотариальное удостоверение."
             )["lexical_complex"],
-            "9 из 10"
+            "9 из 10",
         )
 
     def test_text_18(self):
@@ -183,7 +188,7 @@ class TestAnalyzer(unittest.TestCase):
                 "Это мой одноклассник Миша. Он глупый и некрасивый: глаза маленькие, рот большой, нос картошкой. "
                 "Он думает, он сильный."
             )["lexical_complex_rki"],
-            "3 из 10"
+            "3 из 10",
         )
 
     def test_text_19(self):
@@ -192,32 +197,31 @@ class TestAnalyzer(unittest.TestCase):
                 "Как хороша эта маленькая белокаменная церковь! Одиноко стоит она возле вязовой рощи на небольшом "
                 "холмике у тихого озерца."
             )["description"],
-            "9 из 10"
+            "9 из 10",
         )
 
     def test_text_20(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_native(
-                "Меня зовут Тоня. Это мой стол. Его зовут Леша. Это его стол.")["formula_pushkin"],
-            1
+                "Меня зовут Тоня. Это мой стол. Его зовут Леша. Это его стол."
+            )["formula_pushkin"],
+            1,
         )
 
     def test_text_21(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("384")["text_ok"],
-            False
+            TestAnalyzer.text_analyzer.start_native("384")["text_ok"], False
         )
 
     def test_text_22(self):
-        self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("")["text_ok"],
-            False
-        )
+        self.assertEqual(TestAnalyzer.text_analyzer.start_native("")["text_ok"], False)
 
     def test_text_23(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_native("Шла Саша по шоссе.")["text_error_message"],
-            "Введите текст на русском языке не менее 5 слов."
+            TestAnalyzer.text_analyzer.start_native("Шла Саша по шоссе.")[
+                "text_error_message"
+            ],
+            "Введите текст на русском языке не менее 5 слов.",
         )
 
     def test_text_24(self):
@@ -225,7 +229,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_native(
                 "Шла Саша по шоссе, была хорошая погода. А в тексте бывает english/vinglish"
             )["words"],
-            13
+            13,
         )
 
     def test_text_25(self):
@@ -240,7 +244,7 @@ class TestAnalyzer(unittest.TestCase):
                 "из его жен. Она разослала всем им сообщения — и "
                 "обратилась в полицию Манчестера."
             )["text_ok"],
-            True
+            True,
         )
 
     def test_text_26(self):
@@ -257,7 +261,7 @@ class TestAnalyzer(unittest.TestCase):
                 "самые знаменитые из которых — длинные и сильные лианы. Здесь множество "
                 "ярких бабочек, шумных попугаев, юрких обезьянок и других животных. "
             )["level_comment"],
-            "19 баллов из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс)."
+            "19 баллов из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс).",
         )
 
     def test_text_27(self):
@@ -275,7 +279,7 @@ class TestAnalyzer(unittest.TestCase):
                 "травы Сева нашёл маленькую птичку. Она бессильно раскинула  крылья и слегка "
                 "шевелила головой."
             )["level_comment"],
-            "24 балла из 100. Простой текст, подойдет для возраста 9-10 лет (3-4 класс)."
+            "24 балла из 100. Простой текст, подойдет для возраста 9-10 лет (3-4 класс).",
         )
 
     def test_text_28(self):
@@ -297,7 +301,7 @@ class TestAnalyzer(unittest.TestCase):
                 "У мистера и миссис Дурсль был маленький сын по имени Дадли, и, по их мнению, "
                 "он был самым чудесным ребенком на свете."
             )["level_comment"],
-            "40 баллов из 100. Простой текст, подойдет для возраста 9-10 лет (3-4 класс)."
+            "40 баллов из 100. Простой текст, подойдет для возраста 9-10 лет (3-4 класс).",
         )
 
     def test_text_29(self):
@@ -314,7 +318,7 @@ class TestAnalyzer(unittest.TestCase):
                 "те особи, которые делают это в благоприятных для них местах, к "
                 "которым они лучше всего приспособлены."
             )["level_comment"],
-            "49 баллов из 100. Достаточно простой текст, подойдет для возраста 11-12 лет (5-6 класс)."
+            "49 баллов из 100. Достаточно простой текст, подойдет для возраста 11-12 лет (5-6 класс).",
         )
 
     def test_text_30(self):
@@ -327,7 +331,7 @@ class TestAnalyzer(unittest.TestCase):
                 "особыми орудиями письма (пером, заострённой палочкой) на специально "
                 "подготовленной мягкой поверхности."
             )["level_comment"],
-            "75 баллов из 100. Текст подойдет для возраста 13-15 лет (7-9 класс)."
+            "75 баллов из 100. Текст подойдет для возраста 13-15 лет (7-9 класс).",
         )
 
     def test_text_31(self):
@@ -342,7 +346,7 @@ class TestAnalyzer(unittest.TestCase):
                 "системы британского правительства и то, что правительства, по большому счету, "
                 "порой тратят деньги на ерунду."
             )["level_comment"],
-            "76 баллов из 100. Текст подойдет для возраста 16-17 лет (10-11 класс)."
+            "76 баллов из 100. Текст подойдет для возраста 16-17 лет (10-11 класс).",
         )
 
     def test_text_32(self):
@@ -356,7 +360,7 @@ class TestAnalyzer(unittest.TestCase):
                 "такого договора законодательством не предусмотрено, однако по желанию - "
                 "стороны вправе предусмотреть его нотариальное удостоверение. "
             )["level_comment"],
-            "99 баллов из 100. Очень сложный текст, подойдет для выпускника ВУЗа и старше"
+            "99 баллов из 100. Очень сложный текст, подойдет для выпускника ВУЗа и старше",
         )
 
     def test_text_33(self):
@@ -374,8 +378,8 @@ class TestAnalyzer(unittest.TestCase):
                 ("и", 1),
                 ("край", 1),
                 ("мы", 1),
-                ("сосед", 1)
-            ]
+                ("сосед", 1),
+            ],
         )
 
     def test_text_34(self):
@@ -384,7 +388,7 @@ class TestAnalyzer(unittest.TestCase):
                 "- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и "
                 "ку - ку."
             )["laposhina_list"],
-            "95 %"
+            "95 %",
         )
 
     def test_text_35(self):
@@ -393,7 +397,7 @@ class TestAnalyzer(unittest.TestCase):
                 "- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав "
                 "и ку - ку."
             )["level_comment"],
-            "1 балл из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс)."
+            "1 балл из 100. Очень простой текст, подойдет для возраста 7-8 лет (1-2 класс).",
         )
 
 

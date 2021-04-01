@@ -4,21 +4,24 @@ from app.analyzer_2000 import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.text_analyzer = Analyzer()
 
     def test_text_1(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_foreign("Шла Саша по шоссе и сосала сушку.")["sentences"],
-            1
+            TestAnalyzer.text_analyzer.start_foreign(
+                "Шла Саша по шоссе и сосала сушку."
+            )["sentences"],
+            1,
         )
 
     def test_text_2(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_foreign("Шла Саша по шоссе и сосала сушку.")["words"],
-            7
+            TestAnalyzer.text_analyzer.start_foreign(
+                "Шла Саша по шоссе и сосала сушку."
+            )["words"],
+            7,
         )
 
     def test_text_3(self):
@@ -33,27 +36,23 @@ class TestAnalyzer(unittest.TestCase):
                 "чутким руководством инструктора выполняли физические "
                 "упражнения."
             )["words"],
-            54
+            54,
         )
 
     def test_text_4(self):
         self.assertEqual(
-            TestAnalyzer.text_analyzer.start_foreign("384")["text_ok"],
-            False
+            TestAnalyzer.text_analyzer.start_foreign("384")["text_ok"], False
         )
 
     def test_text_5(self):
-        self.assertEqual(
-            TestAnalyzer.text_analyzer.start_foreign("")["text_ok"],
-            False
-        )
+        self.assertEqual(TestAnalyzer.text_analyzer.start_foreign("")["text_ok"], False)
 
     def test_text_6(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_foreign(
                 "Шла Саша по шоссе, была хорошая погода. А в тексте бывает english/vinglish"
             )["words"],
-            13
+            13,
         )
 
     def test_text_7(self):
@@ -65,7 +64,7 @@ class TestAnalyzer(unittest.TestCase):
                 "пропавшими без вести. \t   "
                 "В госпиталях находятся 1245 военных."
             )["text_ok"],
-            True
+            True,
         )
 
     def test_text_8(self):
@@ -85,7 +84,7 @@ class TestAnalyzer(unittest.TestCase):
                 "обоих). Кроме того, они рассказали, что находились "
                 "на лодке, когда Бостон убил Криса Фармера и Пету Фрэмптон."
             )["text_ok"],
-            True
+            True,
         )
 
     def test_text_9(self):
@@ -94,7 +93,7 @@ class TestAnalyzer(unittest.TestCase):
                 "Это мой друг. Это моя подруга. Это мой дом. Это мое место. Это моя комната. Это моё окно. "
                 "Это мой город."
             )["inA1"],
-            100
+            100,
         )
 
     def test_text_10(self):
@@ -115,7 +114,7 @@ class TestAnalyzer(unittest.TestCase):
                 "силами. Арендодатель оплачивает: эксплуатационные расходы, центральное отопление, коммунальные "
                 "услуги, телефон (абонентская ежемесячная плата)."
             )["inB1"],
-            48
+            48,
         )
 
     # проверяем, отфильтровали ли лишние параметры. Если нет, то должна вылезти ошибка.
@@ -135,7 +134,7 @@ class TestAnalyzer(unittest.TestCase):
                 "А я знаю: она учится хорошо, потому что уроки делает три часа в день! Она не знает, "
                 "как называются динозавры, какие бывают автомобили. И она не играет в футбол!"
             )["level_int"],
-            2
+            2,
         )
 
     def test_text_13(self):
@@ -161,7 +160,7 @@ class TestAnalyzer(unittest.TestCase):
                 "А Лада-Бимка сидела, смотрела на них и тоже нехотела уходить. Она мечтала, чтобы ее старый "
                 "хозяин и новая хозяйка были вместе."
             )["level_int"],
-            1
+            1,
         )
 
     def test_text_14(self):
@@ -169,7 +168,7 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_foreign(
                 "Я иду на урок. Он говорит по-русски. Я еду на машине."
             )["level_int"],
-            1
+            1,
         )
 
     def test_text_15(self):
@@ -198,7 +197,7 @@ class TestAnalyzer(unittest.TestCase):
                 "А вы знаете, о чём мечтают такие женщины? Они мечтают о букете цветов и не "
                 "хотят потерять право на внимание мужчин»."
             )["level_int"],
-            3
+            3,
         )
 
     def test_text_16(self):
@@ -212,7 +211,7 @@ class TestAnalyzer(unittest.TestCase):
                 "позиций подчеркивают ту бесспорную мысль, что в основе развития любого "
                 "жизнеспособного организма ( и в том числе общества людей) лежит разнообразие."
             )["level_int"],
-            6
+            6,
         )
 
     def test_text_17(self):
@@ -234,7 +233,7 @@ class TestAnalyzer(unittest.TestCase):
                 "А подросткам сегодня чуть ли не с детских лет навязывается образ человека "
                 "покупающего, им внушают, что их главная задача в жизни – потреблять."
             )["level_int"],
-            4
+            4,
         )
 
     def test_text_18(self):
@@ -247,7 +246,7 @@ class TestAnalyzer(unittest.TestCase):
                 "законодательством не предусмотрено, однако по желанию - стороны вправе предусмотреть его "
                 "нотариальное удостоверение."
             )["level_int"],
-            6
+            6,
         )
 
     def test_text_19(self):
@@ -266,8 +265,8 @@ class TestAnalyzer(unittest.TestCase):
                 ("и", 1),
                 ("край", 1),
                 ("мы", 1),
-                ("сосед", 1)
-            ]
+                ("сосед", 1),
+            ],
         )
 
     def test_text_20(self):
@@ -276,7 +275,7 @@ class TestAnalyzer(unittest.TestCase):
                 "- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав "
                 "и ку - ку."
             )["not_inB2"],
-            ["бегом"]
+            ["бегом"],
         )
 
     def test_text_21(self):
@@ -285,7 +284,7 @@ class TestAnalyzer(unittest.TestCase):
                 "- Ай - ай - ай! - и бегом в сторону. - Ай! Ой! - закричали ребята.Эй! Мяу! му - му, гав - гав и "
                 "ку - ку."
             )["inB1"],
-            86
+            86,
         )
 
 
