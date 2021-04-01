@@ -5,10 +5,10 @@ module.exports = {
   pwa: {
     name: 'Текстометр',
     themeColor: '#007a7a',
-    msTileColor: "#007a7a",
-    appleMobileWebAppCache: "yes",
+    msTileColor: '#007a7a',
+    appleMobileWebAppCache: 'yes',
     manifestOptions: {
-      background_color: "#ffffff"
+      background_color: '#ffffff'
     },
     workboxOptions: {
       skipWaiting: true

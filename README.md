@@ -7,7 +7,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    docker-compose -f docker-compose.dev.yml up
    ```
 
-2. Open http://localhost:8080
+2. Open <http://localhost:8080>
 
 ## Backend installation, testing and running
 1. Go to `backend` folder
@@ -34,7 +34,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```
 
 6. Run using Uvicorn
-   ```sh
+   ```bash
    cd app
    uvicorn main:app --reload
    ```
@@ -72,7 +72,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    ```bash
    cd frontend # from the project directory
    docker build -t 1eshkin/textometr-frontend:x.x.x .
-   ```   
+   ```
 2. Push frontend image to the Docker Hub
    ```bash
    docker push 1eshkin/textometr-frontend:x.x.x
