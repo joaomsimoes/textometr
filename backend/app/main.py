@@ -2,10 +2,10 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 
+from app.analyzer_2000 import Analyzer
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from app.analyzer_2000 import Analyzer
 
 # prepare logger
 formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")

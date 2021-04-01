@@ -473,7 +473,7 @@ class Analyzer:
         f = open(file_name, "r", encoding="utf_8")
         lines = f.readlines()
         f.close()
-        return [l.replace("\n", "") for l in lines]
+        return [line.replace("\n", "") for line in lines]
 
     def __get_gr_info(self, element):
         gr_info = element.get("analysis")[0]["gr"]
@@ -797,7 +797,7 @@ class Analyzer:
         # первая проверка текста на длину
         self.data_about_text = self.__first_check_len_text(text)
 
-        if self.data_about_text["text_ok"] == False:
+        if self.data_about_text["text_ok"] is False:
             return self.data_about_text
 
         self.sentences = self.__sent_tokenize_plus(text)
@@ -819,7 +819,7 @@ class Analyzer:
 
         # вторая проверка, не менее 5 слов
         self.data_about_text = self.__second_check_len_text(self.whole_lemmas_list)
-        if self.data_about_text["text_ok"] == False:
+        if self.data_about_text["text_ok"] is False:
             return self.data_about_text
 
         # меняем значения в словаре с простых счетчиков на процент
