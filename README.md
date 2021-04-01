@@ -7,7 +7,7 @@ Textometr allows you to quickly obtain information about a text that is relevant
    docker-compose -f docker-compose.dev.yml up
    ```
 
-2. Open http://localhost:8080
+2. Open <http://localhost:8080>
 
 ## Backend installation, testing and running
 1. Go to `backend` folder
