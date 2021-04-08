@@ -2,7 +2,7 @@ version: "3"
 
 services:
   frontend:
-    image: 1eshkin/textometr-frontend:1.2.7
+    image: 1eshkin/textometr-frontend:1.2.9
 
   backend:
     image: 1eshkin/textometr-backend:1.0.9
@@ -16,12 +16,12 @@ services:
           memory: 700M
 
   proxy:
-    image: staticfloat/nginx-certbot
+    image: jonasal/nginx-certbot:1.2.0-nginx1.19.8
     ports:
-        - 80:80/tcp
-        - 443:443/tcp
+      - 80:80/tcp
+      - 443:443/tcp
     environment:
-        CERTBOT_EMAIL: alaposhin@gmail.com
+      - CERTBOT_EMAIL=alaposhin@gmail.com
     volumes:
-      - ./proxy/conf.d:/etc/nginx/user.conf.d:ro
+      - ./proxy/conf.d:/etc/nginx/conf.d
       - ./proxy/letsencrypt:/etc/letsencrypt
