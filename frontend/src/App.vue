@@ -56,7 +56,13 @@
           </div>
           <article v-if="result && result.text_ok === false" class="message is-danger">
             <div class="message-body">
-              {{ result.text_error_message}}
+              {{ result.text_error_message }}
+            </div>
+          </article>
+          <article v-if="hostname === 'pushkin-lab.ru'" class="message is-danger">
+            <div class="message-body">
+              Для корректной работы сервиса перейдите на новый адрес
+              <a class="has-text-link" href="https://textometr.ru">textometr.ru</a>
             </div>
           </article>
           <div class="field">
@@ -824,7 +830,8 @@ export default {
       result: null,
       TEXT_FEATURES: TEXT_FEATURES,
       showAll: false,
-      theme: 'light'
+      theme: 'light',
+      hostname: location.hostname
     }
   },
   computed: {
