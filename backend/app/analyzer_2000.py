@@ -163,6 +163,7 @@ class Analyzer:
         "words",
         "sentences",
         "unique_words",
+        "tt_ratio",
         "reading_for_detail_speed",
         "skim_reading_speed",
         "key_words",
@@ -177,6 +178,7 @@ class Analyzer:
         "not_inB2",
         "inC1",
         "not_inC1",
+        "infr5000",
         "rare_words",
         "cool_but_not_in_slovnik",
         "gram_complex",
@@ -368,7 +370,8 @@ class Analyzer:
         self.whole_lemmas_list = []
         self.noun_list = []
         self.bastard_list = []
-        self.geo_imen_list = []
+        self.names_list = []
+        self.geo_name_list = []
         self.conj_adversative_list = []  # противительные союзы
         self.modal_words_list = []
         self.words_length_list = []
@@ -416,10 +419,10 @@ class Analyzer:
         if "qual" in element.get("analysis")[0]:
             if element.get("analysis")[0]["qual"] == "bastard":
                 self.bastard_list.append(element.get("text"))
-        if gr_info.find("имя") > 0 or gr_info.find("гео") > 0:
-            self.geo_imen_list.append(element.get("analysis")[0]["lex"])
-        if gr_info.find("фам") > 0 or gr_info.find("отч") > 0:
-            self.geo_imen_list.append(element.get("analysis")[0]["lex"])
+        if  gr_info.find("гео") > 0:
+            self.geo_name_list.append(element.get("analysis")[0]["lex"])
+        if gr_info.find("имя") > 0 or gr_info.find("фам") > 0 or gr_info.find("отч") > 0:
+            self.names_list.append(element.get("analysis")[0]["lex"])
         if (
             element.get("analysis")[0]["lex"] == "но"
             or element.get("analysis")[0]["lex"] == "а"
@@ -626,7 +629,8 @@ class Analyzer:
         self.whole_lemmas_list = []
         self.noun_list = []
         self.bastard_list = []
-        self.geo_imen_list = []
+        self.names_list = []
+        self.geo_name_list = []
         self.conj_adversative_list = []  # противительные союзы
         self.modal_words_list = []
         self.words_length_list = []
@@ -688,7 +692,7 @@ class Analyzer:
         self.whole_lemmas_minus_geo_and_stop = [
             f
             for f in self.whole_lemmas_list
-            if f not in self.geo_imen_list and f not in self.stop_list
+            if f not in self.geo_name_list and f not in self.names_list and f not in self.stop_list
         ]
 
         # всего слов в тексте
@@ -748,7 +752,7 @@ class Analyzer:
         self.dict_of_features["unique_words"] = len(self.unique_lemmas_list)
 
         # Доля названий и бастардов
-        self.dict_of_features["lex_names_and_geo"] = len(self.geo_imen_list)
+        self.dict_of_features["lex_names_and_geo"] = len(self.names_list) + len(self.geo_name_list)
         self.dict_of_features["lex_bastards"] = len(self.bastard_list)
 
         LEXICAL_LISTS = {
@@ -832,7 +836,8 @@ class Analyzer:
         self.clean_lemmas_list = [
             f
             for f in self.whole_lemmas_list
-            if f not in self.geo_imen_list
+            if f not in self.geo_name_list
+            and f not in self.names_list
             and f not in self.bastard_list
             and f not in self.stop_list
         ]
@@ -929,6 +934,8 @@ class Analyzer:
 
         self.data_about_text["unique_words"] = self.dict_of_features["unique_words"]
 
+        self.data_about_text["tt_ratio"] = self.dict_of_features["tt_ratio"]
+
         # изучающее чтение текста должно занять m мин
         self.data_about_text["reading_for_detail_speed"] = self.__output_of_min(
             self.dict_of_features["words"]
@@ -952,12 +959,12 @@ class Analyzer:
             if (
                 len(item) > 2
                 and item not in self.bastard_list
-                and item not in self.geo_imen_list
-                and item not in self.slovnik_A1_list
+                and item not in self.names_list
+                #and item not in self.slovnik_A1_list
                 and self.whole_lemmas_list.count(item) > 1
             ):
                 idf = self.__count_freq_by_rnc(item)
-                bag_tf_idf[item] = self.whole_lemmas_list.count(item) - (10 * idf)
+                bag_tf_idf[item] = self.whole_lemmas_list.count(item) - (20 * idf)
 
         sorted_bag = sorted(bag_tf_idf.items(), key=lambda x: x[1], reverse=True)
 
@@ -1038,6 +1045,8 @@ class Analyzer:
         if level_for_scale >= 8:
             self.data_about_text["not_inB1"] = ""
 
+        self.data_about_text["infr5000"] = round(self.dict_of_features["infr5000"] * 100)
+
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
         self.data_about_text["cool_words"] = []
@@ -1082,7 +1091,8 @@ class Analyzer:
                         for f in self.clean_lemmas_list
                         if (
                             f not in cool_words
-                            and f not in self.geo_imen_list
+                            and f not in self.geo_name_list
+                            and f not in self.names_list
                             and f not in slovnik_by_levels[level_int]
                             and f not in kelly_by_levels[level_int]
                             and f not in self.data_about_text["key_words"]
@@ -1147,7 +1157,8 @@ class Analyzer:
                         for f in self.clean_lemmas_list
                         if (
                             f not in cool_words_more_4
-                            and f not in self.geo_imen_list
+                            and f not in self.geo_name_list
+                            and f not in self.names_list
                             and f not in slovnik_by_levels[4]
                             and f not in self.data_about_text["key_words"]
                             and (f not in self.fr_10000_list or f in self.bastard_list)
@@ -1169,6 +1180,9 @@ class Analyzer:
                 )
 
         self.data_about_text["gram_complex"] = list(set(gram_complex))
+
+        #вывод всех полей как они идут на сервисе
+        #print(self.data_about_text)
 
         return self.data_about_text
 
@@ -1210,7 +1224,8 @@ class Analyzer:
         self.clean_lemmas_list = [
             f
             for f in self.whole_lemmas_list
-            if f not in self.geo_imen_list
+            if f not in self.geo_name_list
+            and f not in self.names_list
             and f not in self.bastard_list
             and f not in self.stop_list
         ]
