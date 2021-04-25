@@ -419,9 +419,13 @@ class Analyzer:
         if "qual" in element.get("analysis")[0]:
             if element.get("analysis")[0]["qual"] == "bastard":
                 self.bastard_list.append(element.get("text"))
-        if  gr_info.find("гео") > 0:
+        if gr_info.find("гео") > 0:
             self.geo_name_list.append(element.get("analysis")[0]["lex"])
-        if gr_info.find("имя") > 0 or gr_info.find("фам") > 0 or gr_info.find("отч") > 0:
+        if (
+            gr_info.find("имя") > 0
+            or gr_info.find("фам") > 0
+            or gr_info.find("отч") > 0
+        ):
             self.names_list.append(element.get("analysis")[0]["lex"])
         if (
             element.get("analysis")[0]["lex"] == "но"
@@ -692,7 +696,9 @@ class Analyzer:
         self.whole_lemmas_minus_geo_and_stop = [
             f
             for f in self.whole_lemmas_list
-            if f not in self.geo_name_list and f not in self.names_list and f not in self.stop_list
+            if f not in self.geo_name_list
+            and f not in self.names_list
+            and f not in self.stop_list
         ]
 
         # всего слов в тексте
@@ -752,7 +758,9 @@ class Analyzer:
         self.dict_of_features["unique_words"] = len(self.unique_lemmas_list)
 
         # Доля названий и бастардов
-        self.dict_of_features["lex_names_and_geo"] = len(self.names_list) + len(self.geo_name_list)
+        self.dict_of_features["lex_names_and_geo"] = len(self.names_list) + len(
+            self.geo_name_list
+        )
         self.dict_of_features["lex_bastards"] = len(self.bastard_list)
 
         LEXICAL_LISTS = {
@@ -960,7 +968,7 @@ class Analyzer:
                 len(item) > 2
                 and item not in self.bastard_list
                 and item not in self.names_list
-                #and item not in self.slovnik_A1_list
+                # вернуть если поедут ключевые слова and item not in self.slovnik_A1_list
                 and self.whole_lemmas_list.count(item) > 1
             ):
                 idf = self.__count_freq_by_rnc(item)
@@ -1045,7 +1053,9 @@ class Analyzer:
         if level_for_scale >= 8:
             self.data_about_text["not_inB1"] = ""
 
-        self.data_about_text["infr5000"] = round(self.dict_of_features["infr5000"] * 100)
+        self.data_about_text["infr5000"] = round(
+            self.dict_of_features["infr5000"] * 100
+        )
 
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
@@ -1181,8 +1191,8 @@ class Analyzer:
 
         self.data_about_text["gram_complex"] = list(set(gram_complex))
 
-        #вывод всех полей как они идут на сервисе
-        #print(self.data_about_text)
+        # вывод всех полей как они идут на сервисе
+        # print(self.data_about_text)
 
         return self.data_about_text
 
