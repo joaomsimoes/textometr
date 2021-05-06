@@ -1251,7 +1251,7 @@ class Analyzer:
         whole_lemmas_minus_stop = [
             f for f in self.whole_lemmas_list if f not in self.stop_list
         ]
-        unique_lemmas_list = list(set(whole_lemmas_minus_stop))
+        self.unique_lemmas_list = list(set(whole_lemmas_minus_stop))
 
         # Частотник по тексту
         self.dict_of_features["frequency_bag"] = self.__get_frequency_bag(
@@ -1262,7 +1262,7 @@ class Analyzer:
         # всего слов в тексте
         self.dict_of_features["words"] = len(self.whole_analyzed_text)
         self.dict_of_features["syllables"] = all_syllables
-        self.dict_of_features["unique_words"] = len(unique_lemmas_list)
+        self.dict_of_features["unique_words"] = len(self.unique_lemmas_list)
         # всего предложений в тексте
         self.dict_of_features["sentences"] = all_sentences
         # средняя длина слова в тексте
