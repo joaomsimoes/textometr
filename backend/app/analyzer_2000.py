@@ -1291,9 +1291,9 @@ class Analyzer:
         # чем выше, тем лексика в тексте "однотипнее"
         # потом попробовать sttr: то же самое на отрезках в 1000 слов.
         # standardised type/token ratio
-        self.dict_of_features[
-            "tt_ratio"
-        ] = f"{round((len(unique_lemmas_list) / len(self.whole_lemmas_list)) * 10)} из 10"
+        self.dict_of_features["tt_ratio"] = round(
+            ((len(self.unique_lemmas_list) / len(self.whole_lemmas_list))), 2
+        )
 
         self.dict_of_features["passive"] = len(self.count_passive)
 

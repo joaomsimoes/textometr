@@ -111,6 +111,16 @@
                 <td>{{ result.unique_words }}</td>
               </tr>
               <tr>
+                <th>
+                  {{ TEXT_FEATURES['tt_ratio'].title }}
+                  <div class="tooltip">
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
+                    <span class="tooltiptext has-text-weight-normal">{{ TEXT_FEATURES['tt_ratio'].description }}</span>
+                  </div>
+                </th>
+                <td>{{ result.tt_ratio }}</td>
+              </tr>
+              <tr>
                 <td colspan="2">
                   <br>
                 </td>
@@ -221,6 +231,16 @@
                     </span>
                   </div>
                 </td>
+              </tr>
+              <tr>
+                <th>
+                  {{ TEXT_FEATURES['infr5000'].title }}
+                  <div class="tooltip">
+                    <font-awesome-icon :icon="['far', 'question-circle']" />
+                    <span class="tooltiptext has-text-weight-normal" v-html="TEXT_FEATURES['infr5000'].description"></span>
+                  </div>
+                </th>
+                <td>{{ result.infr5000 }}%</td>
               </tr>
               <tr v-if="result.cool_but_not_in_slovnik.length > 0">
                 <th>{{ TEXT_FEATURES['cool_but_not_in_slovnik'].title }}</th>
@@ -725,6 +745,11 @@ const TEXT_FEATURES = {
     title: 'Не входит в лексический список C1',
     type: 'array'
   },
+  infr5000: {
+    title: 'Частотный список 5000 покрывает',
+    description: 'Список 5000 самых частотных слов русского языка из <a href="http://dict.ruslang.ru/freq.php" target="_blank">Нового частотного словаря русской лексики</a>',
+    type: 'number'
+  },
   cool_but_not_in_slovnik: {
     title: 'Полезные слова, которых нет в лексическом минимуме',
     type: 'array'
@@ -788,12 +813,12 @@ const TEXT_FEATURES = {
   },
   lex_density: {
     title: 'Лексическая плотность',
-    description: 'Отношение количества смысловых и служебных частей речи: чем плотность выше, тем текст сложнее',
+    description: 'Отношение количества смысловых и служебных частей речи: чем плотность выше, тем текст сложнее.',
     type: 'number'
   },
   tt_ratio: {
     title: 'Лексическое разнообразие',
-    description: 'Отношение уникальных слов ко всем словам текста. Чем выше, тем лексика в тексте разнообразнее, и, возможно, сложнее',
+    description: 'Отношение количества уникальных слов текста к количеству всех слов текста. Обозначается величиной от 0 до 1 (когда все слова в тексте уникальны). Под словом здесь понимается лексема, т.е. все словоформы данной лексической единицы. Эта мера полезна для оценки повторяемости, воспроизводимости лексики текста.',
     type: 'number'
   },
   laposhina_list: {

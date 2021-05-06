@@ -1,5 +1,5 @@
-@import '../../node_modules/bulma/sass/utilities/initial-variables';
-@import '../../node_modules/bulma/sass/utilities/functions';
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
+@import "../../node_modules/bulma/sass/utilities/functions";
 
 $primary: #007a7a;
 $warning: #fea02f;
@@ -24,19 +24,40 @@ $very-difficult: #6b0808;
 $very-difficult-invert: findColorInvert($very-difficult);
 
 // Add new color variables to the color map.
-@import '../../node_modules/bulma/sass/utilities/derived-variables';
+@import "../../node_modules/bulma/sass/utilities/derived-variables";
 $addColors: (
-  'very-easy': ($very-easy, $very-easy-invert),
-  'easy': ($easy, $easy-invert),
-  'mild': ($mild, $mild-invert),
-  'moderate': ($moderate, $moderate-invert),
-  'upper-moderate': ($upper-moderate, $upper-moderate-invert),
-  'difficult': ($difficult, $difficult-invert),
-  'very-difficult': ($very-difficult, $very-difficult-invert),
+  "very-easy": (
+    $very-easy,
+    $very-easy-invert,
+  ),
+  "easy": (
+    $easy,
+    $easy-invert,
+  ),
+  "mild": (
+    $mild,
+    $mild-invert,
+  ),
+  "moderate": (
+    $moderate,
+    $moderate-invert,
+  ),
+  "upper-moderate": (
+    $upper-moderate,
+    $upper-moderate-invert,
+  ),
+  "difficult": (
+    $difficult,
+    $difficult-invert,
+  ),
+  "very-difficult": (
+    $very-difficult,
+    $very-difficult-invert,
+  ),
 );
 $colors: map-merge($colors, $addColors);
 
-@import '../../node_modules/bulma/bulma';
+@import "../../node_modules/bulma/bulma";
 
 .switch {
   position: relative;
@@ -126,7 +147,7 @@ input:checked + .slider::before {
 .tooltip .tooltiptext::after {
   content: " ";
   position: absolute;
-  bottom: 100%;  /* At the top of the tooltip */
+  bottom: 100%; /* At the top of the tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
@@ -137,6 +158,10 @@ input:checked + .slider::before {
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.tooltiptext a:hover {
+  color: #53a2fe;
 }
 
 .fa-sun {
