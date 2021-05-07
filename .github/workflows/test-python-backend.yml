@@ -17,7 +17,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install --no-cache-dir numpy==1.19.4 \
+                                     scipy==1.5.4 \
+                                     pandas==1.1.4 \
+                                     nltk==3.5 \
+                                     scikit-learn==0.23.2 \
+                                     pymystem3==0.2.0 \
+                                     joblib==0.17 \
           python -m nltk.downloader punkt
       - name: Run tests with unittest
         run: python -m unittest
