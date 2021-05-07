@@ -22,6 +22,10 @@ $difficult: #d81919;
 $difficult-invert: findColorInvert($difficult);
 $very-difficult: #6b0808;
 $very-difficult-invert: findColorInvert($very-difficult);
+$text-color: #ccc;
+$background-color: #333;
+$ref-color: #2278dc;
+$ref-color-hover: #53a2fe;
 
 // Add new color variables to the color map.
 @import "../../node_modules/bulma/sass/utilities/derived-variables";
@@ -176,11 +180,6 @@ input:checked + .slider::before {
 }
 
 body.dark-theme {
-  $text-color: #ccc;
-  $background-color: #333;
-  $ref-color: #2278dc;
-  $ref-color-hover: #53a2fe;
-
   background-color: black;
   color: $text-color;
 
@@ -269,6 +268,6 @@ body.dark-theme {
   }
 }
 
-.tooltiptext a:hover {
-  color: #53a2fe;
+.tooltip .tooltiptext a:hover {
+  color: $ref-color-hover;
 }
