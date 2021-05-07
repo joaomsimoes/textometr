@@ -23,7 +23,7 @@ jobs:
                                      nltk==3.5 \
                                      scikit-learn==0.23.2 \
                                      pymystem3==0.2.0 \
-                                     joblib==0.17 \
+                                     joblib==0.17
           python -m nltk.downloader punkt
       - name: Run tests with unittest
         run: python -m unittest
