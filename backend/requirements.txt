@@ -1,7 +1,0 @@
-numpy
-scipy
-pandas
-nltk
-sklearn
-pymystem3
-joblib
