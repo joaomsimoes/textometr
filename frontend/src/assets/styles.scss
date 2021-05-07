@@ -130,7 +130,7 @@ input:checked + .slider::before {
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 250px;
-  background-color: black;
+  background-color: #333;
   color: #fff;
   text-align: center;
   padding: 5px;
@@ -152,7 +152,7 @@ input:checked + .slider::before {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent black transparent;
+  border-color: transparent transparent #333 transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
@@ -181,7 +181,7 @@ input:checked + .slider::before {
 
 body.dark-theme {
   $text-color: #ccc;
-  $background-color: #121212;
+  $background-color: #333;
   $ref-color: #2278dc;
   $ref-color-hover: #53a2fe;
 
