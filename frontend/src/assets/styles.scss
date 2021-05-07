@@ -160,10 +160,6 @@ input:checked + .slider::before {
   visibility: visible;
 }
 
-.tooltiptext a:hover {
-  color: #53a2fe;
-}
-
 .fa-sun {
   color: $warning;
   animation: spin 15s linear infinite;
@@ -271,4 +267,8 @@ body.dark-theme {
   .tooltip .tooltiptext {
     background-color: $background-color;
   }
+}
+
+.tooltiptext a:hover {
+  color: #53a2fe;
 }

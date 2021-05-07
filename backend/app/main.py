@@ -9,7 +9,6 @@ from pydantic import BaseModel
 # prepare logger
 formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
 handler = TimedRotatingFileHandler("logs/textometr.log", when="D", interval=10)
-handler.suffix = "%Y-%m-%d"
 handler.setFormatter(formatter)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
