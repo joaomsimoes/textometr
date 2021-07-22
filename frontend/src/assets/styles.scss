@@ -1,5 +1,5 @@
-@import "../../node_modules/bulma/sass/utilities/initial-variables";
-@import "../../node_modules/bulma/sass/utilities/functions";
+@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../node_modules/bulma/sass/utilities/functions';
 
 $primary: #007a7a;
 $warning: #fea02f;
@@ -28,40 +28,40 @@ $ref-color: #2278dc;
 $ref-color-hover: #53a2fe;
 
 // Add new color variables to the color map.
-@import "../../node_modules/bulma/sass/utilities/derived-variables";
+@import '../../node_modules/bulma/sass/utilities/derived-variables';
 $addColors: (
-  "very-easy": (
+  'very-easy': (
     $very-easy,
     $very-easy-invert,
   ),
-  "easy": (
+  'easy': (
     $easy,
     $easy-invert,
   ),
-  "mild": (
+  'mild': (
     $mild,
     $mild-invert,
   ),
-  "moderate": (
+  'moderate': (
     $moderate,
     $moderate-invert,
   ),
-  "upper-moderate": (
+  'upper-moderate': (
     $upper-moderate,
     $upper-moderate-invert,
   ),
-  "difficult": (
+  'difficult': (
     $difficult,
     $difficult-invert,
   ),
-  "very-difficult": (
+  'very-difficult': (
     $very-difficult,
     $very-difficult-invert,
   ),
 );
 $colors: map-merge($colors, $addColors);
 
-@import "../../node_modules/bulma/bulma";
+@import '../../node_modules/bulma/bulma';
 
 .switch {
   position: relative;
@@ -96,7 +96,7 @@ $colors: map-merge($colors, $addColors);
 
 .slider::before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
@@ -149,7 +149,7 @@ input:checked + .slider::before {
 }
 
 .tooltip .tooltiptext::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   bottom: 100%; /* At the top of the tooltip */
   left: 50%;
@@ -222,7 +222,7 @@ body.dark-theme {
   }
 
   footer {
-    background-color: $background-color;
+    background-color: #111 !important;
   }
 
   a {
