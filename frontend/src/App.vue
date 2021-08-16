@@ -464,11 +464,11 @@
           </tbody>
         </table>
       </div>
-      <div class="container is-max-desktop has-text-centered mt-6">
+      <!-- <div class="container is-max-desktop has-text-centered mt-6">
         <a href="https://www.buymeacoffee.com/textometr">
           <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=textometr&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff">
         </a>
-      </div>
+      </div> -->
     </section>
 
     <section class="section" id="about">
@@ -669,12 +669,12 @@
           </div>
         </div>
       </div>
-      <div v-if="loading || !text || !result || result.text_ok === false"
+      <!-- <div v-if="loading || !text || !result || result.text_ok === false"
            class="container is-max-desktop has-text-centered mt-6">
         <a href="https://www.buymeacoffee.com/textometr">
           <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=textometr&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff">
         </a>
-      </div>
+      </div> -->
     </section>
 
     <footer class="footer pb-6 has-background-white-ter">
