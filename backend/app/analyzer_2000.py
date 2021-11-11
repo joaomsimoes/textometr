@@ -369,7 +369,6 @@ class Analyzer:
         self.rki_children_2000 = self.__load("data/children_list_2000.txt")
         self.rki_children_5000 = self.__load("data/children_list_5000.txt")
 
-
         # считали датафрейм
         self.corpus_rnc = pd.read_csv("data/freq_rnc.csv", quotechar="`")
         self.lemmas_list_rnc = list(self.corpus_rnc["lemma"])
@@ -912,7 +911,6 @@ class Analyzer:
 
         level_for_scale = round((prediction * 1.4), 1)
 
-
         for i in Analyzer.INTERPRETER_FOREIGN:
             if i[1] < level_for_scale <= i[2]:
                 level_comment = i[0]
@@ -1085,11 +1083,8 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_1000"] = list(
             set(
                 [
-                    f
-                    for f in self.clean_lemmas_list
-                    if len(f) > 1
-                       and f not in self.stop_list
-                       and f not in self.rki_children_1000
+                    f for f in self.clean_lemmas_list
+                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_1000
                 ]
             )
         )
@@ -1103,11 +1098,8 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_2000"] = list(
             set(
                 [
-                    f
-                    for f in self.clean_lemmas_list
-                    if len(f) > 1
-                       and f not in self.stop_list
-                       and f not in self.rki_children_2000
+                    f for f in self.clean_lemmas_list
+                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_2000
                 ]
             )
         )
@@ -1121,11 +1113,8 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_5000"] = list(
             set(
                 [
-                    f
-                    for f in self.clean_lemmas_list
-                    if len(f) > 1
-                       and f not in self.stop_list
-                       and f not in self.rki_children_5000
+                    f for f in self.clean_lemmas_list
+                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_5000
                 ]
             )
         )
@@ -1137,7 +1126,6 @@ class Analyzer:
         self.data_about_text["cool_but_not_in_slovnik"] = []
 
         if level_int < 4:
-
             # Самые полезные слова
             cool_words = list(
                 set(
@@ -1415,7 +1403,6 @@ class Analyzer:
         )
 
         self.dict_of_features["detcorpus_5000"] = f"{in_detcorpus_5000} %"
-
 
         self.dict_of_features["rare_words"] = list(
             set(

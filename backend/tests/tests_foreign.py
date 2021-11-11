@@ -378,6 +378,7 @@ class TestAnalyzer(unittest.TestCase):
             )["rki_children_1000"],
             '85 %',
         )
+
     def test_text_26(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_foreign(
@@ -388,6 +389,7 @@ class TestAnalyzer(unittest.TestCase):
             )["level_number"],
             4.9,
         )
+
     def test_text_27(self):
         self.assertEqual(
             TestAnalyzer.text_analyzer.start_foreign(
