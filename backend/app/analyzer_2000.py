@@ -148,7 +148,6 @@ class Analyzer:
         "tt_ratio",
         "lex_density",
         "lexical_complex_rki",
-        "laposhina_list",
         "detcorpus_5000",
         "rare_words",
         "frequency_bag",

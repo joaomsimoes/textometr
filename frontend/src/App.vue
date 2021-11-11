@@ -126,6 +126,10 @@
               </td>
             </tr>
             <tr>
+              <th>{{ TEXT_FEATURES["characters"].title }}</th>
+              <td>{{ result.characters }}</td>
+            </tr>
+            <tr>
               <th>{{ TEXT_FEATURES["sentences"].title }}</th>
               <td>{{ result.sentences }}</td>
             </tr>
@@ -340,6 +344,65 @@
               </td>
             </tr>
             <tr>
+              <th>{{ TEXT_FEATURES["rki_children_1000"].title }}</th>
+              <td>{{ result.rki_children_1000 }}</td>
+            </tr>
+            <tr>
+              <th>{{ TEXT_FEATURES["not_in_rki_children_1000"].title }}</th>
+              <td>
+                <div class="tags">
+                  <span
+                    v-for="item in result.not_in_rki_children_1000"
+                    :key="item"
+                    class="tag is-success is-light is-medium"
+                  >
+                    {{ item }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>{{ TEXT_FEATURES["rki_children_2000"].title }}</th>
+              <td>{{ result.rki_children_2000 }}</td>
+            </tr>
+            <tr>
+              <th>{{ TEXT_FEATURES["not_in_rki_children_2000"].title }}</th>
+              <td>
+                <div class="tags">
+                  <span
+                    v-for="item in result.not_in_rki_children_2000"
+                    :key="item"
+                    class="tag is-success is-light is-medium"
+                  >
+                    {{ item }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>{{ TEXT_FEATURES["rki_children_5000"].title }}</th>
+              <td>{{ result.rki_children_2000 }}</td>
+            </tr>
+            <tr>
+              <th>{{ TEXT_FEATURES["not_in_rki_children_5000"].title }}</th>
+              <td>
+                <div class="tags">
+                  <span
+                    v-for="item in result.not_in_rki_children_5000"
+                    :key="item"
+                    class="tag is-success is-light is-medium"
+                  >
+                    {{ item }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <br />
+              </td>
+            </tr>
+            <tr>
               <th>{{ TEXT_FEATURES["reading_for_detail_speed"].title }}</th>
               <td>{{ result.reading_for_detail_speed }}</td>
             </tr>
@@ -425,6 +488,10 @@
               </td>
             </tr>
             <tr>
+              <th>{{ TEXT_FEATURES["characters"].title }}</th>
+              <td>{{ result.characters }}</td>
+            </tr>
+            <tr>
               <th>{{ TEXT_FEATURES["sentences"].title }}</th>
               <td>{{ result.sentences }}</td>
             </tr>
@@ -488,18 +555,6 @@
             </tr>
             <tr>
               <th>
-                {{ TEXT_FEATURES["laposhina_list"].title }}
-                <div class="tooltip">
-                  <font-awesome-icon :icon="['far', 'question-circle']" />
-                  <span class="tooltiptext has-text-weight-normal">{{
-                    TEXT_FEATURES["laposhina_list"].description
-                  }}</span>
-                </div>
-              </th>
-              <td>{{ result.laposhina_list }}</td>
-            </tr>
-            <tr>
-              <th>
                 {{ TEXT_FEATURES["detcorpus_5000"].title }}
                 <div class="tooltip">
                   <font-awesome-icon :icon="['far', 'question-circle']" />
@@ -528,10 +583,6 @@
               <td colspan="2">
                 <br />
               </td>
-            </tr>
-            <tr>
-              <th>{{ TEXT_FEATURES["rki_children_list"].title }}</th>
-              <td>{{ result.rki_children_list }}</td>
             </tr>
             <tr>
               <th>{{ TEXT_FEATURES["lexical_complex_rki"].title }}</th>
@@ -805,6 +856,10 @@ const TEXT_FEATURES = {
     title: "Уроверь текста",
     type: "string"
   },
+  characters: {
+    title: "Знаков с пробелами",
+    type: "number"
+  },
   sentences: {
     title: "Предложений",
     type: "number"
@@ -879,6 +934,32 @@ const TEXT_FEATURES = {
     title: "Редкие слова",
     type: "array"
   },
+  rki_children_1000: {
+    title: "Лексический список РКИ-дети 1000 покрывает",
+    description:
+      'Списки РКИ-дети созданы на основе частотного анализа <a href="https://digitalpushkin.tilda.ws/tirtec" target="_blank">корпуса учебников русского языка для детей TIRTEC</a>',
+    type: "string"
+  },
+  not_in_rki_children_1000: {
+    title: "Не входит в список РКИ-дети 1000",
+    type: "array"
+  },
+  rki_children_2000: {
+    title: "Лексический список РКИ-дети 2000 покрывает",
+    type: "string"
+  },
+  not_in_rki_children_2000: {
+    title: "Не входит в список РКИ-дети 2000",
+    type: "array"
+  },
+  rki_children_5000: {
+    title: "Лексический список РКИ-дети 5000 покрывает",
+    type: "string"
+  },
+  not_in_rki_children_5000: {
+    title: "Не входит в список РКИ-дети 5000",
+    type: "array"
+  },
   reading_for_detail_speed: {
     title: "Изучающее чтение текста займет",
     type: "string"
@@ -945,20 +1026,10 @@ const TEXT_FEATURES = {
       "Отношение количества уникальных слов текста к количеству всех слов текста. Обозначается величиной от 0 до 1 (когда все слова в тексте уникальны). Под словом здесь понимается лексема, т.е. все словоформы данной лексической единицы. Эта мера полезна для оценки повторяемости, воспроизводимости лексики текста.",
     type: "number"
   },
-  laposhina_list: {
-    title: "Список Русский детский 2000",
-    description:
-      "Сколько процентов лексики текста покрывается списком из 2000 самых частотных слов для детской учебной литературы.",
-    type: "percent"
-  },
   detcorpus_5000: {
     title: "Список Русский детский 5000",
     description:
       "Сколько процентов лексики текста покрывается списком из 5000 самых частотных слов для детской литературы.",
-    type: "percent"
-  },
-  rki_children_list: {
-    title: "Список Детский РКИ 4000",
     type: "percent"
   },
   lexical_complex_rki: {
@@ -1045,25 +1116,25 @@ export default {
       this.showAll = false;
     },
     getProgressClassForeign: function(level) {
-      if (level <= 1) {
+      if (level <= 1.4) {
         return "is-very-easy";
       }
-      if (level > 1 && level <= 2) {
+      if (level > 1.4 && level <= 2.5) {
         return "is-easy";
       }
-      if (level > 2 && level <= 4.3) {
+      if (level > 2.5 && level <= 4.5) {
         return "is-mild";
       }
-      if (level > 4.3 && level <= 5.8) {
+      if (level > 4.5 && level <= 7) {
         return "is-moderate";
       }
-      if (level > 5.8 && level <= 6.8) {
+      if (level > 7 && level <= 7.5) {
         return "is-upper-moderate";
       }
-      if (level > 6.8 && level <= 7.9) {
+      if (level > 7.5 && level <= 8.5) {
         return "is-difficult";
       }
-      if (level > 7.9) {
+      if (level > 8.5) {
         return "is-very-difficult";
       }
     },
