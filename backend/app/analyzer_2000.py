@@ -1083,8 +1083,11 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_1000"] = list(
             set(
                 [
-                    f for f in self.clean_lemmas_list
-                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_1000
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_1000
                 ]
             )
         )
@@ -1098,8 +1101,11 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_2000"] = list(
             set(
                 [
-                    f for f in self.clean_lemmas_list
-                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_2000
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_2000
                 ]
             )
         )
@@ -1113,8 +1119,11 @@ class Analyzer:
         self.data_about_text["not_in_rki_children_5000"] = list(
             set(
                 [
-                    f for f in self.clean_lemmas_list
-                    if len(f) > 1 and f not in self.stop_list and f not in self.rki_children_5000
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_5000
                 ]
             )
         )
