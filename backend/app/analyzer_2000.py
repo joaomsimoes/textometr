@@ -133,6 +133,7 @@ class Analyzer:
         "words",
         "unique_words",
         "sentences",
+        "characters",
         "mean_len_word",
         "mean_len_sentence",
         "formula_flesh_oborneva",
@@ -149,7 +150,6 @@ class Analyzer:
         "lexical_complex_rki",
         "laposhina_list",
         "detcorpus_5000",
-        "rki_children_list",
         "rare_words",
         "frequency_bag",
     ]
@@ -161,6 +161,7 @@ class Analyzer:
         "level_comment",
         "level_int",
         "words",
+        "characters",
         "sentences",
         "unique_words",
         "tt_ratio",
@@ -179,6 +180,12 @@ class Analyzer:
         "inC1",
         "not_inC1",
         "infr5000",
+        "rki_children_1000",
+        "not_in_rki_children_1000",
+        "rki_children_2000",
+        "not_in_rki_children_2000",
+        "rki_children_5000",
+        "not_in_rki_children_2000",
         "rare_words",
         "cool_but_not_in_slovnik",
         "gram_complex",
@@ -282,18 +289,18 @@ class Analyzer:
         ("A1. Элементарный уровень.", 0, 1.4),
         ("Начало A2. Базовый уровень.", 1.4, 1.8),
         ("Середина A2. Базовый уровень.", 1.8, 2.2),
-        ("Конец A2. Базовый уровень.", 2.2, 2.8),
-        ("Начало B1.  I сертификационный уровень.", 2.8, 3.5),
-        ("Середина B1. I сертификационный уровень.", 3.5, 4.9),
-        ("Конец B1. I сертификационный уровень.", 4.9, 6),
-        ("Начало B2. II сертификационный уровень.", 6, 6.3),
-        ("Середина B2. II сертификационный уровень.", 6.3, 7.7),
-        ("Конец B2. II сертификационный уровень.", 7.7, 8.1),
-        ("Начало C1. III сертификационный уровень.", 8.1, 8.5),
-        ("Середина C1. III сертификационный уровень.", 8.5, 8.9),
-        ("Конец C1. III сертификационный уровень.", 8.9, 9.2),
-        ("C2, уровень носителя. IV сертификационный уровень.", 9.2, 9.5),
-        ("ой-ой-ой, этот текст сложный даже для носителя", 9.5, 10),
+        ("Конец A2. Базовый уровень.", 2.2, 2.5),
+        ("Начало B1.  I сертификационный уровень.", 2.5, 2.7),
+        ("Середина B1. I сертификационный уровень.", 2.7, 3.5),
+        ("Конец B1. I сертификационный уровень.", 3.5, 4.5),
+        ("Начало B2. II сертификационный уровень.", 4.5, 5.5),
+        ("Середина B2. II сертификационный уровень.", 5.5, 6),
+        ("Конец B2. II сертификационный уровень.", 6, 7),
+        ("Начало C1. III сертификационный уровень.", 7, 7.2),
+        ("Середина C1. III сертификационный уровень.", 7.2, 7.4),
+        ("Конец C1. III сертификационный уровень.", 7.4, 7.5),
+        ("C2, уровень носителя. IV сертификационный уровень.", 7.5, 8.5),
+        ("ой-ой-ой, этот текст сложный даже для носителя", 8.5, 10),
     ]
 
     # шкала сложности, высчитывается от 0 до 10, примерно соответствует классу
@@ -319,11 +326,11 @@ class Analyzer:
         self.features = pd.read_csv("data/list_of_features_1207.csv")
 
         # словники
-        self.slovnik_A1_list = self.__load("data/new_vocab_a1.txt")
-        self.slovnik_A2_list = self.__load("data/new_vocab_a2.txt")
-        self.slovnik_B1_list = self.__load("data/new_vocab_b1.txt")
-        self.slovnik_B2_list = self.__load("data/new_vocab_b2.txt")
-        self.slovnik_C1_list = self.__load("data/new_vocab_c1.txt")
+        self.slovnik_A1_list = self.__load("data/optima_a1.txt")
+        self.slovnik_A2_list = self.__load("data/optima_a2.txt")
+        self.slovnik_B1_list = self.__load("data/vocab_b1_optima_from_A2.txt")
+        self.slovnik_B2_list = self.__load("data/vocab_b2_optima_from_A2.txt")
+        self.slovnik_C1_list = self.__load("data/vocab_с1_optima_from_A2.txt")
 
         # списки kelly
         self.kelly_A1_list = self.__load("data/kelly_a1.txt")
@@ -358,8 +365,9 @@ class Analyzer:
         # списки слов для родного
         self.laposhina_list = self.__load("data/laposhina_list_from_formula.txt")
         self.detcorpus_list = self.__load("data/detcorpus_5000.txt")
-        self.rki_children_list = self.__load("data/rki_children_list.txt")
-        self.united_list = self.__load("data/united_simple_list.txt")
+        self.rki_children_1000 = self.__load("data/children_list_1000.txt")
+        self.rki_children_2000 = self.__load("data/children_list_2000.txt")
+        self.rki_children_5000 = self.__load("data/children_list_5000.txt")
 
         # считали датафрейм
         self.corpus_rnc = pd.read_csv("data/freq_rnc.csv", quotechar="`")
@@ -703,6 +711,7 @@ class Analyzer:
 
         # всего слов в тексте
         self.dict_of_features["words"] = len(self.whole_analyzed_text)
+        self.dict_of_features["characters"] = len(self.raw_text)
         # всего предложений в тексте
         self.dict_of_features["sentences"] = len(self.sentences)
         # средняя длина слова в тексте
@@ -804,6 +813,7 @@ class Analyzer:
     def start_foreign(self, raw_text):
         self.__clear_fields()
 
+        self.raw_text = raw_text
         text = self.__clean_text(raw_text)
 
         # первая проверка текста на длину
@@ -898,6 +908,7 @@ class Analyzer:
         level_comment = ""
 
         # уровень * 1.4, чтобы растянуть шкалу
+
         level_for_scale = round((prediction * 1.4), 1)
 
         for i in Analyzer.INTERPRETER_FOREIGN:
@@ -936,6 +947,8 @@ class Analyzer:
         # начинаем анализ
         # слов в тексте
         self.data_about_text["words"] = self.dict_of_features["words"]
+
+        self.data_about_text["characters"] = len(self.raw_text)
 
         # предложений
         self.data_about_text["sentences"] = self.dict_of_features["sentences"]
@@ -976,7 +989,10 @@ class Analyzer:
 
         sorted_bag = sorted(bag_tf_idf.items(), key=lambda x: x[1], reverse=True)
 
-        self.data_about_text["key_words"] = [f[0] for f in sorted_bag[:10]]
+        if len(self.raw_text) > 2500:
+            self.data_about_text["key_words"] = [f[0] for f in sorted_bag[:20]]
+        else:
+            self.data_about_text["key_words"] = [f[0] for f in sorted_bag[:10]]
 
         # Списки с минимумов
         self.data_about_text["inA1"] = round(self.dict_of_features["inA1"] * 100)
@@ -1057,6 +1073,61 @@ class Analyzer:
             self.dict_of_features["infr5000"] * 100
         )
 
+        # детские списки
+        in_rki_children_1000 = self.__percent_of_known_words_100(
+            self.whole_lemmas_list, self.rki_children_1000
+        )
+
+        self.data_about_text["rki_children_1000"] = f"{in_rki_children_1000} %"
+
+        self.data_about_text["not_in_rki_children_1000"] = list(
+            set(
+                [
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_1000
+                ]
+            )
+        )
+
+        in_rki_children_2000 = self.__percent_of_known_words_100(
+            self.whole_lemmas_list, self.rki_children_2000
+        )
+
+        self.data_about_text["rki_children_2000"] = f"{in_rki_children_2000} %"
+
+        self.data_about_text["not_in_rki_children_2000"] = list(
+            set(
+                [
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_2000
+                ]
+            )
+        )
+
+        in_rki_children_5000 = self.__percent_of_known_words_100(
+            self.whole_lemmas_list, self.rki_children_5000
+        )
+
+        self.data_about_text["rki_children_5000"] = f"{in_rki_children_5000} %"
+
+        self.data_about_text["not_in_rki_children_5000"] = list(
+            set(
+                [
+                    f
+                    for f in self.clean_lemmas_list
+                    if len(f) > 1
+                    and f not in self.stop_list
+                    and f not in self.rki_children_5000
+                ]
+            )
+        )
+
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
         self.data_about_text["cool_words"] = []
@@ -1064,7 +1135,6 @@ class Analyzer:
         self.data_about_text["cool_but_not_in_slovnik"] = []
 
         if level_int < 4:
-
             # Самые полезные слова
             cool_words = list(
                 set(
@@ -1199,6 +1269,7 @@ class Analyzer:
     def start_native(self, raw_text):
         self.__clear_fields()
 
+        self.raw_text = raw_text
         text = self.__clean_text(raw_text)
 
         # создаем словарь и будем в него все складывать
@@ -1261,6 +1332,7 @@ class Analyzer:
         # Цифры про текст:
         # всего слов в тексте
         self.dict_of_features["words"] = len(self.whole_analyzed_text)
+        self.dict_of_features["characters"] = len(self.raw_text)
         self.dict_of_features["syllables"] = all_syllables
         self.dict_of_features["unique_words"] = len(self.unique_lemmas_list)
         # всего предложений в тексте
@@ -1340,18 +1412,6 @@ class Analyzer:
         )
 
         self.dict_of_features["detcorpus_5000"] = f"{in_detcorpus_5000} %"
-
-        in_rki_children = self.__percent_of_known_words_100(
-            self.whole_lemmas_list, self.rki_children_list
-        )
-
-        self.dict_of_features["rki_children_list"] = f"{in_rki_children} %"
-
-        in_united_simple_list = self.__percent_of_known_words_100(
-            self.whole_lemmas_list, self.united_list
-        )
-
-        self.dict_of_features["united_simple_list"] = f"{in_united_simple_list} %"
 
         self.dict_of_features["rare_words"] = list(
             set(
