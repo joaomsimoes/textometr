@@ -118,11 +118,10 @@
                 </div>
                 <progress
                   class="progress mb-4"
-                  :class="getProgressClassForeign(result.level_number)"
-                  :value="result.level_number"
-                  max="8"
-                  >{{ result.level_number }}</progress
-                >
+                  :class="getProgressClassForeign(result.level_for_scale)"
+                  :value="result.level_for_scale"
+                  max="10"
+                ></progress>
               </td>
             </tr>
             <tr>

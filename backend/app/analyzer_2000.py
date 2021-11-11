@@ -159,6 +159,7 @@ class Analyzer:
         "level_number",
         "level_comment",
         "level_int",
+        "level_for_scale",
         "words",
         "characters",
         "sentences",
@@ -906,8 +907,7 @@ class Analyzer:
 
         level_comment = ""
 
-        # уровень * 1.4, чтобы растянуть шкалу
-
+        # уровень * 1.4, чтобы растянуть шкалу [0, 7] до [0, 10]
         level_for_scale = round((prediction * 1.4), 1)
 
         for i in Analyzer.INTERPRETER_FOREIGN:
@@ -917,6 +917,7 @@ class Analyzer:
         self.data_about_text["level_number"] = prediction
         self.data_about_text["level_comment"] = level_comment
         self.data_about_text["level_int"] = level_int
+        self.data_about_text["level_for_scale"] = level_for_scale
 
         f_by_levels = [
             self.features.iloc[:, :][self.features["level"] == 0],
