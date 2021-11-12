@@ -380,7 +380,7 @@
             </tr>
             <tr>
               <th>{{ TEXT_FEATURES["rki_children_5000"].title }}</th>
-              <td>{{ result.rki_children_2000 }}</td>
+              <td>{{ result.rki_children_5000 }}</td>
             </tr>
             <tr>
               <th>{{ TEXT_FEATURES["not_in_rki_children_5000"].title }}</th>
