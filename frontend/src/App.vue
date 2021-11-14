@@ -66,12 +66,6 @@
             {{ result.text_error_message }}
           </div>
         </article>
-        <article v-if="hostname === 'pushkin-lab.ru'" class="message is-danger">
-          <div class="message-body">
-            Для корректной работы сервиса перейдите на новый адрес
-            <a class="has-text-link" href="https://textometr.ru">textometr.ru</a>
-          </div>
-        </article>
         <div class="field">
           <div class="control">
             <textarea
@@ -79,6 +73,7 @@
               class="textarea"
               rows="15"
               placeholder="Вставьте текст для измерения"
+              @input="clear"
             ></textarea>
           </div>
         </div>
@@ -89,7 +84,7 @@
               :class="{
                 'is-loading': loading,
                 'is-primary': mode === 'foreign',
-                'is-warning': mode === 'native'
+                'is-warning': mode === 'native',
               }"
               @click="analyze"
               >Измерить</a
@@ -99,11 +94,7 @@
       </div>
     </section>
 
-    <section
-      class="section"
-      id="result"
-      v-if="text && result && result.text_ok === true && !loading"
-    >
+    <section class="section" id="result" v-if="result && result.text_ok === true && !loading">
       <div class="container is-max-desktop">
         <h1 class="title is-1">
           Результат
@@ -461,8 +452,9 @@
                   :class="getProgressClassNative(result.formula_pushkin)"
                   :value="result.formula_pushkin"
                   max="10"
-                  >{{ result.formula_pushkin }}</progress
                 >
+                  {{ result.formula_pushkin }}
+                </progress>
               </td>
             </tr>
             <tr>
@@ -740,9 +732,7 @@
       <div class="container is-max-desktop">
         <h1 class="title is-1 is-spaced">Публикации</h1>
         <div class="content">
-          <p>
-            При ссылке на ресурс мы рекомендуем цитировать данную работу:
-          </p>
+          <p>При ссылке на ресурс мы рекомендуем цитировать данную работу:</p>
           <p>
             <a href="http://journals.rudn.ru/russian-language-studies/article/view/27498">
               [1] Лапошина А. Н., Лебедева М. Ю. Текстометр: онлайн-инструмент определения уровня
@@ -750,9 +740,7 @@
               331-345
             </a>
           </p>
-          <p>
-            Ещё публикации о программе:
-          </p>
+          <p>Ещё публикации о программе:</p>
           <p>
             <a
               href="https://www.researchgate.net/publication/325568093_Automated_Text_Readability_Assessment_For_Russian_Second_Language_Learners"
@@ -826,7 +814,7 @@
           </div>
         </div>
       </div>
-      <!-- <div v-if="loading || !text || !result || result.text_ok === false"
+      <!-- <div v-if="loading || !result || result.text_ok === false"
            class="container is-max-desktop has-text-centered mt-6">
         <a href="https://www.buymeacoffee.com/textometr">
           <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=textometr&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff">
@@ -844,202 +832,7 @@
 
 <script>
 import axios from "axios";
-
-const TEXT_FEATURES = {
-  // параметры текста для русского как иностранного
-  level_number: {
-    title: "Уровень текста",
-    type: "progress"
-  },
-  level_comment: {
-    title: "Уроверь текста",
-    type: "string"
-  },
-  characters: {
-    title: "Знаков с пробелами",
-    type: "number"
-  },
-  sentences: {
-    title: "Предложений",
-    type: "number"
-  },
-  unique_words: {
-    title: "Уникальных слов",
-    type: "number"
-  },
-  key_words: {
-    title: "Ключевые слова",
-    description:
-      "Это слова, наиболее характерные для этого текста. Они высчитываются с помощью рейтинга: количество раз, которое слово встречается в этом тексте / частота слова по Национальному корпусу русского языка (мера TF/IDF). Выигрывают слова, которые часто встречаются в данном тексте, но редко — во всех других текстах корпуса, то есть максимально характерные именно для этого текста.",
-    type: "array"
-  },
-  cool_words: {
-    title: "Самые полезные слова",
-    description:
-      "Это слова-кандидаты в словарик по данному тексту; cлова, которые, скорее всего, ещё не знакомы студентам (их нет в лексических минимумах предыдущих уровней), но есть в минимуме данного уровня или в списке 3 000 самых частотных слов русского языка по НКРЯ.",
-    type: "array"
-  },
-  inA1: {
-    title: "Лексический список А1 покрывает",
-    type: "percent"
-  },
-  not_inA1: {
-    title: "Не входит в лексический список А1",
-    type: "array"
-  },
-  inA2: {
-    title: "Лексический список А2 покрывает",
-    type: "number"
-  },
-  not_inA2: {
-    title: "Не входит в лексический список А2",
-    type: "array"
-  },
-  inB1: {
-    title: "Лексический список B1 покрывает",
-    type: "number"
-  },
-  not_inB1: {
-    title: "Не входит в лексический список B1",
-    type: "array"
-  },
-  inB2: {
-    title: "Лексический список B2 покрывает",
-    type: "number"
-  },
-  not_inB2: {
-    title: "Не входит в лексический список B2",
-    type: "array"
-  },
-  inC1: {
-    title: "Лексический список C1 покрывает",
-    type: "number"
-  },
-  not_inC1: {
-    title: "Не входит в лексический список C1",
-    type: "array"
-  },
-  infr5000: {
-    title: "Частотный список 5000 покрывает",
-    description:
-      'Список 5000 самых частотных слов русского языка из <a href="http://dict.ruslang.ru/freq.php" target="_blank">Нового частотного словаря русской лексики</a>',
-    type: "number"
-  },
-  cool_but_not_in_slovnik: {
-    title: "Полезные слова, которых нет в лексическом минимуме",
-    type: "array"
-  },
-  rare_words: {
-    title: "Редкие слова",
-    type: "array"
-  },
-  rki_children_1000: {
-    title: "Лексический список РКИ-дети 1000 покрывает",
-    description:
-      'Списки РКИ-дети созданы на основе частотного анализа <a href="https://digitalpushkin.tilda.ws/tirtec" target="_blank">корпуса учебников русского языка для детей TIRTEC</a>',
-    type: "string"
-  },
-  not_in_rki_children_1000: {
-    title: "Не входит в список РКИ-дети 1000",
-    type: "array"
-  },
-  rki_children_2000: {
-    title: "Лексический список РКИ-дети 2000 покрывает",
-    type: "string"
-  },
-  not_in_rki_children_2000: {
-    title: "Не входит в список РКИ-дети 2000",
-    type: "array"
-  },
-  rki_children_5000: {
-    title: "Лексический список РКИ-дети 5000 покрывает",
-    type: "string"
-  },
-  not_in_rki_children_5000: {
-    title: "Не входит в список РКИ-дети 5000",
-    type: "array"
-  },
-  reading_for_detail_speed: {
-    title: "Изучающее чтение текста займет",
-    type: "string"
-  },
-  skim_reading_speed: {
-    title: "Просмотровое чтение текста займет",
-    type: "string"
-  },
-  gram_complex: {
-    title: "Возможные грамматические темы",
-    description:
-      "Алгоритм подсчитывает количество частей речи и грамматических форм и предлагает темы, на которые в тексте можно найти наибольшее количество примеров.",
-    type: "array"
-  },
-  formula_pushkin: {
-    title: "Уровень сложности",
-    type: "progress"
-  },
-  structure_complex: {
-    title: "Структурная сложность",
-    type: "number"
-  },
-  lexical_complex: {
-    title: "Лексическая сложность",
-    type: "number"
-  },
-  narrativity: {
-    title: "Динамичность текста",
-    type: "number"
-  },
-  description: {
-    title: "Описательность текста",
-    type: "number"
-  },
-  words: {
-    title: "Слов",
-    type: "number"
-  },
-  mean_len_word: {
-    title: "Средняя длина слова",
-    type: "number"
-  },
-  mean_len_sentence: {
-    title: "Средняя длина предложения",
-    type: "number"
-  },
-  formula_flesh_oborneva: {
-    title: "Формула Флеша",
-    type: "number"
-  },
-  formula_flesh_kinc_oborneva: {
-    title: "Формула Флеша-Кинкейда",
-    type: "number"
-  },
-  lex_density: {
-    title: "Лексическая плотность",
-    description:
-      "Отношение количества смысловых и служебных частей речи: чем плотность выше, тем текст сложнее.",
-    type: "number"
-  },
-  tt_ratio: {
-    title: "Лексическое разнообразие",
-    description:
-      "Отношение количества уникальных слов текста к количеству всех слов текста. Обозначается величиной от 0 до 1 (когда все слова в тексте уникальны). Под словом здесь понимается лексема, т.е. все словоформы данной лексической единицы. Эта мера полезна для оценки повторяемости, воспроизводимости лексики текста.",
-    type: "number"
-  },
-  detcorpus_5000: {
-    title: "Список Русский детский 5000",
-    description:
-      "Сколько процентов лексики текста покрывается списком из 5000 самых частотных слов для детской литературы.",
-    type: "percent"
-  },
-  lexical_complex_rki: {
-    title: "Лексическая сложность текста для детей-иностранцев",
-    type: "number"
-  },
-  frequency_bag: {
-    title: "Частотный словарь по тексту",
-    type: "list"
-  }
-};
+import { TEXT_FEATURES } from "./config.js";
 
 export default {
   name: "App",
@@ -1052,22 +845,21 @@ export default {
       TEXT_FEATURES: TEXT_FEATURES,
       showAll: false,
       theme: "light",
-      hostname: location.hostname
     };
   },
   computed: {
     checkboxMode: {
-      set: function(val) {
+      set: function (val) {
         this.mode = val ? "native" : "foreign";
       },
-      get: function() {
+      get: function () {
         return this.mode === "native";
-      }
+      },
     },
-    wordFrequencyArray: function() {
+    wordFrequencyArray: function () {
       let res = this.result && this.result.frequency_bag ? this.result.frequency_bag : [];
       return this.showAll ? res : res.slice(0, 10);
-    }
+    },
   },
   mounted() {
     if (localStorage.getItem("theme") === "dark") {
@@ -1079,18 +871,18 @@ export default {
     this.addSmoothScrollForAllAnchors();
   },
   methods: {
-    analyze: function() {
+    analyze: function () {
       this.clear();
       if (this.text.length < 10) {
         this.result = {
           text_ok: false,
-          text_error_message: "Текст слишком короткий."
+          text_error_message: "Текст слишком короткий.",
         };
       } else {
         this.loading = true;
         axios
           .post("/analyze", { text: this.text, mode: this.mode })
-          .then(response => {
+          .then((response) => {
             this.result = response.data;
             if (response.data.text_ok) {
               setTimeout(() => {
@@ -1098,11 +890,11 @@ export default {
               }, 0);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
             this.result = {
               text_ok: false,
-              text_error_message: "Упс, что-то пошло не так... Попробуйте позже."
+              text_error_message: "Упс, что-то пошло не так... Попробуйте позже.",
             };
           })
           .then(() => {
@@ -1110,11 +902,11 @@ export default {
           });
       }
     },
-    clear: function() {
+    clear: function () {
       this.result = null;
       this.showAll = false;
     },
-    getProgressClassForeign: function(level) {
+    getProgressClassForeign: function (level) {
       if (level <= 1.4) {
         return "is-very-easy";
       }
@@ -1137,7 +929,7 @@ export default {
         return "is-very-difficult";
       }
     },
-    getProgressClassNative: function(level) {
+    getProgressClassNative: function (level) {
       if (level <= 2) {
         return "is-very-easy";
       }
@@ -1157,7 +949,7 @@ export default {
         return "is-very-difficult";
       }
     },
-    download: function() {
+    download: function () {
       let content = `${this.text}\n\n`;
       for (const [key, value] of Object.entries(this.result)) {
         if (TEXT_FEATURES[key]) {
@@ -1200,12 +992,12 @@ export default {
     },
     addSmoothScrollForAllAnchors() {
       // add smooth scroll for all anchors
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function(e) {
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
           e.preventDefault();
 
           document.querySelector(this.getAttribute("href")).scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
           });
         });
       });
@@ -1220,7 +1012,7 @@ export default {
       // Check if there are any navbar burgers
       if ($navbarBurgers.length > 0) {
         // Add a click event on each of them
-        $navbarBurgers.forEach(el => {
+        $navbarBurgers.forEach((el) => {
           el.addEventListener("click", () => {
             // Get the target from the "data-target" attribute
             const target = el.dataset.target;
@@ -1232,8 +1024,8 @@ export default {
           });
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
