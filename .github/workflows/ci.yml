@@ -73,14 +73,14 @@ jobs:
         with:
           context: frontend
           push: true
-          tags: 1eshkin/textometr-frontend:1.4.1
+          tags: 1eshkin/textometr-frontend:1.4.2
 
       - name: Build and push backend
         uses: docker/build-push-action@v2
         with:
           context: backend
           push: true
-          tags: 1eshkin/textometr-backend:1.2.0
+          tags: 1eshkin/textometr-backend:1.2.1
 
       - name: Deploy to Docker swarm
         uses: wshihadeh/docker-deployment-action@v2
