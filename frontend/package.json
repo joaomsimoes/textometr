@@ -1,6 +1,6 @@
 {
   "name": "textometr-frontend",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -36,6 +36,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
+    "prerender-spa-plugin": "^3.4.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue-pwa-asset-generator": "^1.4.0",

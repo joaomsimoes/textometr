@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <nav
       class="bd-navbar navbar has-shadow is-spaced"
       role="navigation"
