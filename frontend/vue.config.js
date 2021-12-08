@@ -15,7 +15,7 @@ module.exports = {
     },
     workboxOptions: {
       skipWaiting: true
-    },
+    }
   },
   configureWebpack: {
     plugins:
@@ -23,9 +23,9 @@ module.exports = {
         ? [
             new PrerenderSPAPlugin({
               staticDir: path.join(__dirname, 'dist'),
-              routes: ['/'],
-            }),
+              routes: ['/']
+            })
           ]
         : []
   }
-};
+}
