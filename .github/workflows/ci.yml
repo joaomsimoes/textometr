@@ -74,7 +74,7 @@ jobs:
         with:
           context: frontend
           push: true
-          tags: 1eshkin/textometr-frontend:1.5.0
+          tags: 1eshkin/textometr-frontend:1.5.1
 
       - name: Build and push backend
         uses: docker/build-push-action@v2

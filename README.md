@@ -1,6 +1,6 @@
 # Textometr
 
-Textometr allows you to quickly obtain information about a text that is relevant for its preparation for a Russian lesson: the level of complexity of the text, key and most useful words, statistics on the occurrence of words in lexical minimums.
+Textometr provides information about complexity level and other pedagogical statistics for any given text in Russian.
 
 [![GitHub Super-Linter](https://github.com/leshkin/textometr/workflows/Super-Linter/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
