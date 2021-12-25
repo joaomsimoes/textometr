@@ -8,7 +8,7 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="https://textometr.ru">
-            <img src="./assets/logo.png" />
+            <img id="logo" src="./assets/logo.png" />
           </a>
           <div class="navbar-item">
             <img class="mr-2" src="./assets/santa.png" />
