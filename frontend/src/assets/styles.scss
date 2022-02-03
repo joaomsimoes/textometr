@@ -164,7 +164,7 @@ input:checked + .slider::before {
   visibility: visible;
 }
 
-.fa-sun {
+.sun {
   color: $warning;
   animation: spin 15s linear infinite;
 }
@@ -270,4 +270,16 @@ body.dark-theme {
 
 .tooltip .tooltiptext a:hover {
   color: $ref-color-hover;
+}
+
+.navbar-burger span {
+  height: 2px !important;
+}
+
+.icon-text .icon {
+  align-self: center;
+}
+
+.icon-middle {
+  vertical-align: middle;
 }
