@@ -1,7 +1,6 @@
 {
   "extends": "stylelint-config-standard",
   "rules": {
-    "function-name-case": null,
-    "comma-dangle": ["error", "always"]
+    "function-name-case": null
   }
 }
