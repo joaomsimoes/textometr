@@ -32,32 +32,32 @@ $ref-color-hover: #53a2fe;
 $addColors: (
   'very-easy': (
     $very-easy,
-    $very-easy-invert,
+    $very-easy-invert
   ),
   'easy': (
     $easy,
-    $easy-invert,
+    $easy-invert
   ),
   'mild': (
     $mild,
-    $mild-invert,
+    $mild-invert
   ),
   'moderate': (
     $moderate,
-    $moderate-invert,
+    $moderate-invert
   ),
   'upper-moderate': (
     $upper-moderate,
-    $upper-moderate-invert,
+    $upper-moderate-invert
   ),
   'difficult': (
     $difficult,
-    $difficult-invert,
+    $difficult-invert
   ),
   'very-difficult': (
     $very-difficult,
-    $very-difficult-invert,
-  ),
+    $very-difficult-invert
+  )
 );
 $colors: map-merge($colors, $addColors);
 
