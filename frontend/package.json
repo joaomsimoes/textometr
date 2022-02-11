@@ -16,7 +16,6 @@
     "sass": "^1.49.7",
     "unplugin-vue-components": "^0.17.15",
     "vite": "^2.7.2",
-    "vite-plugin-pwa": "^0.11.13",
     "vite-ssg": "^0.17.9"
   }
 }
