@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="level-item">
-            <span class="is-size-5 has-text-left">Русский как родной<sup>beta</sup></span>
+            <span class="is-size-5 has-text-left">Русский как родной</span>
           </div>
         </div>
         <article v-if="result && result.text_ok === false" class="message is-danger">
@@ -596,7 +596,7 @@
             почитать <a href="#publications">здесь [3].</a>
           </p>
         </div>
-        <h5 class="title is-5">Определение уровня текста для носителей языка (beta-версия)</h5>
+        <h5 class="title is-5">Определение уровня текста для носителей языка</h5>
         <div class="content">
           <p>
             Уровни сложности текста для иностранцев хорошо стандартизированы и задокументированы. В
