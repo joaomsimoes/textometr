@@ -151,11 +151,16 @@ class Analyzer:
         "detcorpus_5000",
         "rare_words",
         "frequency_bag",
+        "obsc_check",
+        "obsc_check_warning",
+        "old_words"
     ]
 
     COLUMNS_OUTPUT = [
         "text_ok",
         "text_error_message",
+        "obsc_check",
+        "obsc_check_warning",
         "level_number",
         "level_comment",
         "level_int",
@@ -169,6 +174,7 @@ class Analyzer:
         "skim_reading_speed",
         "key_words",
         "cool_words",
+        "old_words",
         "inA1",
         "not_inA1",
         "inA2",
@@ -358,6 +364,7 @@ class Analyzer:
         self.brown_russian_10000_list = self.__load("data/Brown10000.txt")
         self.dale_russian_3000_list = self.__load("data/DaleRussian3000.txt")
         self.stop_list = self.__load("data/stop_list.txt")
+        self.old_list = self.__load("data/old_manually_corrected.txt")
 
         # семантические списки
         self.lex_abstract_list = self.__load("data/lex_abstract.txt")
@@ -378,6 +385,8 @@ class Analyzer:
         self.whole_lemmas_list = []
         self.noun_list = []
         self.bastard_list = []
+        self.obsc_list = []
+        self.razgovor_list = []
         self.names_list = []
         self.geo_name_list = []
         self.conj_adversative_list = []  # противительные союзы
@@ -429,6 +438,10 @@ class Analyzer:
                 self.bastard_list.append(element.get("text"))
         if gr_info.find("гео") > 0:
             self.geo_name_list.append(element.get("analysis")[0]["lex"])
+        if gr_info.find("обсц") > 0:
+            self.obsc_list.append(element.get("analysis")[0]["lex"])
+        if gr_info.find("разг") > 0:
+            self.razgovor_list.append(element.get("analysis")[0]["lex"])
         if (
             gr_info.find("имя") > 0
             or gr_info.find("фам") > 0
@@ -641,6 +654,7 @@ class Analyzer:
         self.whole_lemmas_list = []
         self.noun_list = []
         self.bastard_list = []
+        self.obsc_list = []
         self.names_list = []
         self.geo_name_list = []
         self.conj_adversative_list = []  # противительные союзы
@@ -689,6 +703,7 @@ class Analyzer:
         self.data_about_text["text_ok"] = True
         self.data_about_text["text_error_message"] = ""
         return self.data_about_text
+
 
     def __set_numbers_about_foreign_text(self, clean_lemmas_list):
         self.all_words = len(self.whole_analyzed_text)
@@ -968,6 +983,11 @@ class Analyzer:
             self.dict_of_features["words"] / Analyzer.SKIM_READING_SPEED_NORM[level_int]
         )
 
+        #проверка на мат
+        if len(self.obsc_list) > 0:
+            self.data_about_text["obsc_check"] = True
+            self.data_about_text["obsc_check_warning"] = "Внимание! Текст может содержать нецензурную лексику."
+
         # частотный словарь по тексту
         self.data_about_text["frequency_bag"] = self.__get_frequency_bag(
             self.whole_lemmas_list
@@ -1127,12 +1147,16 @@ class Analyzer:
                 ]
             )
         )
+        #устаревшие слова
+        self.old_words = [f for f in self.whole_lemmas_list if f in self.old_list]
+        self.data_about_text["old_words"] = list(set(self.old_words))
 
         # Можем работать с лексическими списками только до 4 уровня,
         # дальше их не существует
         self.data_about_text["cool_words"] = []
         self.data_about_text["rare_words"] = []
         self.data_about_text["cool_but_not_in_slovnik"] = []
+        self.data_about_text["old_words"]
 
         if level_int < 4:
             # Самые полезные слова
@@ -1352,6 +1376,15 @@ class Analyzer:
         )
         self.dict_of_features["mean_len_word_in_syllables"] = all_syllables / all_words
         self.dict_of_features["percent_of_long_words"] = long_words / all_words
+
+        #проверка на мат
+        if len(self.obsc_list) > 0:
+            self.dict_of_features["obsc_check"] = True
+            self.dict_of_features["obsc_check_warning"] = "Внимание! Текст может содержать нецензурную лексику."
+
+        #устаревшие слова
+        self.old_words = [f for f in self.whole_lemmas_list if f in self.old_list]
+        self.dict_of_features["old_words"] = list(set(self.old_words))
 
         # lexical density - лексическая плотность, соотношение смысловых и служебных
         # частей речи: чем она выше, тем считается что текст сложнее
