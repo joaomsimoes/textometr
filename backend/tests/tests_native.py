@@ -411,5 +411,6 @@ class TestAnalyzer(unittest.TestCase):
             ["кибитка"],
         )
 
+
 if __name__ == "__main__":
     unittest.main()
