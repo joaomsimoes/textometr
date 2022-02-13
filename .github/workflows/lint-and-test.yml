@@ -1,6 +1,8 @@
 name: Linting and testing
 
-on: push
+on:
+  push:
+    branches: ['develop']
 
 jobs:
   # Set the job key. The key is displayed as the job name
