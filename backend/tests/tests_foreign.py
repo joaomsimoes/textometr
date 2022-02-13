@@ -442,8 +442,9 @@ class TestAnalyzer(unittest.TestCase):
             TestAnalyzer.text_analyzer.start_foreign(
                 "Летит кибитка удалая через леса и поля."
             )["old_words"],
-            ['кибитка'],
+            ["кибитка"],
         )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -153,7 +153,7 @@ class Analyzer:
         "frequency_bag",
         "obsc_check",
         "obsc_check_warning",
-        "old_words"
+        "old_words",
     ]
 
     COLUMNS_OUTPUT = [
@@ -704,7 +704,6 @@ class Analyzer:
         self.data_about_text["text_error_message"] = ""
         return self.data_about_text
 
-
     def __set_numbers_about_foreign_text(self, clean_lemmas_list):
         self.all_words = len(self.whole_analyzed_text)
         self.all_len_words = [len(f) for f in self.whole_lemmas_list]
@@ -983,10 +982,12 @@ class Analyzer:
             self.dict_of_features["words"] / Analyzer.SKIM_READING_SPEED_NORM[level_int]
         )
 
-        #проверка на мат
+        # проверка на мат
         if len(self.obsc_list) > 0:
             self.data_about_text["obsc_check"] = True
-            self.data_about_text["obsc_check_warning"] = "Внимание! Текст может содержать нецензурную лексику."
+            self.data_about_text[
+                "obsc_check_warning"
+            ] = "Внимание! Текст может содержать нецензурную лексику."
 
         # частотный словарь по тексту
         self.data_about_text["frequency_bag"] = self.__get_frequency_bag(
@@ -1147,7 +1148,7 @@ class Analyzer:
                 ]
             )
         )
-        #устаревшие слова
+        # устаревшие слова
         self.old_words = [f for f in self.whole_lemmas_list if f in self.old_list]
         self.data_about_text["old_words"] = list(set(self.old_words))
 
@@ -1377,12 +1378,14 @@ class Analyzer:
         self.dict_of_features["mean_len_word_in_syllables"] = all_syllables / all_words
         self.dict_of_features["percent_of_long_words"] = long_words / all_words
 
-        #проверка на мат
+        # проверка на мат
         if len(self.obsc_list) > 0:
             self.dict_of_features["obsc_check"] = True
-            self.dict_of_features["obsc_check_warning"] = "Внимание! Текст может содержать нецензурную лексику."
+            self.dict_of_features[
+                "obsc_check_warning"
+            ] = "Внимание! Текст может содержать нецензурную лексику."
 
-        #устаревшие слова
+        # устаревшие слова
         self.old_words = [f for f in self.whole_lemmas_list if f in self.old_list]
         self.dict_of_features["old_words"] = list(set(self.old_words))
 

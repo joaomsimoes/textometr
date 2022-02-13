@@ -1,8 +1,8 @@
-name: Continuous Integration
+name: Linting and testing
 
 on:
   push:
-    branches: ['master']
+    branches: ['develop']
 
 jobs:
   # Set the job key. The key is displayed as the job name
@@ -50,48 +50,3 @@ jobs:
           python -m nltk.downloader punkt
       - name: Run tests with unittest
         run: python -m unittest
-
-  build-and-push-docker-images:
-    name: Build and push Docker images
-    needs: [lint, test]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: frontend
-          push: true
-          tags: 1eshkin/textometr-frontend:2.1.0
-
-      - name: Build and push backend
-        uses: docker/build-push-action@v2
-        with:
-          context: backend
-          push: true
-          tags: 1eshkin/textometr-backend:1.2.1
-
-      - name: Deploy to Docker swarm
-        uses: wshihadeh/docker-deployment-action@v2
-        with:
-          remote_docker_host: alexey@textometr.ru
-          ssh_private_key: ${{ secrets.TEXTOMETR_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.TEXTOMETR_SSH_PUBLIC_KEY }}
-          deployment_mode: docker-swarm
-          copy_stack_file: true
-          keep_files: 5
-          deploy_path: /home/alexey/textometr
-          stack_file_name: docker-compose.yml
-          args: textometr
