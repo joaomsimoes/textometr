@@ -5,7 +5,7 @@ m = pymystem3.Mystem(entire_input=False, disambiguation=True)
 
 all_freq_data = pd.read_csv("data/freq_all.csv", quotechar='`')
 
-columns = ["lemma", "comment_main", "comment_child", "pos", "cefr", "rnc_ipm", "detcorpus_ipm", "rufola_123_ipm", "det_rki_ipm", "bilingual_ipm","native_ipm"]
+columns = ["lemma", "comment_main", "comment_child", "pos", "cefr", "kelly", "rnc_ipm", "detcorpus_ipm", "rufola_123_ipm", "det_rki_ipm", "bilingual_ipm","native_ipm"]
 
 def __find_freq(row_words):
     lem_words = m.lemmatize(row_words)
@@ -42,4 +42,3 @@ def __find_freq(row_words):
                     freq_data_dict[col] = row[1][col]
                 result.append(freq_data_dict)
     return result
-
