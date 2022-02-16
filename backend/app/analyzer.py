@@ -7,7 +7,6 @@ from collections import defaultdict
 import nltk
 import numpy as np
 import pandas as pd
-import pymystem3
 from joblib import load
 from nltk.tokenize import sent_tokenize
 from sklearn import linear_model
@@ -324,8 +323,8 @@ class Analyzer:
         ("Очень сложный текст, подойдет для выпускника ВУЗа и старше", 91, 100),
     ]
 
-    def __init__(self):
-        self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
+    def __init__(self, mystem):
+        self.mystem = mystem
 
         self.ridge = linear_model.Ridge(alpha=0.1)
 
