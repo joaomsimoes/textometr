@@ -2,6 +2,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 
+import pymystem3
 from app.analyzer import Analyzer
 from app.frequency_check import FrequencyCheck
 from fastapi import FastAPI
@@ -9,16 +10,18 @@ from pydantic import BaseModel
 
 # prepare logger
 formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
-handler = TimedRotatingFileHandler("logs/textometr.log", when="D", interval=10)
+handler = TimedRotatingFileHandler("logs/textometr.log", when="midnight")
 handler.setFormatter(formatter)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
-analyzer = Analyzer()
+mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
+
+analyzer = Analyzer(mystem)
 logger.info("Analyzer object has been created")
 
-frequencyCheck = FrequencyCheck()
+frequencyCheck = FrequencyCheck(mystem)
 logger.info("Frequency Check object has been created")
 
 

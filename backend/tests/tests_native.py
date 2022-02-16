@@ -1,12 +1,14 @@
 import unittest
 
+import pymystem3
 from app.analyzer import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.text_analyzer = Analyzer()
+        mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
+        cls.text_analyzer = Analyzer(mystem)
 
     def test_text_1(self):
         self.assertEqual(

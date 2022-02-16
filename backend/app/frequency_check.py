@@ -1,5 +1,4 @@
 import pandas as pd
-import pymystem3
 
 
 class FrequencyCheck:
@@ -19,8 +18,8 @@ class FrequencyCheck:
         "native_ipm",
     ]
 
-    def __init__(self):
-        self.mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
+    def __init__(self, mystem):
+        self.mystem = mystem
         self.all_freq_data = pd.read_csv("data/freq_all.csv", quotechar="`")
 
     def start(self, row_words):
