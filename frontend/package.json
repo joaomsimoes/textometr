@@ -13,9 +13,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
+    "@vueuse/head": "^0.7.5",
     "sass": "^1.49.7",
     "unplugin-vue-components": "^0.17.15",
     "vite": "^2.7.2",
-    "vite-ssg": "^0.17.9"
+    "vite-ssg": "^0.17.10",
+    "vue-router": "^4.0.12"
   }
 }
