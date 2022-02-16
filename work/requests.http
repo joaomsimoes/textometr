@@ -1,3 +1,16 @@
+curl 'http://localhost:8000/analyze' \
+  -H 'Connection: keep-alive' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36' \
+  -H 'Content-Type: application/json;charset=UTF-8' \
+  -H 'Origin: http://localhost' \
+  -H 'Referer: http://localhost/' \
+  -H 'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7' \
+  --data-binary '{"text":"Турция решила отказаться от российской вакцины против коронавируса. Об этом министр здравоохранения Турции Фахреттин Коджа заявил изданию Haberturk.\n\nПо словам министра, вакцина не соответствует принципам надлежащей лабораторной практики.\n\n«Россия не сумела выполнить [эти условия]. Таким образом, для ВОЗ и всего мира не представляется возможным закупать эту вакцину. Мы также не можем выдать разрешение на ее использование. Поэтому она вышла за рамки наших интересов», — объяснил Коджа.\n\nИсточник ТАСС в Российском фонде прямых инвестиций (РФПИ), курирующем создание «Спутник V», назвал информацию об отказе Турции от вакцины недостоверной. По его словам, переговоры продолжаются. «Приведенные цитаты [министра] — пример «фейк ньюс», — подчеркнул собеседник агентства.","mode":"foreign"}' \
+  --compressed \
+  --insecure
+
+#####
 curl 'https://textometr.ru/analyze' \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \

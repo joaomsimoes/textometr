@@ -1,6 +1,6 @@
 import unittest
 
-from app.analyzer_2000 import Analyzer
+from app.analyzer import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):

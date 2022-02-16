@@ -2,7 +2,8 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 
-from app.analyzer_2000 import Analyzer
+from app.analyzer import Analyzer
+from app.frequency_check import FrequencyCheck
 from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -15,8 +16,10 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 analyzer = Analyzer()
-
 logger.info("Analyzer object has been created")
+
+frequencyCheck = FrequencyCheck()
+logger.info("Frequency Check object has been created")
 
 
 class Text(BaseModel):
@@ -34,3 +37,9 @@ def analyze(text: Text):
         return analyzer.start_foreign(text.text)
     else:
         return analyzer.start_native(text.text)
+
+
+@app.post("/frequency")
+def frequency(text: Text):
+    logger.info(text.text)
+    return frequencyCheck.start(text.text)

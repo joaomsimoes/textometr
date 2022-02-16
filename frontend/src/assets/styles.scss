@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost&family=Sonsie+One&display=swap');
 @import '../../node_modules/bulma/sass/utilities/initial-variables';
 @import '../../node_modules/bulma/sass/utilities/functions';
 
@@ -179,6 +180,14 @@ input:checked + .slider::before {
   }
 }
 
+#logo-text {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.5em;
+  letter-spacing: 0.05em;
+  margin-left: 10px;
+  color: #000;
+}
+
 body.dark-theme {
   background-color: black;
   color: $text-color;
@@ -253,6 +262,10 @@ body.dark-theme {
     filter: invert(0.9);
   }
 
+  #logo-text {
+    color: #fff;
+  }
+
   .tag {
     background-color: #82dcc1 !important;
     color: #1e5832 !important;
@@ -265,6 +278,11 @@ body.dark-theme {
 
   .tooltip .tooltiptext {
     background-color: $background-color;
+  }
+
+  .message-body {
+    background-color: $background-color;
+    color: $text-color;
   }
 }
 
@@ -282,4 +300,13 @@ body.dark-theme {
 
 .icon-middle {
   vertical-align: middle;
+}
+
+.donate {
+  background-color: #fd0;
+  border-radius: 9999px;
+  color: #000;
+  font-size: 1.25em;
+  font-weight: 500;
+  border-width: 0;
 }
