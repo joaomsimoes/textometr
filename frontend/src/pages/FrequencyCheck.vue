@@ -11,18 +11,18 @@
       </article>
       <div class="field">
         <div class="control">
-          <textarea
+          <input
+            type="text"
             v-model="text"
-            class="textarea"
-            rows="1"
+            class="input"
             placeholder="Введите от 1 до 5 слов в начальной форме. Например: больница, поликлиника, клиника, госпиталь"
             @input="clear"
-          ></textarea>
+          />
         </div>
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <a class="button is-link is-rounded is-medium" @click="analyze">Проверить</a>
+          <a class="button is-link is-rounded is-medium" @click="frequencyCheck">Проверить</a>
         </p>
       </div>
     </div>
@@ -104,6 +104,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -113,7 +115,7 @@ export default {
     }
   },
   methods: {
-    frequency: function () {
+    frequencyCheck: function () {
       this.clear()
       this.loading = true
       axios
