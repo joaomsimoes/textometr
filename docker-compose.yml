@@ -2,10 +2,10 @@ version: '3'
 
 services:
   frontend:
-    image: 1eshkin/textometr-frontend:2.1.0
+    image: 1eshkin/textometr-frontend:2.2.0
 
   backend:
-    image: 1eshkin/textometr-backend:1.2.1
+    image: 1eshkin/textometr-backend:1.3.0
     environment:
       - MAX_WORKERS=1
     volumes:
