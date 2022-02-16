@@ -21,6 +21,7 @@ logger.info("Analyzer object has been created")
 frequencyCheck = FrequencyCheck()
 logger.info("Frequency Check object has been created")
 
+
 class Text(BaseModel):
     text: str
     mode: Optional[str] = "foreign"
@@ -39,6 +40,6 @@ def analyze(text: Text):
 
 
 @app.post("/frequency")
-def analyze(text: Text):
+def frequency(text: Text):
     logger.info(text.text)
     return frequencyCheck.start(text.text)

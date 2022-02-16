@@ -185,7 +185,7 @@ input:checked + .slider::before {
   font-size: 1.5em;
   letter-spacing: 0.05em;
   margin-left: 10px;
-  color: #000000;
+  color: #000;
 }
 
 body.dark-theme {
@@ -263,7 +263,7 @@ body.dark-theme {
   }
 
   #logo-text {
-    color: #ffffff;
+    color: #fff;
   }
 
   .tag {
@@ -303,10 +303,10 @@ body.dark-theme {
 }
 
 .donate {
-  background-color: #ffdd00;
+  background-color: #fd0;
   border-radius: 9999px;
-  color: #000000;
+  color: #000;
   font-size: 1.25em;
   font-weight: 500;
-  border-width: 0px;
+  border-width: 0;
 }

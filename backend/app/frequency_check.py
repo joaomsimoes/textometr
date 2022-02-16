@@ -1,5 +1,5 @@
-import pymystem3
 import pandas as pd
+import pymystem3
 
 
 class FrequencyCheck:
