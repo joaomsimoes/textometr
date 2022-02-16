@@ -47,7 +47,7 @@ Textometr provides information about complexity level and other pedagogical stat
 
    ```bash
    cd app
-   uvicorn main:app --reload
+   uvicorn app.main:app --reload
    ```
 
 7. Deactivate venv
