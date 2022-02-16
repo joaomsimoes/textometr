@@ -1,12 +1,14 @@
 import unittest
 
 from app.frequency_check import FrequencyCheck
+import pymystem3
 
 
 class TestAnalyzer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.frequencyCheck = FrequencyCheck()
+        mystem = pymystem3.Mystem(entire_input=False, disambiguation=True)
+        cls.frequencyCheck = FrequencyCheck(mystem)
 
     def test_words_1(self):
         self.assertEqual(
