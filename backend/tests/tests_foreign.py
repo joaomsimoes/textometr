@@ -1,7 +1,7 @@
 import unittest
 
-from app.analyzer import Analyzer
 import pymystem3
+from app.analyzer import Analyzer
 
 
 class TestAnalyzer(unittest.TestCase):

@@ -2,11 +2,11 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 
+import pymystem3
 from app.analyzer import Analyzer
 from app.frequency_check import FrequencyCheck
 from fastapi import FastAPI
 from pydantic import BaseModel
-import pymystem3
 
 # prepare logger
 formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")

@@ -1,7 +1,7 @@
 import unittest
 
-from app.frequency_check import FrequencyCheck
 import pymystem3
+from app.frequency_check import FrequencyCheck
 
 
 class TestAnalyzer(unittest.TestCase):
