@@ -1,3 +1,23 @@
+
+curl 'https://textometr.ru/api/analyze' \
+  -H 'Connection: keep-alive' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'Content-Type: application/json' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  -H 'Origin: https://textometr.ru' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Referer: https://textometr.ru/' \
+  -H 'Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'Cookie: _ym_uid=1616888404212339329; _ym_d=1633003865; _ym_isad=1' \
+  --data-binary '{"text":"Турция решила отказаться от российской вакцины против коронавируса. Об этом министр здравоохранения Турции Фахреттин Коджа заявил изданию Haberturk.\n\nПо словам министра, вакцина не соответствует принципам надлежащей лабораторной практики.\n\n«Россия не сумела выполнить [эти условия]. Таким образом, для ВОЗ и всего мира не представляется возможным закупать эту вакцину. Мы также не можем выдать разрешение на ее использование. Поэтому она вышла за рамки наших интересов», — объяснил Коджа.\n\nИсточник ТАСС в Российском фонде прямых инвестиций (РФПИ), курирующем создание «Спутник V», назвал информацию об отказе Турции от вакцины недостоверной. По его словам, переговоры продолжаются. «Приведенные цитаты [министра] — пример «фейк ньюс», — подчеркнул собеседник агентства.","mode":"foreign"}' \
+  --compressed
+
+#####
 curl 'http://localhost:8000/analyze' \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \

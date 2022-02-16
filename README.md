@@ -111,10 +111,13 @@ Textometr provides information about complexity level and other pedagogical stat
    ```
    Then Ctrl+C to shutdown
 8. Deploy services to Docker Swarm
+
    ```bash
    docker stack deploy --compose-file docker-compose.yml textometr
    ```
+
 9. Watch running services
+
    ```bash
    docker service ls # to view active replicas
    docker stats # to monitor resource usage
@@ -125,7 +128,20 @@ Textometr provides information about complexity level and other pedagogical stat
 1. Copy `docker-compose.yml` to the `textometr` folder on remote server
 
 2. Deploy app stack in Docker Swarm
+
    ```bash
    cd textometr
    docker stack deploy --compose-file docker-compose.yml textometr
+   ```
+
+3. Reload nginx config
+
+   ```bash
+   docker container exec <container> nginx -s reload
+   ```
+
+4. View service logs
+
+   ```bash
+   docker service ps --no-trunc textometr_backend
    ```
