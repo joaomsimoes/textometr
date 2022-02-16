@@ -46,10 +46,10 @@
       <table class="table is-hoverable is-fullwidth is-bordered">
         <tbody>
           <tr>
-            <th></th>
-            <th v-for="item in result" class="has-text-centered">
-              {{ item['lemma'] }}
-            </th>
+            <td></td>
+            <td v-for="item in result" class="has-text-centered">
+              <span class="is-size-5 has-text-weight-semibold">{{ item['lemma'] }}</span>
+            </td>
           </tr>
           <tr>
             <th>Часть речи</th>
@@ -140,10 +140,12 @@
             </td>
           </tr>
           <tr>
-            <th>
-              Частотность по корпусу учебников РЯ для детей младшего школьного возраста TIRTEC, ipm
+            <th :colspan="result.length + 1">
+              <div class="mt-5">
+                Частотность по корпусу учебников РЯ для детей младшего школьного возраста TIRTEC,
+                ipm
+              </div>
             </th>
-            <td v-for="item in result" class="has-text-centered"></td>
           </tr>
           <tr>
             <th>Дети-инофоны</th>
@@ -168,7 +170,7 @@
             </td>
           </tr>
           <tr>
-            <th>дети-российские школьники</th>
+            <th>Дети-российские школьники</th>
             <td v-for="item in result" class="has-text-centered">
               <template v-if="item['native_ipm']">
                 {{ item['native_ipm'] }}
