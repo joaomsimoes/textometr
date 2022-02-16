@@ -39,7 +39,7 @@ class FrequencyCheck:
             "not_in_list": False,
             "is_omonim": False,
         }
-        if len(words) == 0 or len(words) > 3:
+        if len(lem_str) == 0:
             freq_data_dict["input_error"] = True
             result.append(freq_data_dict)
             return result
@@ -53,6 +53,7 @@ class FrequencyCheck:
             count_lemmas = list_of_lemmas.count(i)
             if count_lemmas == 0:
                 freq_data_dict["not_in_list"] = True
+                freq_data_dict["lemma"] = i
                 result.append(freq_data_dict)
             if count_lemmas == 1:
                 for col in self.COLUMNS:
@@ -61,11 +62,15 @@ class FrequencyCheck:
                     )[0]
                 result.append(freq_data_dict)
             if count_lemmas > 1:
-                freq_data_dict["is_omonim"] = True
                 omonims = self.all_freq_data[self.all_freq_data["lemma"] == i]
                 for row in omonims.iterrows():
+                    row_omonim = row
+                    freq_data_dict = {
+                        "input_error": False,
+                        "not_in_list": False,
+                        "is_omonim": True,
+                    }
                     for col in self.COLUMNS:
-                        freq_data_dict[col] = row[1][col]
+                        freq_data_dict[col] = row_omonim[1][col]
                     result.append(freq_data_dict)
-        print(result)
-        return result
+        return result[:5]
