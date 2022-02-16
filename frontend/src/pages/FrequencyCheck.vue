@@ -9,6 +9,11 @@
           например, нескольких близких по значению слов.
         </div>
       </article>
+      <article v-if="errorMessage" class="message is-danger">
+        <div class="message-body">
+          {{ errorMessage }}
+        </div>
+      </article>
       <div class="field">
         <div class="control">
           <input
@@ -22,7 +27,14 @@
       </div>
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <a class="button is-link is-rounded is-medium" @click="frequencyCheck">Проверить</a>
+          <a
+            class="button is-link is-rounded is-medium"
+            :class="{
+              'is-loading': loading
+            }"
+            @click="frequencyCheck"
+            >Проверить</a
+          >
         </p>
       </div>
     </div>
@@ -31,39 +43,140 @@
   <section class="section" id="result" v-if="result && !loading">
     <div class="container is-max-desktop">
       <h1 class="title is-1">Результат</h1>
-      <table class="table is-hoverable is-fullwidth">
+      <table class="table is-hoverable is-fullwidth is-bordered">
         <tbody>
           <tr>
-            <th>Общая оценка</th>
-            <td></td>
+            <th></th>
+            <th v-for="item in result" class="has-text-centered">
+              {{ item['lemma'] }}
+            </th>
           </tr>
           <tr>
-            <th>Первое появление в ЛМ</th>
-            <td></td>
+            <th>Часть речи</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['pos']">
+                {{ item['pos'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>Частотность по ЧС НКРЯ</th>
-            <td></td>
+            <th>Частотность по текстам для взрослых</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['comment_main']">
+                {{ item['comment_main'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>Частотность по Деткорпусу</th>
-            <td></td>
+            <th>Частотность по текстам для детей</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['comment_child']">
+                {{ item['comment_child'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>Частотность по RuFoLa</th>
-            <td></td>
+            <th>Уровень по лексическим минимумам ТРКИ</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['cefr']">
+                {{ item['cefr'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>Частотность по корпусу учебников РЯ: TIRTEC - РКИ</th>
-            <td></td>
+            <th>Уровень по спискам KELLY</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['kelly']">
+                {{ item['kelly'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>TIRTEC - билингвы</th>
-            <td></td>
+            <th>Частотность по Новому частотному словарю русской лексики, ipm</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['rnc_ipm']">
+                {{ item['rnc_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
           <tr>
-            <th>TIRTEC - носители</th>
-            <td></td>
+            <th>Частотность по корпусу литературы для детей Деткорпус, ipm</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['detcorpus_ipm']">
+                {{ item['detcorpus_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>Частотность по корпусу учебников РКИ RuFoLa, ipm</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['rufola_123_ipm']">
+                {{ item['rufola_123_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Частотность по корпусу учебников РЯ для детей младшего школьного возраста TIRTEC, ipm
+            </th>
+            <td v-for="item in result" class="has-text-centered"></td>
+          </tr>
+          <tr>
+            <th>Дети-инофоны</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['det_rki_ipm']">
+                {{ item['det_rki_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>Дети-билингвы</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['bilingual_ipm']">
+                {{ item['bilingual_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>дети-российские школьники</th>
+            <td v-for="item in result" class="has-text-centered">
+              <template v-if="item['native_ipm']">
+                {{ item['native_ipm'] }}
+              </template>
+              <span v-else class="icon is-small">
+                <x-mark-icon />
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -72,32 +185,62 @@
 
   <section class="section">
     <div class="container is-max-desktop">
-      <h1 class="title is-1 is-spaced">
-        Частотные списки русского языка, использованные в расчетах
-      </h1>
+      <h1 class="title is-1">Литература</h1>
+      <h5 class="title is-5">Частотные списки русского языка, использованные в расчетах</h5>
       <div class="content">
-        <p>
-          ЧС НКРЯ:
-          <a href="http://dict.ruslang.ru/freq.php"
-            >Новый частотный словарь русской лексики (О. Н. Ляшевская, С. А. Шаров)</a
-          >
-        </p>
-        <p>
-          ДетКорпус:
-          <a href="http://detcorpus.ru/pages/about.html"
-            >Корпус русской детской литературы XX—XXI в.</a
-          >
-        </p>
-        <p>
-          RuFoLa: корпус текстов из учебников русского языка как иностранного (для взрослых
-          учащихся)
-        </p>
-        <p>
-          TIRTEC:
-          <a href="https://digitalpushkin.tilda.ws/tirtec"
-            >Корпус текстов из учебников русского языка для детей младшего школьного возраста</a
-          >
-        </p>
+        <ol>
+          <li>
+            <strong class="mr-2">ЧС НКРЯ:</strong>
+            <a href="http://dict.ruslang.ru/freq.php"
+              >Новый частотный словарь русской лексики (О. Н. Ляшевская, С. А. Шаров)</a
+            >
+          </li>
+          <li>
+            <strong class="mr-2">ДетКорпус:</strong>
+            <a href="http://detcorpus.ru/pages/about.html"
+              >Корпус русской детской литературы XX—XXI в.</a
+            >
+          </li>
+          <li>
+            <strong class="mr-2">RuFoLa:</strong>
+            Корпус текстов из учебников русского языка как иностранного (для взрослых учащихся)
+          </li>
+          <li>
+            <strong class="mr-2">TIRTEC:</strong>
+            <a href="https://digitalpushkin.tilda.ws/tirtec"
+              >Корпус текстов из учебников русского языка для детей младшего школьного возраста</a
+            >
+          </li>
+        </ol>
+      </div>
+
+      <h5 class="title is-5">Система лексических минимумов по русскому языку как иностранному</h5>
+      <div class="content">
+        <ol>
+          <li>
+            Система лексических минимумов по русскому языку как иностранному: Лексический минимум по
+            русскому языку как иностранному. Элементарный уровень. Общее владение / под ред. Н.П.
+            Андрюшиной, Т.В. Козловой. – 4е изд., испр. и доп. – СПб. : Златоуст, 2012. – 80 с.
+          </li>
+          <li>
+            Лексический минимум по русскому языку как иностранному. Базовый уровень. Общее владение
+            / Н.П. Андрюшина, Т.В. Козлова (электронное издание). – 5е изд. – СПб. : Златоуст,2015.
+            – 116 с.
+          </li>
+          <li>
+            Лексический минимум по русскому языку как иностранному. Первый сертификационный уровень.
+            Общее владение / Н.П. Андрюшина и др. – 9е изд. – СПб. : Златоуст, 2017. – 200 с.
+          </li>
+          <li>
+            Лексический минимум по русскому языку как иностранному. Второй сертификационный уровень.
+            Общее владение / под редакцией Н.П. Андрюшиной. – 7-е изд. – СПб. : Златоуст, 2017. –
+            164 с.
+          </li>
+          <li>
+            Лексический минимум по русскому языку как иностранному. Третий сертификационный уровень.
+            Общее владение / под ред. Н.П. Андрюшиной. – СПб. : Златоуст, 2018. – 201 с.
+          </li>
+        </ol>
       </div>
     </div>
   </section>
@@ -111,7 +254,8 @@ export default {
     return {
       loading: false,
       text: '',
-      result: true
+      result: null,
+      errorMessage: null
     }
   },
   methods: {
@@ -122,18 +266,13 @@ export default {
         .post('/api/frequency', { text: this.text })
         .then((response) => {
           this.result = response.data
-          if (response.data.text_ok) {
-            setTimeout(() => {
-              document.querySelector('#result').scrollIntoView({ behavior: 'smooth' })
-            }, 0)
-          }
+          setTimeout(() => {
+            document.querySelector('#result').scrollIntoView({ behavior: 'smooth' })
+          }, 0)
         })
         .catch((error) => {
           console.log(error)
-          this.result = {
-            text_ok: false,
-            text_error_message: 'Упс, что-то пошло не так... Попробуйте позже.'
-          }
+          this.errorMessage = 'Упс, что-то пошло не так... Попробуйте позже.'
         })
         .then(() => {
           this.loading = false
@@ -141,6 +280,7 @@ export default {
     },
     clear: function () {
       this.result = null
+      this.errorMessage = null
     }
   }
 }
