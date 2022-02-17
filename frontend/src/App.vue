@@ -22,11 +22,11 @@
       </div>
       <div class="navbar-menu" :class="{ 'is-active': burgerActive }">
         <div class="navbar-end">
-          <router-link class="navbar-item" to="/">Анализ сложности текста</router-link>
-          <router-link class="navbar-item" to="/frequency-check"
-            >Проверка частотности слов</router-link
+          <a class="navbar-item" @click="goToPage('/')">Анализ сложности текста</a>
+          <a class="navbar-item" @click="goToPage('/frequency-check')">Проверка частотности слов</a>
+          <a class="navbar-item" id="contacts-ref" @click="goToContacts" href="#contacts"
+            >Контакты</a
           >
-          <a class="navbar-item" href="#contacts">Контакты</a>
           <a class="navbar-item" href="https://www.facebook.com/textometr">Мы в Facebook</a>
           <div class="navbar-item">
             <span class="icon is-small is-clickable" @click="changeTheme">
@@ -116,11 +116,10 @@ export default {
       this.theme = 'dark'
       document.body.classList.add('dark-theme')
     }
-
-    this.addSmoothScrollForAllAnchors()
   },
   methods: {
     changeTheme() {
+      this.burgerActive = false
       if (this.theme === 'light') {
         this.theme = 'dark'
       } else {
@@ -129,25 +128,22 @@ export default {
       localStorage.setItem('theme', this.theme)
       document.body.classList.toggle('dark-theme')
     },
-    toggleShowAll() {
-      this.showAll = !this.showAll
-    },
-    addSmoothScrollForAllAnchors() {
-      // add smooth scroll for all anchors
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault()
 
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-          })
-        })
+    goToContacts(e) {
+      this.burgerActive = false
+      e.preventDefault()
+
+      document.querySelector(e.target.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
       })
+    },
+
+    goToPage(page) {
+      this.burgerActive = false
+      this.$router.push(page)
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
