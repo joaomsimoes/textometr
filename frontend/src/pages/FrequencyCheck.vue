@@ -22,6 +22,7 @@
             class="input"
             placeholder="Введите от 1 до 5 слов в начальной форме. Например: больница, поликлиника, клиника, госпиталь"
             @input="clear"
+            @keyup.enter="frequencyCheck"
           />
         </div>
       </div>
@@ -250,8 +251,22 @@
 
 <script>
 import axios from 'axios'
+import { useHead } from '@vueuse/head'
 
 export default {
+  setup() {
+    useHead({
+      title: 'Текстометр. Проверка частотности слов',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Сервис проверки частотности слов предлагает анализ лексики сразу по нескольким частотным словарям. Вы можете получить частотный анализ одного слова или сравнить частотность, например, нескольких близких по значению слов.'
+        }
+      ]
+    })
+  },
+
   data() {
     return {
       loading: false,
