@@ -733,8 +733,22 @@
 <script>
 import axios from 'axios'
 import { TEXT_FEATURES, DEMO_TEXT } from '/src/config.js'
+import { useHead } from '@vueuse/head'
 
 export default {
+    setup() {
+    useHead({
+      title: 'Текстометр. Анализ сложности текста на русском языке',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Текстометр позволяет быстро получить информацию о тексте, актуальную для его подготовки к уроку русского языка: уровень сложности текста, ключевые слова, самые полезные слова, статистика по вхождению слов в лексические минимумы.'
+        }
+      ]
+    })
+  },
+
   data() {
     return {
       mode: 'foreign',
