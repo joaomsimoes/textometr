@@ -130,7 +130,7 @@
             </td>
           </tr>
           <tr>
-            <th>Частотность по корпусу учебников РКИ RuFoLa, ipm</th>
+            <th>Частотность по корпусу учебников РКИ RuFoLa (A1-B1), ipm</th>
             <td v-for="item in result" class="has-text-centered">
               <template v-if="item['rufola_123_ipm']">
                 {{ item['rufola_123_ipm'] }}
@@ -213,6 +213,10 @@
             <a href="https://digitalpushkin.tilda.ws/tirtec"
               >Корпус текстов из учебников русского языка для детей младшего школьного возраста</a
             >
+          </li>
+          <li>
+            <strong class="mr-2">KELLY:</strong>
+            <a href="http://corpus.leeds.ac.uk/serge/kelly/">Списки проекта KELLY</a>
           </li>
         </ol>
       </div>
